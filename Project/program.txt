@@ -1,0 +1,71 @@
+#include <stdlib>
+#include "mylib" Lib
+
+#{
+Some ideas I have:
+    Mutable & immutable variables (possibly using :x vs x)
+    No pre-processor statements except for includes allowed.
+    Whitespace optional, braces required.
+    Well defined library structure stdlib::printf.
+    Need lambdas.
+    Use && for and, || for or, ! for not.
+    Use false, true as bools.
+#}
+
+## This is a basic function.
+func isBig(x) { return x >= 1000; }
+
+#{
+Here is a function
+with if/else
+#}
+func largest(x,y,z)
+{
+    if(x > y)
+    {
+        if(x > z)
+        {
+            return x;
+        }
+        return z;
+    }
+    else
+    {
+        if(y > z)
+        {
+            return y;
+        }
+        return z;
+    }
+}
+
+func
+printString(str)
+{
+    stdlib::printf("My string is: %s", str);
+    stdlib::println();
+}
+
+func loopy(x)
+{
+    x = 1;
+    while(x < 10)
+    {
+        stdlib::println(x);
+        x++;
+    }
+    stdlib::printf("Final x: %s", x);
+}
+
+func forLoopy(x)
+{
+    x = 1;
+    for(x < 10; ++x;)
+    {
+        stdlib::println(x);
+    }
+    stdlib::printf("Final x: %s", x);
+}
+
+#$
+Nothing else matters
