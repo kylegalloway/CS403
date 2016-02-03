@@ -52,8 +52,10 @@
 )
 
 ; Task 4
-(define (good-enough? guess x)
-    (<= (abs (- guess x)) 0.001)
+(define (cube n) (* n n n))
+
+(define (good-enough? guess improved-guess)
+    (<= (abs (- guess improved-guess)) 0.00000001)
 )
 
 (define (root3 x)
@@ -61,7 +63,7 @@
         (/ (+ (/ x (* guess guess)) (* 2 guess)) 3) ;Newton's method for cube roots
     )
     (define (root3-iter guess)
-            (if (good-enough? (cube guess) x)
+            (if (good-enough? guess (improve guess))
                 guess
                 (root3-iter (improve guess))
             )
@@ -89,7 +91,23 @@
 )
 
 ; Task 7
-
+(define (w f i)
+    (define A (S f (+ i 1) 0.0))
+    (define B (S f (- i 1) 0.0))
+    (define C (S f i 0.0))
+    (if (= i 0)
+        (f i)
+        (/ (- (* A B) (* C C))
+           (+ (- A (* 2 C)) B)
+        )
+    )
+)
+(define (S f n total)
+    (if (= n 0)
+        (f n)
+        (S f (- n 1) (+ total (f n)))
+    )
+)
 
 ; Task 8
 (define (halve x)
@@ -168,15 +186,24 @@
     (exprTest (root3 64) 4)
     (exprTest (root3 8) 2)
     (exprTest (root3 27) 3)
+    (exprTest (root3 216) 6)
+    (exprTest (root3 42) 3.476026645)
+    (exprTest (root3 4) 1.587401052)
 )
 
 (define (run5)
 )
 
 (define (run6)
+    (exprTest (((((oppy +) 1) *) 2) 3) (+ 1 (* 2 3)))
+    (exprTest (((((oppy -) 1) -) 2) 3) (- 1 (- 2 3)))
+    (exprTest (((((oppy /) 1) +) 2) 3) (/ 1 (+ 2 3)))
+    (exprTest (((((oppy *) 1) /) 2) 3) (* 1 (/ 2 3)))
 )
 
 (define (run7)
+    (define (f x) (* (** -1 x) (/ 1 (+ (* 2 x) 1))))
+    (exprTest (S f 3 0.0) 3.1415)
 )
 
 (define (run8)
@@ -198,7 +225,7 @@
 ; ; Done (run4)
 ; (run5)
 ; ; Done (run6)
-; (run7)
+(run7)
 ; ; Done (run8)
 ; (run9)
 ; (run10)
