@@ -1,9 +1,8 @@
+; Password for Submit: 16andcounting
+
 (define (author)
     (println "AUTHOR: Kyle Galloway ckgalloway@crimson.ua.edu")
 )
-
-(define tolerance 0.0001)
-(define (close-enough? a b) (< (abs (- a b)) tolerance))
 
 (define (exprTest # $expr target)
     (define result (catch (eval $expr #)))
@@ -40,21 +39,32 @@
 
 ; Task 3
 (define (mandelbrot-iter threshold)
-    (define (mandelbrot x y)
-
+    (define (mandelbrot x y r s count)
+        (if (> (+ (* r r) (* s s)) 4)
+            count
+            (if (> count threshold)
+                0
+                (mandelbrot x y (+ (- (* r r) (* s s)) x) (+ (* 2 r s) y) (+ count 1))
+            )
+        )
     )
+    (lambda (x y) (mandelbrot x y 0.0 0.0 0))
 )
 
 ; Task 4
+(define (good-enough? guess x)
+    (<= (abs (- guess x)) 0.001)
+)
+
 (define (root3 x)
     (define (improve guess)
-        (/ (+ guess (/ x guess)) 2.0)
+        (/ (+ (/ x (* guess guess)) (* 2 guess)) 3) ;Newton's method for cube roots
     )
     (define (root3-iter guess)
-        (if (close-enough? (expt guess 3) x)
-            guess
-            (root3-iter (improve guess))
-        )
+            (if (good-enough? (cube guess) x)
+                guess
+                (root3-iter (improve guess))
+            )
     )
     (if (> x 0)
         (root3-iter 1.0)
@@ -82,11 +92,43 @@
 
 
 ; Task 8
-(define (egypt* b c))
-(define (halve x))
+(define (halve x)
+    (define (halve-iter x num)
+        (if (= (+ num num) x)
+            num
+            (halve-iter x (+ num 1))
+        )
+    )
+    (halve-iter x 1)
+)
+
+(define (egypt* b c)
+    (define (egypt*-iter2 a b c d)
+        (if (= b 0)
+            d
+            (if (<= a b)
+                (egypt*-iter2 (halve a) (- b a) (halve c) (+ c d))
+                (egypt*-iter2 (halve a) b (halve c) d)
+            )
+        )
+    )
+    (define (egypt*-iter a b c)
+        (if (<= a b)
+          (egypt*-iter (+ a a) b (+ c c))
+          (egypt*-iter2 a b c 0)
+        )
+    )
+    (egypt*-iter 1 b c)
+)
 
 ; Task 9
-(define (mystery n))
+; Equivalent to sqrt(3) - 1 as it approaches infinity
+;(define (mystery n)
+;    (if)
+;    (else
+;      (+ 1 (/ 1.0 (?(2/1) (recur ...))))
+;    )
+;)
 
 ; Task 10
 (define (ramanujan d x))
@@ -102,27 +144,30 @@
 )
 
 (define (run2)
-    (exprTest (zeno_cost 0.000001 55 .25) 7.0)
-    (exprTest (zeno_cost 1 1 2) 16390.000000)
+    (exprTest (zeno_cost 0.000001 55 .25) 7)
+    (exprTest (zeno_cost 1 1 2) 16390)
+    (exprTest (zeno_cost 0.0002 10 3) 17)
     (exprTest (zeno_cost 2 10 3) 7.174454e07)
-    (exprTest (zeno_cost 8 10 2) 1310717.0000)
-    (exprTest (zeno_cost 16 10 0.5000000000) 19.927083333)
-    (exprTest (zeno_cost 128 2 0.5000000000) 3.9583333333)
-    (exprTest (zeno_cost 0.0002000000 10 3) 17.000000000)
-    (exprTest (zeno_cost 128 2 0.5000000000) 3.9583333333)
-    (exprTest (zeno_cost 0.0008000000 10 2) 77.000000000)
-    (exprTest (zeno_cost 16 10 0.5000000000) 19.927083333)
+    (exprTest (zeno_cost 128 2 0.5) 3.9583333333)
+    (exprTest (zeno_cost 8 10 2) 1310717)
+    (exprTest (zeno_cost 16 10 0.5) 19.927083333)
+    (exprTest (zeno_cost 0.0008 10 2) 77)
 )
 
 (define (run3)
-    (define mandelbrot-tester (mandelbrot-iter 100))
-    (if (= (mandelbrot-tester 2 3) 0)
-        (print "point (2,3) is in the Mandelbrot set!\n")
-        (print "point (2,3) is not in the Mandelbrot set.\n")
-    )
+    (exprTest ((mandelbrot-iter 100) 0 0) 0)
+	(exprTest ((mandelbrot-iter 100) 1 1) 2)
+	(exprTest ((mandelbrot-iter 100) 2 2) 1)
+	(exprTest ((mandelbrot-iter 100) -2 -2) 1)
+	(exprTest ((mandelbrot-iter 100) -1 -1) 3)
+	(exprTest ((mandelbrot-iter 100) .5 .5) 5)
+    (exprTest ((mandelbrot-iter 100) 2 3) 1)
 )
 
 (define (run4)
+    (exprTest (root3 64) 4)
+    (exprTest (root3 8) 2)
+    (exprTest (root3 27) 3)
 )
 
 (define (run5)
@@ -135,6 +180,10 @@
 )
 
 (define (run8)
+    (exprTest (egypt* 56 1960) 109760)
+    (exprTest (egypt* 64 64) 4096)
+    (exprTest (egypt* 100 100) 10000)
+    (exprTest (egypt* 280 1240) 347200)
 )
 
 (define (run9)
@@ -145,12 +194,12 @@
 
 ; ; Done (run1)
 ; ; Done (run2)
-; (run3)
+; ; Done (run3)
 ; ; Done (run4)
 ; (run5)
 ; ; Done (run6)
 ; (run7)
-; (run8)
+; ; Done (run8)
 ; (run9)
 ; (run10)
 (println "assignment 1 loaded!")
