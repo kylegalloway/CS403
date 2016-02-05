@@ -75,7 +75,9 @@
 )
 
 ; Task 5
-(define (crazyTriangle left right levels))
+(define (crazyTriangle left right levels)
+
+)
 
 ; Task 6
 (define (oppy op)
@@ -105,7 +107,7 @@
 (define (S f n total)
     (if (= n 0)
         (f n)
-        (S f (- n 1) (+ total (f n)))
+        (S f (- n 1) (+ total (w f n)))
     )
 )
 
@@ -140,17 +142,52 @@
 )
 
 ; Task 9
-; Equivalent to sqrt(3) - 1 as it approaches infinity
-;(define (mystery n)
-;    (if)
-;    (else
-;      (+ 1 (/ 1.0 (?(2/1) (recur ...))))
-;    )
-;)
+(define (mystery n)
+    (println "Equivalent to sqrt(3) - 1 as it approaches infinity")
+    (define (myst-rec total c)
+        (if (= n 0)
+            0
+        )
+        (if (< c n)
+            (begin
+                (if (= (% (- n c) 2) 0)
+                    (myst-rec (/ 1 (+ 2 total)) (+ c 1))
+                    (myst-rec (/ 1 (+ 1 total)) (+ c 1))
+                )
+            )
+            (+ 1 total)
+        )
+    )
+    (myst-rec 0.0 0)
+)
 
 ; Task 10
-(define (ramanujan d x))
-(define (iramanujan d x))
+(define (ramanujan d x)
+    (define (ram-rec c)
+        (if (< c d)
+            (sqrt (+ 1 (* (+ x c) (ram-rec (+ c 1)))))
+            1
+        )
+    )
+    (if (= d 0)
+        0
+        (ram-rec 0)
+    )
+)
+
+(define (iramanujan d x)
+    (define (iram c total)
+        (if (< c d)
+            (iram (+ c 1) (sqrt (+ 1 (* (+ x (- d c) -1) total))))
+            total
+        )
+    )
+
+    (if (= d 0)
+        0
+        (iram 0 1.0)
+    )
+)
 
 
 (define (run1)
@@ -192,6 +229,7 @@
 )
 
 (define (run5)
+    (crazyTriangle 1 2 6)
 )
 
 (define (run6)
@@ -214,9 +252,46 @@
 )
 
 (define (run9)
+	(exprTest (mystery 0) 1)
+	(exprTest (mystery 1) 2.0)
+	(exprTest (mystery 2) 1.6666666667)
+	(exprTest (mystery 3) 1.7500000000)
+	(exprTest (mystery 4) 1.7272727273)
+	(exprTest (mystery 5) 1.7333333333)
+	(exprTest (mystery 10) 1.7320490368)
+	(exprTest (mystery 25) 1.7320508076)
+	(exprTest (mystery 100) 1.7320508076)
+	(exprTest (mystery 1000) 1.7320508076)
+	(exprTest (mystery 10000) 1.7320508076)
 )
 
 (define (run10)
+	(exprTest (ramanujan 0 0) 0)
+	(exprTest (ramanujan 0 1) 0)
+	(exprTest (ramanujan 1 0) 1.0)
+	(exprTest (ramanujan 1 1) 1.4142135624)
+	(exprTest (ramanujan 2 1) 1.6528916503)
+	(exprTest (ramanujan 1 2) 1.7320508076)
+	(exprTest (ramanujan 2 2) 2.2360679775)
+	(exprTest (ramanujan 3 3) 3.2951592364)
+	(exprTest (ramanujan 7 4) 4.9198021247)
+	(exprTest (ramanujan 6 11) 11.497813243)
+	(exprTest (ramanujan 116 87) 88.000000000)
+	(exprTest (ramanujan 116 11793) 11794.000000)
+	(exprTest (iramanujan 0 0) 0)
+	(exprTest (iramanujan 0 1) 0)
+	(exprTest (iramanujan 1 0) 1.0)
+	(exprTest (iramanujan 1 1) 1.4142135624)
+	(exprTest (iramanujan 2 1) 1.6528916503)
+	(exprTest (iramanujan 1 2) 1.7320508076)
+	(exprTest (iramanujan 2 2) 2.2360679775)
+	(exprTest (iramanujan 3 3) 3.2951592364)
+	(exprTest (iramanujan 7 4) 4.9198021247)
+	(exprTest (iramanujan 6 11) 11.497813243)
+	(exprTest (iramanujan 116 87) 88.000000000)
+	(exprTest (iramanujan 116 11793) 11794.000000)
+	(exprTest (iramanujan 1000 11793) 11794.000000)
+	(exprTest (iramanujan 1000 503403) 503404.00000)
 )
 
 ; ; Done (run1)
@@ -227,6 +302,6 @@
 ; ; Done (run6)
 (run7)
 ; ; Done (run8)
-; (run9)
-; (run10)
+; ; Done (run9)
+; ; Done (run10)
 (println "assignment 1 loaded!")
