@@ -1,0 +1,91 @@
+file : EMPTY
+     | include file
+     | program
+
+include : INCLUDE OCHEVRON ID CCHEVRON
+        | INCLUDE STRING
+
+program : definition
+        | definition program
+
+definition : variableAssignment
+           | functionDefinition
+           | functionCall
+
+variableAssignment : ID ASSIGN expr SEMI
+
+functionDefinition : ID OPAREN optParamList CPAREN block
+
+optParamList : EMPTY
+             | paramList
+
+paramList : expr
+          | expr COMMA paramList
+
+functionCall : ID OPAREN optArgumentList CPAREN
+
+optArgumentList : EMPTY
+                | argumentList
+
+argumentList : expr
+             | expr COMMA argumentList
+
+optExprList : EMPTY
+           | exprList
+
+exprList : expr
+         | expr COMMA exprList
+
+expr : primary
+     | primary operator expr
+
+primary : ID
+        | STRING
+        | INT
+        | OPAREN expr CPAREN
+        | lambda
+        | functionDefinition
+        | functionCall
+        | ID OBRACKET expr CBRACKET
+        | OBRACE optExprList CBRACE
+
+operator : EQUAL
+         | GREATER
+         | LESS
+         | GREATEREQUAL
+         | LESSEQUAL
+         | PLUS
+         | MINUS
+         | MULTIPLY
+         | DIVIDE
+         | POWER
+         | NOT
+         | AND
+         | OR
+
+block : OBRACE optStatementList CBRACE
+
+optStatementList : EMPTY
+                 | statementList
+
+statementList : statement
+              | statement statementList
+
+statement : variableAssignment SEMI
+          | functionDefinition
+          | functionCall SEMI
+          | expr SEMI
+          | whileLoop
+          | ifStatement
+          | RETURN expr SEMI
+
+whileLoop : WHILE OPAREN expr CPAREN block
+
+ifStatement : IF OPAREN expr CPAREN block optElseStatement
+
+optElseStatement : EMPTY
+                 | ElseStatement
+
+ElseStatement : ELSE block
+
+lambda : LAMBDA OPAREN argumentlist CPAREN block
