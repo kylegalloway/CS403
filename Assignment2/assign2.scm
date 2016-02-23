@@ -53,8 +53,49 @@
 )
 
 ; Task 3
-(define (infix->prefix Expr)
+; Returns true if op1 has == or > precedence than op2
+(define (checkPrec op1 op2)
+    (cond
+        ((== op1 '^) #t)
+        ((and (== op1 '*) (!= op2 '^)) #t)
+        ((and (== op1 '/) (!= op2 '^)) #t)
+        ((and (== op1 '+) (!= op2 '^) (!= op2 '*) (!= op2 '/)) #t)
+        ((and (== op1 '-) (!= op2 '^) (!= op2 '*) (!= op2 '/)) #t)
+        (else #f)
+    )
+)
 
+; Empties the ops stack onto the output stack and returns the output
+(define (emptyStack output ops)
+    ; (println output " : " ops)
+    (if (null? ops)
+        output
+        (emptyStack (cons (car ops) output) (cdr ops))
+    )
+)
+
+(define (infix->prefix Expr)
+    (define (iter ex out ops)
+        ; (println ex " : " out " : " ops)
+        (if (null? ex)
+            (emptyStack out ops)
+            (cond
+                ((integer? (car ex))
+                    (iter (cdr ex) (cons (car ex) out) ops)
+                )
+                ((symbol? (car ex))
+                    (if (null? ops)
+                        (iter (cdr ex) out (cons (car ex) ops))
+                        (if (checkPrec (car ex) (car ops))
+                            (iter (cdr ex) out (cons (car ex) ops))
+                            (iter ex (cons (list (car ops) (car out) (cadr out)) (cddr out)) (cdr ops))
+                        )
+                    )
+                )
+            )
+        )
+    )
+    (iter Expr nil nil)
 )
 
 ; Task 4
@@ -65,7 +106,10 @@
 (define (fix L)
     (define (fix ly)
         (if (not (null? ly))
-            (append (car ly) (list (fix (cdr ly))))
+            (if (integer? (car ly))
+                ly
+                (list (append (car ly) (fix (cdr ly))))
+            )
             nil
         )
     )
@@ -79,7 +123,7 @@
             (append curr (list (list 'lambda (list (car exp)))))
         )
     )
-    (fix (append (iter (cadr Expr) '()) (list (caddr Expr))))
+    (car (fix (append (iter (cadr Expr) '()) (list (caddr Expr)))))
 )
 
 ; Task 6
@@ -91,28 +135,32 @@
             (if (not (list? (car L)))
                 ; Recur with L=>(cdr L) & newL=>(newL (car L))
                 (replace-iter (cdr L)
-                              (append (list (car L)) newL)
+                              (append newL (list (car L)))
                 )
                 ; Else, recur with L=>(cdr L) &
                 ;     newL=>(newL (replace (car L)))
-                (replace-iter (cdr L) (append (replace-paren (car L)) newL))
+                (replace-iter (cdr L) (append newL (replace-paren (car L))))
             )
-            ; Else, return (newL 'l)
-            (append (list 'l) newL)
+            ; Else, return (newL 'r)
+            (append newL (list 'r))
         )
     )
-    ; Call replace-iter with L and ('r)
-    (replace-iter L (list 'r))
+    ; Call replace-iter with L and ('l)
+    (replace-iter L (list 'l))
 )
 
 (define (rewrite L)
     (define (rewrite-iter L newL)
         (if (and (list? L) (not (null? L)))
-                  ; If (car L) is 'r
-            (cond ((== (car L) 'l) (rewrite-iter (cdr L) (list newL)))
-                  ; If (car L) is an integer
-                  ((integer? (car L)) (rewrite-iter (cdr L) (append newL (list (car L)))))
-                  (#t (rewrite-iter (cdr L) (list newL)))
+            (cond
+                ; If (car L) is 'l make newL a list
+                ((== (car L) 'l) (rewrite-iter (cdr L) (list newL)))
+                ; If (car L) is an integer (append newL (list (car L)))
+                ((integer? (car L))
+                    (rewrite-iter (cdr L) (append (list (car L)) newL))
+                )
+                ; Else, make newL a list
+                (#t (rewrite-iter (cdr L) (list newL)))
             )
             newL
         )
@@ -121,6 +169,7 @@
 )
 
 (define (reverse* L)
+    ; (replace-paren L)
     (rewrite (replace-paren L))
 )
 
@@ -202,10 +251,8 @@
 ; Tests
 (define (run1)
     (loop (lambda (x) (inspect x)) '(0 5))
-    (loop (lambda (x) (println (* x x))) '(1 13))
-    (loop (lambda (x) (println (+ x x))) '(1 11))
-    (loop (lambda (x) (println (* x x x))) '(1 11))
-    (loop (lambda (x) (println (+ x x x))) '(1 21))
+    (loop (lambda (x) (println (* x x))) '(1 11))
+    (loop (lambda (x) (println (+ x x x))) '(1 11))
     (loop (lambda (x) (println (sqrt x))) '(1 10))
 )
 
@@ -225,6 +272,8 @@
 )
 
 ; (define (run3)
+;     (println (infix->prefix '(1 * 2 + 3)))
+;     (inspect (eval (infix->prefix '(1 * 2 + 3)) this))
 ;     (inspect (eval (infix->prefix '(1 + 2 * 3)) this))
 ;     (inspect (eval (infix->prefix '(1 - 2 * 3)) this))
 ;     (inspect (eval (infix->prefix '(1 + 2 * 3 + 4)) this))
