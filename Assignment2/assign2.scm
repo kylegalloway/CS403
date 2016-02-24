@@ -4,13 +4,30 @@
     (println "AUTHOR: Kyle Galloway ckgalloway@crimson.ua.edu")
 )
 
+; (define (exprTest # $expr target)
+;     (define result (catch (eval $expr #)))
+;     (if (error? result)
+;         (println $expr " is EXCEPTION: " (result'value)
+;             " (it should be " target ")")
+;         (println $expr " is " result
+;             " (it should be " target ")")
+;     )
+; )
+
 (define (exprTest # $expr target)
     (define result (catch (eval $expr #)))
-    (if (error? result)
-        (println $expr " is EXCEPTION: " (result'value)
-            " (it should be " target ")")
-        (println $expr " is " result
-            " (it should be " target ")")
+    (println)
+    (cond
+        ((error? result)
+            (println $expr " is EXCEPTION:")
+            (println (result'value))
+            (println "It should be:")
+            (println target))
+        (else
+            (println $expr " is: ")
+            (println result ", it should be: ")
+            (println target)
+        )
     )
 )
 
@@ -53,49 +70,87 @@
 )
 
 ; Task 3
-; Returns true if op1 has == or > precedence than op2
-(define (checkPrec op1 op2)
-    (cond
-        ((== op1 '^) #t)
-        ((and (== op1 '*) (!= op2 '^)) #t)
-        ((and (== op1 '/) (!= op2 '^)) #t)
-        ((and (== op1 '+) (!= op2 '^) (!= op2 '*) (!= op2 '/)) #t)
-        ((and (== op1 '-) (!= op2 '^) (!= op2 '*) (!= op2 '/)) #t)
-        (else #f)
+; Returns the top element of the stack
+(define (peek S)
+    (if (null? S)
+        '()
+        (car S)
     )
 )
-
+; Returns the stack without the top element
+(define (pop S)
+    (if (null? S)
+        '()
+        (cdr S)
+    )
+)
+; Adds an element to the front of a S
+(define (push S el)
+    (if (null? S)
+        (list el)
+        (append (list el) S)
+    )
+)
+; Returns true if op1 has higher precedence than op2
+(define (checkPrec op1 op2)
+    (define prList '(^ / * - +))
+    (define (iter prList)
+        (cond
+            ((== (car prList) op1) #t)
+            ((== (car prList) op2) #f)
+            (else (iter (cdr prList)))
+        )
+    )
+    (iter prList)
+)
+; Adds all of the given list to a stack (basically reverses it)
+(define (pushAll L)
+    (define (iter LL S)
+        (if (null? LL)
+            S
+            (iter (cdr LL) (push S (car LL)))
+        )
+    )
+    (iter L '())
+)
+; Makes an expression from the element and the top 2 items of the stack
+(define (makeExpr S el)
+    (append (list (list el (car S) (cadr S))) (cddr S))
+)
 ; Empties the ops stack onto the output stack and returns the output
 (define (emptyStack output ops)
     ; (println output " : " ops)
     (if (null? ops)
         output
-        (emptyStack (cons (car ops) output) (cdr ops))
+        (if (>= (length ops) 2)
+            (emptyStack (makeExpr output (car ops)) (cdr ops))
+            (emptyStack (makeExpr output (car ops)) nil)
+        )
     )
 )
 
 (define (infix->prefix Expr)
-    (define (iter ex out ops)
-        ; (println ex " : " out " : " ops)
-        (if (null? ex)
-            (emptyStack out ops)
+    (define (iter in out ops)
+        ; (println in " : " out " : " ops)
+        (if (null? in)
+            (car (emptyStack out ops))
             (cond
-                ((integer? (car ex))
-                    (iter (cdr ex) (cons (car ex) out) ops)
+                ((integer? (car in))
+                    (iter (cdr in) (push out (car in)) ops)
                 )
-                ((symbol? (car ex))
+                ((symbol? (car in))
                     (if (null? ops)
-                        (iter (cdr ex) out (cons (car ex) ops))
-                        (if (checkPrec (car ex) (car ops))
-                            (iter (cdr ex) out (cons (car ex) ops))
-                            (iter ex (cons (list (car ops) (car out) (cadr out)) (cddr out)) (cdr ops))
+                        (iter (cdr in) out (push ops (car in)))
+                        (if (checkPrec (car in) (car ops))
+                            (iter (cdr in) out (push ops (car in)))
+                            (iter in (makeExpr out (car ops)) (cdr ops))
                         )
                     )
                 )
             )
         )
     )
-    (iter Expr nil nil)
+    (iter (pushAll Expr) nil nil)
 )
 
 ; Task 4
@@ -154,13 +209,14 @@
         (if (and (list? L) (not (null? L)))
             (cond
                 ; If (car L) is 'l make newL a list
+                ; Cool function that inserts deep needs to go here
                 ((== (car L) 'l) (rewrite-iter (cdr L) (list newL)))
                 ; If (car L) is an integer (append newL (list (car L)))
                 ((integer? (car L))
                     (rewrite-iter (cdr L) (append (list (car L)) newL))
                 )
                 ; Else, make newL a list
-                (#t (rewrite-iter (cdr L) (list newL)))
+                (#t (rewrite-iter (cdr L) (cons '() newL)))
             )
             newL
         )
@@ -174,6 +230,7 @@
 )
 
 ; Task 7
+; Same as in book
 (define (accumulate op initial sequence)
     (if (null? sequence)
         initial
@@ -182,7 +239,7 @@
         )
     )
 )
-
+; Same as in book
 (define (accumulate-n op init seqs)
     (if (null? (car seqs))
         nil
@@ -191,23 +248,21 @@
         )
     )
 )
-
-(define (dot-product v w)
-    (accumulate + 0 (map * v w))
-)
-
-(define (matrix-*-vector m v)
-    (map (lambda (row) (dot-product row v)) m)
-)
-
+; Same as in book
 (define (transpose mat)
     (accumulate-n cons nil mat)
 )
+; Same as in book
+(define (dot-product v w)
+    (accumulate + 0 (map * v w))
+)
+; Same as in book but transpose the matrix at the beginning
+(define (matrix-*-vector m v)
+    (map (lambda (row) (dot-product row v)) (transpose m))
+)
 
 (define (matrix-*-matrix m n)
-    (let ((cols (transpose n)))
-         (map (lambda (row) (matrix-*-vector cols row)) m)
-    )
+    (map (lambda (row) (matrix-*-vector n row)) m)
 )
 
 
@@ -271,14 +326,14 @@
     (inspect (((((curry plus 1) 2) 3) 4) 5))
 )
 
-; (define (run3)
-;     (println (infix->prefix '(1 * 2 + 3)))
-;     (inspect (eval (infix->prefix '(1 * 2 + 3)) this))
-;     (inspect (eval (infix->prefix '(1 + 2 * 3)) this))
-;     (inspect (eval (infix->prefix '(1 - 2 * 3)) this))
-;     (inspect (eval (infix->prefix '(1 + 2 * 3 + 4)) this))
-;     (inspect (eval (infix->prefix '(1 + 1)) this))
-; )
+(define (run3)
+    (inspect (eval (infix->prefix '(1 * 2 + 3)) this))
+    (inspect (eval (infix->prefix '(1 + 2 * 3)) this))
+    (inspect (eval (infix->prefix '(1 - 2 * 3)) this))
+    (inspect (eval (infix->prefix '(1 - 2 * 3 + 4)) this))
+    (inspect (eval (infix->prefix '(1 + 2 * 3 + 4)) this))
+    (inspect (eval (infix->prefix '(1 + 1)) this))
+)
 
 ; (define (run4))
 
@@ -295,28 +350,27 @@
 ;     (inspect (reverse* '(1 2 3 4 5)))
 ; )
 
-; (define (run7)
-;     (define v (list 1 3 -5))
-;     (define w (list 4 -2 -1))
-;     (inspect (dot-product v w))
-;     (println "   [it should be 3]")
-;     (define m (list (list 1 2 3) (list 4 5 6)))
-;     (define v (list 1 2 3))
-;     (inspect (matrix-*-vector m v))
-;     (println "   [it should be (14 32)]")
-;     (define a (list (list 14 9 3) (list 2 11 15) (list 0 12 17) (list 5 2 3)))
-;     (define b (list (list 12 25) (list 9 10) (list 8 5)))
-;     (inspect (matrix-*-matrix a b))
-;     (println "   [it should be ((273 455) (243 235) (244 205) (102 160))]")
-;     (inspect (dot-product '(0) '(0)))
-;     (println "    [it should be 0]")
-;     (inspect (transpose '((0))))
-;     (println "    [it should be '((0))]")
-;     (inspect (matrix-*-vector '((0)) '(0)))
-;     (println "    [it should be '(0)]")
-;     (inspect (matrix-*-matrix '((0)) '((0))))
-;     (println "    [it should be '((0))]")
-; )
+(define (run7)
+    (define v1 '(1 2 3))
+    (define w1 '(4 5 6))
+    (define m1 '((1 4) (2 5) (3 6)))
+    (define m2 '((1 2 3) (2 3 4) (3 4 5) (4 5 6)))
+    (define m3 '((10 10) (10 10) (10 10)))
+    (define m4 '((1 4 6) (2 5 7) (3 6 8) (4 7 9)))
+    (define m5 '((4 6 9 1) (3 6 8 4) (2 5 7 6)))
+    (define m6 '((1 2 3)(10 20 30)(100 200 300)))
+    (define I3 '((1 0 0) (0 1 0) (0 0 1)))
+    (exprTest (dot-product v1 w1) 32)
+    (exprTest (matrix-*-vector m1 v1) '(14 32))
+    (exprTest (matrix-*-matrix m2 m3) '((60 60) (90 90) (120 120) (150 150)))
+    (exprTest (matrix-*-matrix m4 m5) '((28 60 83 53) (37 77 107 64) (46 94 131 75) (55 111 155 86)))
+    (exprTest (matrix-*-matrix m5 m4) '((47 107 147) (55 118 160) (57 117 157)))
+    (exprTest (matrix-*-matrix m6 I3) '((1 2 3)(10 20 30)(100 200 300)))
+    (exprTest (dot-product '(0) '(0)) 0)
+    (exprTest (transpose '((0))) '((0)))
+    (exprTest (matrix-*-vector '((0)) '(0)) '(0))
+    (exprTest (matrix-*-matrix '((0)) '((0))) '((0)))
+)
 
 ; (define (run8)
 ;     (define t0 (node 5 nil nil))
@@ -332,11 +386,11 @@
 ; Run tests
 ; DONE (run1)
 ; DONE (run2)
-; (run3)
+; DONE (run3)
 ; (run4)
 ; DONE (run5)
 ; (run6)
-; (run7)
+; DONE (run7)
 ; (run8)
 ; (run9)
 ; (run10)

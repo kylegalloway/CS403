@@ -8,27 +8,18 @@ include : INCLUDE OCHEVRON ID CCHEVRON
 program : definition
         | definition program
 
-definition : variableAssignment
+definition : variableDefinition
            | functionDefinition
-           | functionCall
 
-variableAssignment : ID ASSIGN expr SEMI
+variableDefinition : ID ASSIGN expr SEMI
 
 functionDefinition : ID OPAREN optParamList CPAREN block
 
 optParamList : EMPTY
              | paramList
 
-paramList : expr
-          | expr COMMA paramList
-
-functionCall : ID OPAREN optArgumentList CPAREN
-
-optArgumentList : EMPTY
-                | argumentList
-
-argumentList : expr
-             | expr COMMA argumentList
+paramList : ID
+          | ID COMMA paramList
 
 optExprList : EMPTY
            | exprList
@@ -39,17 +30,21 @@ exprList : expr
 expr : primary
      | primary operator expr
 
-primary : ID
+primary : idDef
         | STRING
         | INT
+        | NOT primary
         | OPAREN expr CPAREN
         | lambda
         | functionDefinition
-        | functionCall
-        | ID OBRACKET expr CBRACKET
-        | OBRACE optExprList CBRACE
+        | OBRACKET optExprList CBRACKET
+
+idDef : ID
+      | ID OPAREN optExprList CPAREN
+      | ID OBRACKET expr CBRACKET
 
 operator : EQUAL
+         | NOTEQUAL
          | GREATER
          | LESS
          | GREATEREQUAL
@@ -59,9 +54,9 @@ operator : EQUAL
          | MULTIPLY
          | DIVIDE
          | POWER
-         | NOT
          | AND
          | OR
+         | ASSIGN
 
 block : OBRACE optStatementList CBRACE
 
@@ -71,9 +66,8 @@ optStatementList : EMPTY
 statementList : statement
               | statement statementList
 
-statement : variableAssignment SEMI
+statement : variableDefinition
           | functionDefinition
-          | functionCall SEMI
           | expr SEMI
           | whileLoop
           | ifStatement
@@ -87,5 +81,6 @@ optElseStatement : EMPTY
                  | ElseStatement
 
 ElseStatement : ELSE block
+              | ELSE ifStatement
 
-lambda : LAMBDA OPAREN argumentlist CPAREN block
+lambda : LAMBDA OPAREN optParamList CPAREN block

@@ -1,17 +1,16 @@
 #include <stdlib>
-#include "mylib" Lib
+#include "mylib"
 
 #{
 Some ideas I have:
-    Mutable & immutable variables (possibly using :x vs x)
     No pre-processor statements except for includes allowed.
-    Well defined library structure stdlib::printf.
+    Includes are only allowed at top of file.
 #}
 
 ## This is a basic function.
 func isBig(x) { return x >= 1000; }
 
-stdlib::println(isBig(42));
+println(isBig(42));
 
 #{
 Here is a function
@@ -25,6 +24,14 @@ func largest(x,y,z)
         if(x > z)
         {
             return x;
+        }
+        return z;
+    }
+    else if (y > x)
+    {
+        if(y > z)
+        {
+            return y;
         }
         return z;
     }
@@ -42,8 +49,8 @@ func largest(x,y,z)
 func
 printString(str)
 {
-    stdlib::printf("My string is: %s", str);
-    stdlib::println();
+    printf("My string is: %s", str);
+    println();
 }
 
 func loopy()
@@ -51,10 +58,10 @@ func loopy()
     x = 1;
     while(x < 10)
     {
-        stdlib::println(x);
+        println(x);
         x = x + 1; ##No syntactic sugar...yet
     }
-    stdlib::printf("Final x: %s", x);
+    printf("Final x: %s", x);
 }
 
 loopy();
