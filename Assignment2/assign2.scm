@@ -298,7 +298,58 @@
 )
 
 ; Task 9
+(define (big+ a b)
+    (define (iter a b total addin)
+        (println "a: " a " :b: " b " :total: " total " :addin: " addin)
+        (if (> (length a) 0)
+            (if (> (length b) 0)
+                (begin
+                    (define s (+ (car a) (car b) addin))
+                    (if (> s 9)
+                        (if (> (length total) 0)
+                            (iter (cdr a) (cdr b) (append total (list (- s 10))) 1)
+                            (iter (cdr a) (cdr b) (list (- s 10)) 1)
+                        )
+                        (if (> (length total) 0)
+                            (iter (cdr a) (cdr b) (append total (list s)) 0)
+                            (iter (cdr a) (cdr b) (list s) 0)
+                        )
+                    )
+                )
+                (if (> (length total) 0)
+                    (append total a)
+                    a
+                )
+            )
+            (if (> (length b) 0)
+                (if (> (length total) 0)
+                    (append total b)
+                    b
+                )
+                total
+            )
+        )
+    )
+    (if (== '- (car a))
+        (if (== '- (car b))
+            (reverse (iter (reverse (car a)) (reverse (car b)) nil 0))
+            (reverse (append (iter (reverse (car a)) (reverse b) nil 0)) '-)
+        )
+        (if (== '- (car b))
+            (reverse (append (iter (reverse a) (reverse (car b)) nil 0)) '-)
+            (reverse (iter (reverse a) (reverse b) nil 0))
+        )
+    )
+)
 
+(define (big- a b)
+    (if(== (car b) '-)
+        (big+ a (cdr b))
+        (big+ a (append '(-) b))
+    )
+)
+
+(define (big* a b))
 
 ; Task 10
 
@@ -379,7 +430,20 @@
 ;     (displayTree t2 "   ")
 ; )
 
-; (define (run9))
+(define (run9)
+    (exprTest (big+ '(1 1 1 1) '(1 1 1 1)) '(2 2 2 2))
+    (exprTest (big+ '(- 1 1 1 1) '(1 1 1 1)) '(0 0 0 0))
+    (exprTest (big+ '(1 1 1 1) '(- 1 1 1 1)) '(0 0 0 0))
+    (exprTest (big+ '(- 1 1 1 1) '(- 1 1 1 1)) '(- 2 2 2 2))
+    (exprTest (big+ '(4 5 8 9) '(3 0 2)) '(4 8 9 1))
+    (exprTest (big+ '(3 0 2) '(4 5 8 9)) '(4 8 9 1))
+    (exprTest (big- '(1 1 1 1) '(1 1 1 1)) '(0 0 0 0))
+    (exprTest (big- '(- 1 1 1 1) '(1 1 1 1)) '(- 2 2 2 2))
+    (exprTest (big- '(1 1 1 1) '(- 1 1 1 1)) '(2 2 2 2))
+    (exprTest (big- '(- 1 1 1 1) '(- 1 1 1 1)) '(0 0 0 0))
+    (exprTest (big- '(1 1 1 1) '(1 1 1)) '(1 0 0 0))
+    (exprTest (big- '(1 0 0) '(1 1 0 0)) '(- 1 0 0 0))
+)
 
 ; (define (run10))
 
@@ -392,6 +456,6 @@
 ; (run6)
 ; DONE (run7)
 ; (run8)
-; (run9)
+(run9)
 ; (run10)
 (println "assignment 1 loaded!")
