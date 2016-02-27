@@ -260,7 +260,7 @@
 (define (matrix-*-vector m v)
     (map (lambda (row) (dot-product row v)) (transpose m))
 )
-
+; Same as in book but don't transpose the matrix at the beginning
 (define (matrix-*-matrix m n)
     (map (lambda (row) (matrix-*-vector n row)) m)
 )
