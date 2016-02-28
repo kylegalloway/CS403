@@ -155,7 +155,27 @@
 
 ; Task 4
 
+; (list def ((lambda params body) args))
 
+(define (no-locals orig)
+    (define (iter curr params args)
+        (define spot (car curr))
+        (if (== (car spot) 'define)
+            (if (== (length params) 0)
+                (if (== (length args) 0)
+                    (iter (cdr curr) (list (cadr spot)) (list (caddr spot)))
+                    (iter (cdr curr) (list (cadr spot)) (append args (list (caddr spot))))
+                )
+                (if (== (length args) 0)
+                    (iter (cdr curr) (append params (list (cadr spot))) (list (caddr spot)))
+                    (iter (cdr curr) (append params (list (cadr spot))) (append args (list (caddr spot))))
+                )
+            )
+            (list (list 'lambda params (car curr) args))
+        )
+    )
+    (list (car orig) (cadr orig) (iter (cddr orig) '() '()))
+)
 ; Task 5
 
 (define (fix L)
@@ -284,15 +304,25 @@
     )
 )
 
-(define (insertInTree root item)
-    (if (>= item root'value)
-        (if (null? root'right)
-            ; (define (root'right) (node item nil nil))
-            ; (insertInTree root'right item)
+(define (insertInTree Tree item)
+    (cond
+        ; If Tree is empty make a root
+        ((null? Tree) (node item '() '()))
+        ; Else if the value is the same return the tree
+        ((= item (Tree'value)) Tree)
+        ; If less than, make a new Tree and recur left
+        ((< item (Tree'value))
+            (node (Tree'value)
+                    (insertInTree (Tree'left) item)
+                    (Tree'right)
+            )
         )
-        (if (null? root'left)
-            ; (define (root'left) (node item nil nil))
-            ; (insertInTree root'left item)
+        ; If less than, make a new Tree and recur right
+        ((> item (Tree'value))
+            (node (Tree'value)
+                        (Tree'left)
+                        (insertInTree (Tree'right) item)
+            )
         )
     )
 )
@@ -300,11 +330,13 @@
 ; Task 9
 (define (clean x)
     (define (allZero? n)
+        ; If (length n) == 1
         (if (== 1 (length n))
             (if (!= 0 (car n))
                 #f ; (car n != 0)
                 #t ; (car n == 0)
             )
+            ;else
             (if (!= 0 (car n))
                 #f ; (car n != 0)
                 (allZero? (cdr n)) ; (car n == 0)
@@ -312,16 +344,19 @@
         )
     )
     (if (== (car x) '-)
+        ; Fixes '(- 0 0 0)
         (if (allZero? (cdr x))
             '(0)
             x
         )
+        ; Fixes '(0 0 0)
         (if (allZero? x)
             '(0)
             x
         )
     )
 )
+
 (define (big+ a b)
     (define (iter a b total addin)
         (if (> (length a) 0)
@@ -483,7 +518,20 @@
     (inspect (eval (infix->prefix '(1 + 1)) this))
 )
 
-; (define (run4))
+(define (run4)
+    (exprTest (no-locals
+        '(define (nsq a) (define x (+ a 1)) (define y (- a 1)) (* x y)))
+        '(define (nsq a) ((lambda (x y) (* x y)) (+ a 1) (- a 1)))
+    )
+    (exprTest (no-locals
+        '(define (nsq a) (define x (+ a 1)) (define y (- a 1)) (define z a) (* x y z)))
+        '(define (nsq a) ((lambda (x y z) (* x y z)) (+ a 1) (- a 1) a))
+    )
+    (exprTest (no-locals
+        '(define (nsq a) (define (iter x) (+ a 1)) (define y (- a 1)) (* x y)))
+        '(define (nsq a) ((lambda ((iter x) y) (* x y) ((+ a 1) (- a 1)))))
+    )
+)
 
 (define (run5)
     (println (convert (quote (lambda (a b) (+ a b)))))
@@ -520,12 +568,16 @@
     (exprTest (matrix-*-matrix '((0)) '((0))) '((0)))
 )
 
-; (define (run8)
-;     (define t0 (node 5 nil nil))
-;     (define t1 (insertInTree t0 2))
-;     (define t2 (insertInTree t1 8))
-;     (displayTree t2 "   ")
-; )
+(define (run8)
+    (define t0 (node 5 nil nil))
+    (define t1 (insertInTree t0 2))
+    (define t2 (insertInTree t1 8))
+    (define t3 (insertInTree t2 7))
+    (define t4 (insertInTree t3 10))
+    (define t5 (insertInTree t4 1))
+    (define t6 (insertInTree t5 3))
+    (displayTree t6 "   ")
+)
 
 (define (run9)
     (exprTest (big+ '(4 5 8 9) '(3 0 2)) '(4 8 9 1))
@@ -548,11 +600,11 @@
 ; DONE (run1)
 ; DONE (run2)
 ; DONE (run3)
-; (run4)
+(run4)
 ; DONE (run5)
 ; (run6)
 ; DONE (run7)
-; (run8)
-; (run9)
+; DONE (run8)
+; 2/3 DONE (run9)
 ; (run10)
 (println "assignment 1 loaded!")
