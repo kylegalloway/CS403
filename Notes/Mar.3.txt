@@ -1,0 +1,8 @@
+function evalCall(T, E):
+    eargs = eval(getArgs(T), E)
+    f = lookup(getName(T), E)
+    s = create(getParams(f), eargs, getDefScope(f))
+    return eval(getBody(f), s)
+
+function evalFuncDef(T, E):
+    return cons(CLOSURE, E, T)

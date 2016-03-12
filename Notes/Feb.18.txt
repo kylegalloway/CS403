@@ -1,0 +1,125 @@
+(define (exp m n)
+	(lambda (f)
+		(lambda (x)
+			(((n m) f) x)
+		)
+	)
+)
+
+what is m^n when n is zero?
+	(((zero m) f) x) **will return the base (f)**
+	(f x) **this is one**
+	
+what is m^n when n is one?
+	(((one m) f) x) ** will return the base m times (m f)**
+	((m f) x) **this is m**
+	
+what is m^n when n is two?
+	(((two m) f) x) **will return (m(m f))**
+	((m (m f)) x) ** m^2 **
+	pick a value for m: three
+	((three (three f)) x)
+	((three f) ((three f) ((three f) x)))
+	((three f) ((three f) 3))
+	((three f) 6)
+	(9)
+	
+what is m^n when n is three?
+	(((three m) f) x)
+	((m (m (m f))) x)
+	choose a value for m: two
+	((two (two (two f))) x)
+		  -----------------
+	(((two (two f)) ((two (two f)) x))
+	(((two (two f)) 4)
+	8	  
+
+**big Ints Task**
+(define old+ +)
+(define (+ a b)
+	(cond
+		((normalInts? a b) (old+ a b))
+		((and (real? a) (real? b)) (old+ a b))
+		ect...
+	)
+)
+
+a+b > INT_MAX ** no overflow **
+INT_MAX - b <= a ** does overflow **
+
+******************************
+******************************
+
+(define (length items)
+	(cond
+		((null? items) 0)
+		(else (+ 1 (length (cdr items))))
+	)
+)
+
+
+** tail recursive **
+
+(define (length items)
+	(define (iter store src)
+		(cond
+			((null? src) store)
+			(else (iter (+ store 1) (cdr items)))
+		)
+	)
+	(iter 0 items)
+)
+
+(define (find x items)
+	(cond
+		((null? items) #f)
+		((eq? x (car items)) #t)
+		(else (find x (cdr items)))
+	)
+)
+
+(define (collect x items)
+	(cond
+		((null? items) nil)
+		((eq? x (car items)) 
+			(cons x (collect x (cdr items)))
+		)
+		(else (collect x (cdr items)))
+	)
+)
+
+(define (howMany x items)
+	(length(collect x items))
+)
+
+*****************************
+*  CONVENTIONAL INTERFACE   *
+*****************************
+
+job control language (jcl)
+
+made every thing a text file
+
+Unix Utilites     ** files called over and over **
+
+Scam's conventional interface is a list  ** by nesting function calls **
+
+** good for matrix problem **
+(define (map f items)
+	(cond
+		((null? items) nil)
+		(else (cons (f(car items))
+				    (map f (cdr items)))
+		)
+	)
+)
+
+(define (keep p? items)
+	(cond
+		((null? items) nil)
+		((p? (car items))
+			(cons (car items) (keep p? (cdr items)))
+		)
+		(else (keep p? (cdr items)))
+	)
+)

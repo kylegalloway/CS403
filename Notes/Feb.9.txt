@@ -1,0 +1,102 @@
+Recognizer
+
+function check(t){
+	return t == Pending.type;
+}
+
+function  advance(){
+	var old = Pending;
+	Pending = lex();
+	return old;
+}
+
+function match(t){
+	if(check(t)) return advance();
+	throw(syntaxError);
+}
+
+Grammer rules
+
+/* expr : primary
+	    | primary op expr */
+	 
+function expr(){
+	primary();
+	if(opPending()){
+		op();
+		expr();
+	}
+}
+
+/* op : PLUS
+	  | MINUS
+	  | ASSIGN
+	  | MULT
+	  | DIVIDE */
+
+function opPending(){
+	return check(PLUS) || check(MINUS) || ...;
+}
+
+/* statement : expr SEMI 
+			 | whileLoop
+			 | ifStatement
+			 | definition */
+
+function statment(){
+	if(exprPending()){
+		expr();
+		match(SEMI);
+	}
+	else if(whilePending()){
+		whileLoop();
+	}
+	else if(ifPending()){
+		ifStatement();
+	}
+	else if(definitionPending){
+		definition();
+	}
+	else{
+		throw(sentaxError);
+	}
+}
+
+function exprPending(){
+	return primaryPending();
+}
+
+function parse(fileName){
+	lexInit(fileName);
+	Pending = lex();
+	program();
+	match(END_OF_INPUT);
+}
+
+*****************************************
+
+CHAPTER 2 : DATA STRUCTURES
+*****************************************
+
+cons cell
+|
+--> construct
+
+a cell [ | ] pointer to the left and pointer to the right
+
+(cons left right) such as (cons 1 3)
+							[1|3]
+
+(define a (cons 1 3))
+a = [1|3]
+
+(car a) = value of left (1)
+(cdr a) = value of right (3)
+
+cons can contain other cons
+
+a -> ((4.9).(10.6))
+(car a) -> (4.9)
+(car (cdr a)) -> (10)
+(cadr a) -> (10)
+(cddr a) -> (6)

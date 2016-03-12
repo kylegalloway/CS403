@@ -1,0 +1,127 @@
+Karatsubas sudo
+(define m (max (length a) (length b)))
+(define m2 (/ m 2))
+.
+.
+.
+(* m2 2) *** not use m because of integer devision***
+m2
+ 
+adding a and -b as a - b
+-a * -b is a * b
+helper that multiplyed a big int by a scalar(regular number)
+ 
+pair used to look at a cons cell and does not
+	trace the whole thing like list does 
+
+task3 use a stack and queue or 2 stacks
+((a + b) + x) Left Associative
+(a + (b + x)) Right Associative
+matters on subtraction
+
+'(1 2 3 4) = (quote (1 2 3 4))
+
+************************************************
+CHAPTER 2 NOTES
+************************************************ 
+(define two
+	(lambda (f)
+		(lambda (x)
+			(f (f x))
+		)
+	)
+)
+
+(define four
+	(lambda (f)
+		(lambda (x)
+			(f (f (f (f x))))
+		)
+	)
+)
+
+(define (add m n)
+	(lambda (f)
+		(lambda (x)
+			((m f) ((n f) x))
+		)
+	)
+)
+
+(define six (add two four))
+
+(define (mult m n)
+	(lambda (f)
+		(lambda (x)
+			((m (n f)) x)
+		)
+	)
+)
+
+(define eight (mult two four))
+
+(define (exp m n)
+	(lambda (f)
+		(lambda (x)
+			(((n m) f) x)
+		)
+	)
+)
+
+(define sixteen (exp two four))
+
+(inspect ((two (lambda (x) (+ x 1)))0)) returns 2
+(inspect ((four (lambda (x) (+ x 1)))0)) returns 4
+(inspect ((six (lambda (x) (+ x 1)))0)) returns 6
+(inspect ((eight (lambda (x) (+ x 1)))0)) returns 8
+(inspect ((sixteen (lambda (x) (+ x 1)))0)) returns 16
+
+***********************************************
+RATIONAL NUMBERS
+***********************************************
+
+need a numerator and denominator
+
+[num|den]
+
+better
+[num| ]
+	 [den|nil]
+	 
+best (use an identifier aka a symbol)
+[rat| ]
+	 [num| ]
+		  [den|nil]
+
+(define (rational num den)
+	(define factor (gcd num den)) ** reduces the fraction**
+	(list 'rat num den) ** makes rat a symbol**
+	
+)
+
+(define (get-den r) (caddr r))
+(define (get-num r) (cadr r))
+(define (get-type r) (car r))
+
+(define (rat* a b)
+	(rational
+		(* (get-num a) (get-num b))
+		(* (get-den a) (get-den b))
+	)
+)
+
+(define (rat+ a b)
+	(rational
+		(+ (* (get-num a) (get-den b))
+				(* (get-num b) (get-den a)))
+				
+		(* (get-den a) (get-den b))
+	)
+)
+
+**alternate way**
+(define (rational a b)
+	this
+)
+(define (get-num r)(r' a))
+(define (get-den r) (r' b))

@@ -1,0 +1,124 @@
+[ 3| ] --> (3. (4. "blue")) actually 
+	[4|blue]	   (3 4 . "blue") because assumes 
+				   it is a list after first value
+
+(1 2 3) list
+[1| ]
+   [2| ]
+      [3|nil]
+
+(1 (2 .3) 4) --> (cons 1 (cons (cons 2 3) (cons 4 nil)))
+[1| ]
+    [ | ]
+ [2|3] [4|nill]  
+
+ 
+MODLE STACK LIST
+
+(define s nil)
+(define t (push s 1)) --> 1
+(define w (push t 5)) --> (5 1)
+
+(define (push s v)
+	(cons v s)
+)
+
+
+STACK OF SQUARES 1 to n
+
+(define (build n)
+	(define (iter c s)
+		(cond
+			((> c n) s)
+			(else (iter (+ count 1) (push (* c c) s))
+		)
+	)
+	(iter 1 nil)
+)
+
+(define (pop s)
+	(cdr s)
+)
+
+(define (peek s)
+	(car s)
+)
+
+[head queue|tail queue]
+
+(define (dequeue q)  *don't worry about going empty*
+	(cons
+		(cdr (car q))
+		(cdr q)
+	)
+)
+
+*allowed to append item to list as our enqueue for assignment*
+(append q (list v))
+
+NO DATA STRUCTURE METHOD (need functions, IDENTIFIERS)
+
+(define (cons a b)
+	(define (cell msg)
+		(cond
+			((equal msg 0)a)
+			(else b)
+		)
+	)
+	cell
+)
+
+(define (car c)
+	(c 0)
+)
+
+(define (cdr c)
+	(c 1)
+)
+
+CHURCH INTEGRALS (numbers built with functions)
+
+(define zero (lambda (f) (lambda (x) x))) *first functions ignores itself second function is the identity function*
+
+(define(add-1 n)
+	(lambda (f) (lambda (x)
+		(f ((n f) x))
+		)
+	)
+)
+
+(define one(add-1 zero)) --> (define one(lambda(f) (lamba(x) (f x)))
+
+(define two(add-1 one)) --> (define two(lambda(f) (lambda(x) (f(f x))))
+
+((two (lambda (n) (+ n 1)))0) *proof that it works*
+|-->outputs (2)
+
+(four (lambda (n) (append n n)) '(x)) * the '(x) is the list x*
+|-->outputs (x ... x) *16 x's*
+
+(define (plus a b)
+	(lambda (f)
+		(lambda (x)
+			((a f) ((b f)x)) *probably works - Lusth*
+		)
+	)
+)
+*this allowes you to add numbers togeather without needing to have numbers*
+
+BIG INTS
+ (5 4 3 7)
++(6 0 8 9)
+=(1 1 5 2 6)
+
+ (5 4 3 7)
+*(6 0 8 9)
+=(3 3 1 0 5 8 9 3)
+
+*best to start from the back and work forward so reverse list*
+(define (reverse digits)
+	(cond
+		((null? digits)nil)
+		(else (cons (reverse (cdr digits) (car digits)))
+)
+(6 0 8 9) --> ((((nil.9).8).0).6) *not pretty*

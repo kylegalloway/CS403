@@ -1,0 +1,57 @@
+DICTIONARY is a library in your language
+Lambda is a function that works like an
+	expression and can be passed between functions
+
+function names are Identifiers
+
+program : definition
+		| definition program
+
+definition : vardef
+		   | deffun
+
+deffun : type ID OP optParamList CP block
+
+optParamList : E
+			 | paramList
+
+ID OP optArgList CP == name(a,b,c)
+
+optArgList : E
+	       | argList
+
+argList : expr
+		| expr COMMA argList
+
+expr : primary (STRING, INTEGER, ID)
+	 | expr operator expr (but has left recursion)
+	 | primary operator expr (use this)
+
+primary : ID
+		| STRING
+		| INT
+		| OP expr CP
+		| lambda
+		| deffun (function definition)
+		| MINUS primary
+		| PLUS primary
+		| NOT primary
+		| ID OP optArgList CP
+
+operator : EQUAL
+		 | GREATER
+		 | LESS
+		 | GREATEREQUAL (?)
+		 | LESSEQUAL (?)
+
+block : OB opt statementList CB = [stuff]
+
+statementList : statement
+			  | satement statementList
+
+statement : vardef SEMI
+		  | whileLoop
+		  | expr SEMI
+		  | ifStatement
+		  | RETURN expr SEMI
+		  | deffun

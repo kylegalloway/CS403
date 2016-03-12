@@ -1,0 +1,175 @@
+; (define (node left right value)
+;     (define display......)
+;     (define (dispatch msg)
+;         (cond
+;             ((eq? msg 'left) left)
+;             ((eq? msg 'right) right)
+;             ((eq? msg 'value) value)
+;             (else (error))
+;         )
+;     )
+;     dispatch
+; )
+
+; Does the same as above
+(define (node left right value)
+    ; (define display......)
+    this
+)
+
+(define a (node nil nil 4))
+(define b (node a nil 5))
+(define c (node b a 6))
+; ((c 'display))
+
+
+    ;     6
+    ;    / \
+    ;   5  |
+    ;  /  /
+    ; |  |
+    ; 4 --
+
+
+(exprTest (c 'right) 4)
+(exprTest ((c 'left) 'left) 4)
+
+; =============================================================================
+; Parsing
+; =============================================================================
+/*
+exprList : expr
+         | expr COMMA exprList
+ */
+
+; Recognizer
+function exprList()
+{
+    expr();
+    if (check(COMMA))
+    {
+        advance();
+        exprList();
+    }
+}
+
+class lexeme
+{
+    string type;
+    int ival;
+    real rval;
+    string sval;
+
+    /* These are added to keep track of string of lexeme inputs */
+    lexeme left;
+    lexeme right;
+}
+
+; Basically this makes each lexeme also a cons cell
+
+; Parser
+; Need to "Joe Dirt"-ify this....
+; Only need to keep expr & exprList lexemes
+function exprList()
+{
+    var a, b;
+    a = expr();
+    if (check(COMMA))
+    {
+        advance();
+        b = exprList();
+    }
+    else
+        b = NULL;
+
+    return cons(EXPRLIST, a, cons(JOIN, b, NULL));
+}
+
+; Rewrite to get a Scheme-like list
+function exprList()
+{
+    var a, b = NULL;
+    a = expr();
+    if (check(COMMA))
+    {
+        advance();
+        b = exprList();
+    }
+    return cons(ARGLIST, a, b)
+}
+
+/*
+expr : primary
+     | primary operator expr
+ */
+
+function expr()
+{
+    var a, b, c;
+    a = primary()
+    if (opPending())
+    {
+        b = op();
+        c = expr();
+        b.left = a;
+        b.right = c;
+        return b;
+    }
+    return a;
+}
+
+
+/*
+statement : variableDefinition
+          | functionDefinition
+          | expr SEMI
+          | whileLoop
+          | ifStatement
+          | RETURN expr SEMI
+ */
+
+function statement()
+{
+    if (ifStatementPending())
+    {
+        return ifStatement();
+    }
+    else if (exprPending())
+    {
+        var a = expr()
+        match(SEMI);
+        return a;
+    }
+}
+
+/*
+optParamList : EMPTY
+             | paramList
+ */
+
+function optParamList()
+{
+    if (paramListPending())
+    {
+        return paramList();
+    }
+    else
+    {
+        return NULL;
+    }
+}
+
+/*
+    functionDefinition : ID OPAREN optParamList CPAREN block
+ */
+
+function functionDefinition()
+{
+    var a, b, c;
+    a = match(ID);
+    match(OPAREN);
+    b = optParamList();
+    match(CPAREN);
+    c = block();
+    return cons(FUNCDEF, a, cons(JOIN, b, cons(JOIN, c, NULL)));
+}

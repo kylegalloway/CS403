@@ -1,0 +1,80 @@
+discrete event simulation
+
+priority queue
+
+(define (pq)
+    (define events nil)
+    (define clock 0)
+    (define (insert skip f)
+        (define when (+ clock skip))
+        (define (iter items)
+            (cond
+                ((null? items) (list (list when f)))
+                ((< when (caar items))
+                    (cons (list when f) items)
+                )
+                (else
+                    (cons (car items) (iter (cdr items)))
+                )
+            )
+        )
+        (set! events (iter events))o
+    )
+    (define (go) ; book calls this propagate
+        (cond
+            ((null? events) 'DONE)
+            (else
+                (define event (car events))
+                (set! events (cdr events))
+                (set! clock (car event))
+                ((cadr event))
+                (go)
+            )
+        )
+    )
+    (define peekTime (caar events))
+    (define peekFunction (cadar events))
+    ; Need a display to show the time/functions in a usable manner
+    ; (define display)
+    this
+)
+
+To Use
+
+(define q (pq))
+; (inspect q)
+((q'insert) 10
+    (lambda()
+        (print ((q'peekTime)) ": ")
+        (println "hello, world!")
+        ((q'insert) 5
+            (lambda ()
+                (print ((q'peekTime)) ": ")
+                (println "good-bye\n")
+            )
+        )
+    )
+)
+((q'go))
+
+
+Something Something Environment Darkside
+
+function createEnv():
+    return cons(ENV, null, cons(JOIN, null, null))
+
+function insertEnv(id, val, env):
+    ids = car(env)
+    vals = car(cdr(env))
+    env.left = cons(JOIN, id, ids)
+    env.right = cons(JOIN, val, vals)
+
+function lookup(id, env):
+    ids = car(env)
+    vals = car(cdr(env))
+    while(ids != null):
+        if (id.sval == car(ids).sval):
+            return car(vals)
+        else:
+            ids = cdr(ids)
+            vals = cdr(vals)
