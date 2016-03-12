@@ -13,7 +13,7 @@ definition : variableDefinition
 
 variableDefinition : ID ASSIGN expr SEMI
 
-functionDefinition : ID OPAREN optParamList CPAREN block
+functionDefinition : FUNCTION ID OPAREN optParamList CPAREN block
 
 optParamList : EMPTY
              | paramList
