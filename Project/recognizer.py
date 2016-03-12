@@ -4,16 +4,18 @@ from lexeme import Lexeme
 global pending
 
 def main(filename):
-    pending = None
-    with open(filename) as file:
-        parse(file)
+    pass
+#     pending = None
+#     with open(filename) as file:
+#         parse(file)
 
 def parse(file):
-    lexer = Lexer(file)
-    pending = lexer.lex()
-    while (pending.ltype != "END_OF_INPUT"):
-        print(pending)
-        pending = lexer.lex()
+    pass
+    # lexer = Lexer(file)
+    # pending = lexer.lex()
+    # while (pending.ltype != "END_OF_INPUT"):
+    #     print(pending)
+    #     pending = lexer.lex()
     # program()
     # match("END_OF_INPUT")
 
