@@ -1,7 +1,7 @@
 from lex import Lexer
 from lexeme import Lexeme
 
-class Parser():
+class Recognizer():
 
     def __init__(self, filename):
         with open(filename) as self.file:
