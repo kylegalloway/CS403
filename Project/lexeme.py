@@ -6,11 +6,11 @@ class Lexeme():
     def __str__(self):
         if (self.ltype != None):
             if (self.lvalue != None):
-                return ("Type: " + self.ltype + " Value: " + self.lvalue)
+                return (self.ltype + " : " + self.lvalue)
             else:
-                return ("Type: " + self.ltype + " Value: NONE")
+                return (self.ltype)
         else:
             if (self.lvalue != None):
-                return ("Type: NONE Value: " + self.lvalue)
+                return ("INVALID")
             else:
-                return ("Type: NONE Value: NONE")
+                return ("INVALID")
