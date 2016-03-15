@@ -3,7 +3,7 @@ from lexeme import Lexeme
 class Lexer():
 
     def __init__(self, file):
-        self.lineNumber = 0
+        self.lineNumber = 1
         self.file = file
         self.pending = None
 
@@ -20,8 +20,6 @@ class Lexer():
         if (ch == '}'): return Lexeme("CBRACE")
         if (ch == '['): return Lexeme("OBRACKET")
         if (ch == ']'): return Lexeme("CBRACKET")
-        if (ch == '<'): return Lexeme("LESSTHAN")
-        if (ch == '>'): return Lexeme("GREATERTHAN")
         if (ch == '='): return Lexeme("EQUALS")
         if (ch == '+'): return Lexeme("PLUS")
         if (ch == '-'): return Lexeme("MINUS")
@@ -34,6 +32,7 @@ class Lexer():
         if (ch == '.'): return Lexeme("PERIOD")
         if (ch == '|'): return Lexeme("BAR")
 
+        if (ch == '<' or ch == '>'): return self.lexOp(ch)
         if (ch == '#'): return self.lexComment()
         if (ch == '\"'): return self.lexString()
         if (ch == '\''): return self.lexString()
@@ -41,6 +40,23 @@ class Lexer():
         if (ch.isalpha()): return self.lexWord(ch)
 
         self.fatal("Bad Character", ch)
+
+    def lexOp(self, ch):
+        buff = "" + ch
+        ch = self.getCharacter()
+        if (buff == ">"):
+            if (ch == "="):
+                return Lexeme("GREATEREQUAL")
+            else:
+                self.pushbackCharacter()
+                return Lexeme("GREATER")
+        elif (buff == "<"):
+            if (ch == "="):
+                return Lexeme("LESSEQUAL")
+            else:
+                self.pushbackCharacter()
+                return Lexeme("LESS")
+
 
     def lexComment(self):
         ch = self.getCharacter()

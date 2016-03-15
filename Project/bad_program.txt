@@ -1,0 +1,80 @@
+include "mylib"
+
+#{
+Some ideas I have:
+    No pre-processor statements except for includes allowed.
+    Includes are only allowed at top of file.
+#
+
+## This is a basic function.
+func isBig(x) { return x >= 1000; }
+
+println(isBig(42));
+
+#{
+Here is a function
+with if/else
+#}
+func largest(x,y,z)
+{
+    ## Braces are required in all functions, loops, and conditionals.
+    if(x > y)
+    {
+        if(x > z)
+        {
+            return x;
+        }
+        return z;
+    }
+    else if (y > x)
+    {
+        if(y > z)
+        {
+            return y;
+        }
+        return z;
+    }
+    else
+    {
+        if(y > z)
+        {
+            return y;
+        }
+        return z;
+    }
+}
+
+## Whitespace doesn't matter
+func
+printString(str)
+{
+    printf("My string is: %s", str);
+    println();
+}
+
+func loopy()
+{
+    x = 1;
+    while(x < 10)
+    {
+        println(x);
+        x = x + 1; ##No syntactic sugar...yet
+    }
+    printf("Final x: %s", x);
+}
+
+loopy();
+
+func
+apply(func, L, size)
+{
+    x = L[0];
+    while (x != L[size])
+    {
+        func(L[x]);
+        x = L[x + 1];
+    }
+}
+
+#$
+Nothing else matters
