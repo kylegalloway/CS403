@@ -1,0 +1,145 @@
+function call(pt, env)
+{
+    // Get the args for the function call
+    var args = getArgs(pt);
+    // Get the function def from the ID
+    var f = getFunction(pt);
+    // Eval the function def to get the entire closure
+    var closure = eval(f, env);
+
+    // To handle user functions and built-ins
+    if (closure.type == BUILTIN) { return evalBuiltin(closure, env, args); }
+    // To handle returns
+    if (closure.type == RETURNED) { return evalReturn(closure, env, args); }
+
+    // This gets the defining environment from the closure
+    var denv = getEnv(closure);
+    // This gets the function body from the closure
+    var body = getBody(closure);
+    // This gets the formal parameters from the closure
+    var params = getParams(closure);
+
+    // This evaluates the arguments in the calling environment
+    var eargs = evalArgs(args, env);
+    // This builds the new table and attaches it to the denv
+    var xenv = extend(params, eargs, denv);
+
+    // This evaluates the function in the new extended environment
+    return eval(body, xenv)
+}
+
+
+How do we make "println("x is", x)" work??
+We have to put these in the built in environment.
+
+Lexeme evalPrintln(Lexeme args, Lexeme env)
+{
+    Lexeme eargs = evalArgs(args, env);
+    ...
+    // loop through eargs to print out each
+    // then print newline
+    ...
+}
+
+That will print but we need to hook it into the global environment
+
+So we should bind this to the println variable in the global scope
+
+// Build global env
+var global = extend(NULL, NULL, NULL);
+// make a new function id
+var prtln = new Lexeme(ID, "println");
+// make a call to a built in function
+var prtlnval = new Lexeme(BUILTIN, NULL);
+// attach the prtln function id to the built in function
+prtlnval.left = prtln;
+// insert the functions into the global scope
+insert(prtln, prtlnval, global);
+
+
+function evalBuiltin(bi, env, args)
+{
+    var name = bi.left.value;
+    if (name == "println")
+    {
+        return evalPrintln(args, env);
+    }
+    else if ....
+    ....
+    ....
+}
+
+function evalPlus(pt, env)
+{
+    var a = eval(pt.left, env);
+    var b = eval(pt.right, env);
+
+    if (a.type == INTEGER && b.type == INTEGER)
+        return new Lexeme(INTEGER, a.ival + b.ival);
+    else
+        fatal(error);
+}
+
+function evalBlock(pt, env)
+{
+    var result;
+    var spot = getStatements(pt);
+    while (spot != NULL)
+    {
+        result = eval(spot.left, env);
+        if (result.type == RETURNED):
+            return result
+        spot = spot.right;
+    }
+    return result;
+}
+
+function evalReturn(pt, env)
+{
+    var result = evalArgs(pt, env);
+    var ret = new Lexeme(RETURNED);
+    ret.left = result;
+    return ret;
+}
+
+===============================================================================
+Not necessary for a language
+    Assignment
+    Data Structures
+    Numbers
+
+
+To get rid of base cases
+// Naming with a $ delays the eval of that arg
+// Using # (sharp) gives you the calling env
+// The combination of # and $ gives a thunk
+
+(define (cons-stream # left $right)
+    (cons left (cons $right #))
+)
+
+(define (stream-car cell)
+    (car cell)
+)
+
+(define (stream-cdr cell)
+    (eval (cadr cell) (cddr cell))
+)
+
+// Gives all ints from n to infinity
+(define (ints-from n)
+    (cons-stream n (ints-from (+ n 1)))
+)
+
+(define two-on (ints-from 2))
+(inspect (stream-car two-on)) ==> ... is 2
+(inspect (stream-car (stream-cdr two-on))) ==> ... is 3
+
+(define (stream-ref S n)
+    (cond
+        ((= n 0) (stream-car S))
+        (else (stream-ref (stream-cdr S) (- n 1)))
+    )
+)
+
+(stream-ref two-on 1000) ==> ... is 1002

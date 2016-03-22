@@ -11,7 +11,7 @@ class Lexer():
         self.skipWhiteSpace()
         ch = self.getCharacter()
 
-        if (self.endOfFile(ch)): return Lexeme("END_OF_INPUT")
+        if (ch == ""): return Lexeme("END_OF_INPUT")
         if (ch == ';'): return Lexeme("SEMI")
         if (ch == ','): return Lexeme("COMMA")
         if (ch == '('): return Lexeme("OPAREN")
@@ -31,7 +31,6 @@ class Lexer():
         if (ch == '|'): return Lexeme("BAR")
 
         if (ch in ['<', '>', '=', '!']): return self.lexOp(ch)
-        if (ch == '#'): return self.lexComment()
         if (ch == '\"'): return self.lexString()
         if (ch == '\''): return self.lexString()
         if (ch.isdigit()): return self.lexNumber(ch)
@@ -68,25 +67,21 @@ class Lexer():
                 return Lexeme("NOT")
 
 
-    def lexComment(self):
+    def skipComment(self):
         ch = self.getCharacter()
         if (ch == '#'):
             self.lineNumber += 1
             self.skipLine()
-            return Lexeme("COMMENT")
         elif (ch == '{'):
             while (ch != '#'):
                 if (ch == '\n'):
                     self.lineNumber += 1
                 ch = self.getCharacter()
             ch = self.getCharacter()
-            if (ch == '}'):
-                return Lexeme("COMMENT")
-            else:
+            if (ch != '}'):
                 self.fatal("Badly formed comment.", " Line: " + self.lineNumber)
         elif (ch == '$'):
             self.skipFile()
-            return Lexeme("END_OF_INPUT")
         else:
             self.fatal("Badly formed comment.", " Line: " + self.lineNumber)
 
@@ -137,14 +132,14 @@ class Lexer():
 
     def skipWhiteSpace(self):
         ch = self.getCharacter()
-        while (ch.isspace()):
+        while (ch.isspace() or ch == "#"):
             if (ch == '\n'):
                 self.lineNumber += 1
+            if (ch == "#"):
+                skipComment()
             ch = self.getCharacter()
-        self.pushbackCharacter()
-
-    def endOfFile(self, ch):
-        return ch == None
+        if (ch != ""):
+            self.pushbackCharacter()
 
     def skipLine(self):
         ch = self.getCharacter()
