@@ -9,8 +9,9 @@ program : definition
 
 definition : variableDefinition
            | functionDefinition
+           | idDef SEMI
 
-variableDefinition : ID EQUAL expr SEMI
+variableDefinition : VAR ID EQUAL expr SEMI
 
 functionDefinition : FUNCTION ID OPAREN optParamList CPAREN block
 
@@ -55,7 +56,7 @@ operator : EQUAL
          | POWER
          | AND
          | OR
-         | EQUAL
+         | DOUBLEEQUAL
 
 block : OBRACE optStatementList CBRACE
 

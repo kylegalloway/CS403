@@ -8,9 +8,8 @@ class Recognizer():
         self.pending = None
         self.lexer = Lexer(self.file)
 
-    def fatal(self, *args):
-        for x in args:
-            print(x)
+    def fatal(self, problem, line):
+        print("LINE: "+str(line)+"\nERROR: "+problem)
         exit(1)
 
     def parse(self):
@@ -63,29 +62,30 @@ class Recognizer():
 
     # definition : variableDefinition
     #            | functionDefinition
+    #            | idDef SEMI
     def definition(self):
         if(self.variableDefinitionPending()):
             self.variableDefinition()
         elif(self.functionDefinitionPending()):
             self.functionDefinition()
+        elif(self.idDefPending()):
+            self.idDef()
+            self.match("SEMI")
 
     def definitionPending(self):
-        return self.variableDefinitionPending() or self.functionDefinitionPending()
+        return self.variableDefinitionPending() or self.functionDefinitionPending() or self.idDefPending()
 
-    # variableDefinition : ID EQUAL expr SEMI
+    # variableDefinition : VAR ID EQUAL expr SEMI
     def variableDefinition(self):
+        self.match("VAR")
         self.match("ID")
         self.match("EQUAL")
+        print("debug")
         self.expr()
         self.match("SEMI")
 
     def variableDefinitionPending(self):
-        if (self.check("ID")):
-            tempch = self.advance()
-            tmp = self.check("EQUAL")
-            ch = tempch
-            return tmp
-
+        return self.check("VAR")
 
     # functionDefinition : FUNCTION ID OPAREN optParamList CPAREN block
     def functionDefinition(self):
@@ -208,7 +208,7 @@ class Recognizer():
     #          | POWER
     #          | AND
     #          | OR
-    #          | ASSIGN
+    #          | DOUBLEEQUAL
     def operator(self):
         if(self.check("EQUAL")):
             self.match("EQUAL")

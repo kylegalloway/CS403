@@ -20,19 +20,17 @@ class Lexer():
         if (ch == '}'): return Lexeme("CBRACE")
         if (ch == '['): return Lexeme("OBRACKET")
         if (ch == ']'): return Lexeme("CBRACKET")
-        if (ch == '='): return Lexeme("EQUALS")
         if (ch == '+'): return Lexeme("PLUS")
         if (ch == '-'): return Lexeme("MINUS")
         if (ch == '*'): return Lexeme("TIMES")
         if (ch == '/'): return Lexeme("DIVIDE")
-        if (ch == '!'): return Lexeme("NOT")
         if (ch == '%'): return Lexeme("MODULO")
         if (ch == '^'): return Lexeme("EXPONENT")
         if (ch == '&'): return Lexeme("AMPERSAND")
         if (ch == '.'): return Lexeme("PERIOD")
         if (ch == '|'): return Lexeme("BAR")
 
-        if (ch == '<' or ch == '>'): return self.lexOp(ch)
+        if (ch in ['<', '>', '=', '!']): return self.lexOp(ch)
         if (ch == '#'): return self.lexComment()
         if (ch == '\"'): return self.lexString()
         if (ch == '\''): return self.lexString()
@@ -56,6 +54,18 @@ class Lexer():
             else:
                 self.pushbackCharacter()
                 return Lexeme("LESS")
+        elif (buff == "="):
+            if (ch == "="):
+                return Lexeme("DOUBLEEQUAL")
+            else:
+                self.pushbackCharacter()
+                return Lexeme("EQUAL")
+        elif (buff == "!"):
+            if (ch == "="):
+                return Lexeme("NOTEQUAL")
+            else:
+                self.pushbackCharacter()
+                return Lexeme("NOT")
 
 
     def lexComment(self):
@@ -109,6 +119,7 @@ class Lexer():
         self.pushbackCharacter()
 
         if (buff == "func"): return Lexeme("FUNCTION")
+        if (buff == "var"): return Lexeme("VAR")
         if (buff == "while"): return Lexeme("WHILE")
         if (buff == "if"): return Lexeme("IF")
         if (buff == "else"): return Lexeme("ELSE")

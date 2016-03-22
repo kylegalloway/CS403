@@ -54,7 +54,7 @@ printString(str)
 
 func loopy()
 {
-    x = 1;
+    var x = 1;
     while(x < 10)
     {
         println(x);
@@ -66,13 +66,13 @@ func loopy()
 loopy();
 
 func
-apply(func, L, size)
+apply(f, L, size)
 {
-    x = L[0];
+    var x = L[0];
     while (x != L[size])
     {
         func(L[x]);
-        x = L[x + 1];
+        var x = L[x + 1];
     }
 }
 

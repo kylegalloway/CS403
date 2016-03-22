@@ -12,4 +12,5 @@ def scanner(file):
         print(pending)
         pending = lexer.lex()
 
-main("program.txt")
+# main("program.txt")
+main("no_coms_program.txt")

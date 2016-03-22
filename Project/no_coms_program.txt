@@ -2,6 +2,7 @@ include "mylib"
 
 func isBig(x) { return x >= 1000; }
 
+println(isBig(42));
 
 func largest(x,y,z)
 {
@@ -32,17 +33,6 @@ func largest(x,y,z)
 }
 
 func
-apply(f, L, size)
-{
-    x = L[0];
-    while (x != L[size])
-    {
-        func(L[x]);
-        x = L[x + 1];
-    }
-}
-
-func
 printString(str)
 {
     printf("My string is: %s", str);
@@ -51,7 +41,7 @@ printString(str)
 
 func loopy()
 {
-    x = 1;
+    var x = 1;
     while(x < 10)
     {
         println(x);
@@ -62,4 +52,13 @@ func loopy()
 
 loopy();
 
-println(isBig(42));
+func
+apply(f, L, size)
+{
+    var x = L[0];
+    while (x != L[size])
+    {
+        f(L[x]);
+        var x = L[x + 1];
+    }
+}
