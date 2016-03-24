@@ -4,4 +4,4 @@ def main(filename):
     r = Recognizer(filename)
     r.parse()
 
-main("small_program.txt")
+main("program.txt")

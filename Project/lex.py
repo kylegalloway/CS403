@@ -136,7 +136,7 @@ class Lexer():
             if (ch == '\n'):
                 self.lineNumber += 1
             if (ch == "#"):
-                skipComment()
+                self.skipComment()
             ch = self.getCharacter()
         if (ch != ""):
             self.pushbackCharacter()
