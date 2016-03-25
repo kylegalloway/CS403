@@ -80,4 +80,4 @@
 ; (run7)
 ; (run8)
 ; (run9)
-(println "assignment 3 loaded!")
+(display "\n\nassignment 3 loaded!\n\n")
