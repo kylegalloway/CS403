@@ -41,9 +41,6 @@
 ; Task 9
 
 
-; Task 10
-
-
 ; Tests
 ; (define (run1)
 ;
@@ -72,9 +69,6 @@
 ; (define (run9)
 ;
 ; )
-; (define (run10)
-;
-; )
 
 ; Run tests
 ; (run1)
@@ -86,5 +80,4 @@
 ; (run7)
 ; (run8)
 ; (run9)
-; (run10)
-(println "assignment 1 loaded!")
+(println "assignment 3 loaded!")

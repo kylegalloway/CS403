@@ -1,7 +1,7 @@
 from lex import Lexer
 from lexeme import Lexeme
 
-class Recognizer():
+class Parser():
 
     def __init__(self, filename):
         self.file = open(filename)
@@ -37,6 +37,11 @@ class Recognizer():
             return self.advance()
         self.fatal("Syntax Error. Expected "+str(t)+" , Received "+str(self.pending), self.lexer.lineNumber)
 
+# =============================================================================
+#   BELOW HERE IS THE GRAMMAR PORTION OF THE PARSING CLASS
+# =============================================================================
+
+
     # file : EMPTY
     #      | include file
     #      | program
@@ -54,11 +59,6 @@ class Recognizer():
         self.match("INCLUDE")
         self.match("STRING")
 
-    def includePending(self):
-        # print("In includePending")
-        return self.check("INCLUDE")
-
-
     # program : definition
     #         | definition program
     def program(self):
@@ -66,10 +66,6 @@ class Recognizer():
         self.definition()
         if (self.programPending()):
             self.program()
-
-    def programPending(self):
-        # print("In programPending")
-        return self.definitionPending()
 
     # definition : variableDefinition
     #            | functionDefinition
@@ -84,10 +80,6 @@ class Recognizer():
             self.idDef()
             self.match("SEMI")
 
-    def definitionPending(self):
-        # print("In definitionPending")
-        return self.variableDefinitionPending() or self.functionDefinitionPending() or self.idDefPending()
-
     # variableDefinition : VAR ID EQUAL expr SEMI
     def variableDefinition(self):
         # print("In variableDefinition")
@@ -96,10 +88,6 @@ class Recognizer():
         self.match("EQUAL")
         self.expr()
         self.match("SEMI")
-
-    def variableDefinitionPending(self):
-        # print("In variableDefinitionPending")
-        return self.check("VAR")
 
     # functionDefinition : FUNCTION ID OPAREN optParamList CPAREN block
     def functionDefinition(self):
@@ -111,9 +99,20 @@ class Recognizer():
         self.match("CPAREN")
         self.block()
 
-    def functionDefinitionPending(self):
-        # print("In functionDefinitionPending")
-        return self.check("FUNCTION")
+    # idDef : ID
+    #       | ID OPAREN optExprList CPAREN
+    #       | ID OBRACKET expr CBRACKET
+    def idDef(self):
+        # print("In idDef")
+        self.match("ID")
+        if (self.check("OPAREN")):
+            self.match("OPAREN")
+            self.optExprList()
+            self.match("CPAREN")
+        elif (self.check("OBRACKET")):
+            self.match("OBRACKET")
+            self.expr()
+            self.match("CBRACKET")
 
     # optParamList : EMPTY
     #              | paramList
@@ -131,10 +130,6 @@ class Recognizer():
             self.match("COMMA")
             self.paramList()
 
-    def paramListPending(self):
-        # print("In paramListPending")
-        return self.check("ID")
-
     # optExprList : EMPTY
     #            | exprList
     def optExprList(self):
@@ -151,10 +146,6 @@ class Recognizer():
             self.match("COMMA")
             self.exprList()
 
-    def exprListPending(self):
-        # print("In exprListPending")
-        return self.exprPending()
-
     # expr : primary
     #      | primary operator expr
     def expr(self):
@@ -163,10 +154,6 @@ class Recognizer():
         if(self.operatorPending()):
             self.operator()
             self.expr()
-
-    def exprPending(self):
-        # print("In exprPending")
-        return self.primaryPending()
 
     # primary : idDef
     #         | STRING
@@ -199,29 +186,6 @@ class Recognizer():
             self.match("OBRACKET")
             self.optExprList()
             self.match("OBRACKET")
-
-    def primaryPending(self):
-        # print("In primaryPending")
-        return self.idDefPending() or self.check("STRING") or self.check("INTEGER") or self.check("NOT") or self.check("OPAREN") or self.k_lambdaPending() or self.functionDefinitionPending() or self.check("OBRACKET")
-
-    # idDef : ID
-    #       | ID OPAREN optExprList CPAREN
-    #       | ID OBRACKET expr CBRACKET
-    def idDef(self):
-        # print("In idDef")
-        self.match("ID")
-        if (self.check("OPAREN")):
-            self.match("OPAREN")
-            self.optExprList()
-            self.match("CPAREN")
-        elif (self.check("OBRACKET")):
-            self.match("OBRACKET")
-            self.expr()
-            self.match("CBRACKET")
-
-    def idDefPending(self):
-        # print("In idDefPending")
-        return self.check("ID")
 
     # operator : EQUAL
     #          | NOTEQUAL
@@ -268,20 +232,12 @@ class Recognizer():
         elif(self.check("ASSIGN")):
             self.match("ASSIGN")
 
-    def operatorPending(self):
-        # print("In operatorPending")
-        return self.check("EQUAL") or self.check("NOTEQUAL") or self.check("GREATER") or self.check("LESS") or self.check("GREATEREQUAL") or self.check("LESSEQUAL") or self.check("PLUS") or self.check("MINUS") or self.check("MULTIPLY") or self.check("DIVIDE") or self.check("POWER") or self.check("AND") or self.check("OR") or self.check("ASSIGN")
-
     # block : OBRACE optStatementList CBRACE
     def block(self):
         # print("In block")
         self.match("OBRACE")
         self.optStatementList()
         self.match("CBRACE")
-
-    def blockPending(self):
-        # print("In blockPending")
-        return self.check("OBRACE")
 
     # optStatementList : EMPTY
     #                  | statementList
@@ -297,10 +253,6 @@ class Recognizer():
         self.statement()
         if(self.statementListPending()):
             self.statementList()
-
-    def statementListPending(self):
-        # print("In statementListPending")
-        return self.statementPending()
 
     # statement : variableDefinition
     #           | functionDefinition
@@ -326,10 +278,6 @@ class Recognizer():
             self.expr()
             self.match("SEMI")
 
-    def statementPending(self):
-        # print("In statementPending")
-        return self.variableDefinitionPending() or self.functionDefinitionPending() or self.exprPending() or self.whileLoopPending() or self.ifStatementPending() or self.check("RETURN")
-
     # whileLoop : WHILE OPAREN expr CPAREN block
     def whileLoop(self):
         # print("In whileLoop")
@@ -338,10 +286,6 @@ class Recognizer():
         self.expr()
         self.match("CPAREN")
         self.block()
-
-    def whileLoopPending(self):
-        # print("In whileLoopPending")
-        return self.check("WHILE")
 
     # ifStatement : IF OPAREN expr CPAREN block optElseStatement
     def ifStatement(self):
@@ -352,10 +296,6 @@ class Recognizer():
         self.match("CPAREN")
         self.block()
         self.optElseStatement()
-
-    def ifStatementPending(self):
-        # print("In ifStatementPending")
-        return self.check("IF")
 
     # optElseStatement : EMPTY
     #                  | elseStatement
@@ -374,10 +314,6 @@ class Recognizer():
         elif(self.ifStatementPending()):
             self.ifStatement()
 
-    def elseStatementPending(self):
-        # print("In elseStatementPending")
-        return self.check("ELSE")
-
     # k_lambda : LAMBDA OPAREN optParamList CPAREN block
     def k_lambda(self):
         # print("In k_lambda")
@@ -386,6 +322,74 @@ class Recognizer():
         self.optParamList()
         self.match("CPAREN")
         self.block()
+
+    def includePending(self):
+        # print("In includePending")
+        return self.check("INCLUDE")
+
+    def programPending(self):
+        # print("In programPending")
+        return self.definitionPending()
+
+    def definitionPending(self):
+        # print("In definitionPending")
+        return self.variableDefinitionPending() or self.functionDefinitionPending() or self.idDefPending()
+
+    def variableDefinitionPending(self):
+        # print("In variableDefinitionPending")
+        return self.check("VAR")
+
+    def functionDefinitionPending(self):
+        # print("In functionDefinitionPending")
+        return self.check("FUNCTION")
+
+    def idDefPending(self):
+        # print("In idDefPending")
+        return self.check("ID")
+
+    def paramListPending(self):
+        # print("In paramListPending")
+        return self.check("ID")
+
+    def exprListPending(self):
+        # print("In exprListPending")
+        return self.exprPending()
+
+    def exprPending(self):
+        # print("In exprPending")
+        return self.primaryPending()
+
+    def primaryPending(self):
+        # print("In primaryPending")
+        return self.idDefPending() or self.check("STRING") or self.check("INTEGER") or self.check("NOT") or self.check("OPAREN") or self.k_lambdaPending() or self.functionDefinitionPending() or self.check("OBRACKET")
+
+    def operatorPending(self):
+        # print("In operatorPending")
+        return self.check("EQUAL") or self.check("NOTEQUAL") or self.check("GREATER") or self.check("LESS") or self.check("GREATEREQUAL") or self.check("LESSEQUAL") or self.check("PLUS") or self.check("MINUS") or self.check("MULTIPLY") or self.check("DIVIDE") or self.check("POWER") or self.check("AND") or self.check("OR") or self.check("ASSIGN")
+
+    def blockPending(self):
+        # print("In blockPending")
+        return self.check("OBRACE")
+
+    def statementListPending(self):
+        # print("In statementListPending")
+        return self.statementPending()
+
+    def statementPending(self):
+        # print("In statementPending")
+        return self.variableDefinitionPending() or self.functionDefinitionPending() or self.exprPending() or self.whileLoopPending() or self.ifStatementPending() or self.check("RETURN")
+
+    def whileLoopPending(self):
+        # print("In whileLoopPending")
+        return self.check("WHILE")
+
+    def ifStatementPending(self):
+        # print("In ifStatementPending")
+        return self.check("IF")
+
+    def elseStatementPending(self):
+        # print("In elseStatementPending")
+        return self.check("ELSE")
 
     def k_lambdaPending(self):
         # print("In k_lambdaPending")

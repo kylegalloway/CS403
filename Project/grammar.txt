@@ -15,6 +15,10 @@ variableDefinition : VAR ID EQUAL expr SEMI
 
 functionDefinition : FUNCTION ID OPAREN optParamList CPAREN block
 
+idDef : ID
+      | ID OPAREN optExprList CPAREN
+      | ID OBRACKET expr CBRACKET
+
 optParamList : EMPTY
              | paramList
 
@@ -32,16 +36,12 @@ expr : primary
 
 primary : idDef
         | STRING
-        | INT
+        | INTEGER
         | NOT primary
         | OPAREN expr CPAREN
-        | lambda
+        | k_lambda
         | functionDefinition
         | OBRACKET optExprList CBRACKET
-
-idDef : ID
-      | ID OPAREN optExprList CPAREN
-      | ID OBRACKET expr CBRACKET
 
 operator : EQUAL
          | NOTEQUAL
@@ -83,4 +83,4 @@ optElseStatement : EMPTY
 elseStatement : ELSE block
               | ELSE ifStatement
 
-lambda : LAMBDA OPAREN optParamList CPAREN block
+k_lambda : LAMBDA OPAREN optParamList CPAREN block

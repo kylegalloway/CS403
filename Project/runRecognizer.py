@@ -5,3 +5,4 @@ def main(filename):
     r.parse()
 
 main("program.txt")
+# main("bad_program.txt")

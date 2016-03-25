@@ -70,7 +70,6 @@ class Lexer():
     def skipComment(self):
         ch = self.getCharacter()
         if (ch == '#'):
-            self.lineNumber += 1
             self.skipLine()
         elif (ch == '{'):
             while (ch != '#'):
@@ -79,11 +78,11 @@ class Lexer():
                 ch = self.getCharacter()
             ch = self.getCharacter()
             if (ch != '}'):
-                self.fatal("Badly formed comment.", " Line: " + self.lineNumber)
+                self.fatal("Badly formed comment.", " Line: " + str(self.lineNumber))
         elif (ch == '$'):
             self.skipFile()
         else:
-            self.fatal("Badly formed comment.", " Line: " + self.lineNumber)
+            self.fatal("Badly formed comment.", " Line: " + str(self.lineNumber))
 
     def lexString(self):
         buff = ""

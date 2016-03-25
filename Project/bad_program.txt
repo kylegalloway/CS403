@@ -4,7 +4,7 @@ include "mylib"
 Some ideas I have:
     No pre-processor statements except for includes allowed.
     Includes are only allowed at top of file.
-#
+#}
 
 ## This is a basic function.
 func isBig(x) { return x >= 1000; }
@@ -66,12 +66,12 @@ func loopy()
 loopy();
 
 func
-apply(func, L, size)
+apply(f, L, size)
 {
     x = L[0];
     while (x != L[size])
     {
-        func(L[x]);
+        f(L[x]);
         x = L[x + 1];
     }
 }

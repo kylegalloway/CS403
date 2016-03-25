@@ -71,7 +71,7 @@ apply(f, L, size)
     var x = L[0];
     while (x != L[size])
     {
-        func(L[x]);
+        f(L[x]);
         var x = L[x + 1];
     }
 }
