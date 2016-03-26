@@ -1,5 +1,6 @@
 from lex import Lexer
 from lexeme import Lexeme
+from conscell import ConsCell
 
 class Parser():
 
@@ -15,8 +16,9 @@ class Parser():
     def parse(self):
         # print("In parse")
         self.advance()
-        self.k_file()
+        root = self.k_file()
         self.match("END_OF_INPUT")
+        return root
         # print("Done")
 
     def check(self, t):
@@ -37,6 +39,9 @@ class Parser():
             return self.advance()
         self.fatal("Syntax Error. Expected "+str(t)+" , Received "+str(self.pending), self.lexer.lineNumber)
 
+    def cons(value, left, right):
+        return ConsCell(value, ConsCell(left, ConsCell(right, None)))
+
 # =============================================================================
 #   BELOW HERE IS THE GRAMMAR PORTION OF THE PARSING CLASS
 # =============================================================================
@@ -48,24 +53,31 @@ class Parser():
     def k_file(self):
         # print("In k_file")
         if (self.includePending()):
-            self.include()
-            self.k_file()
+            i = self.include()
+            f = self.k_file()
+            return cons("FILE", i, cons("JOIN", f, None))
         elif (self.programPending()):
-            self.program()
+            p = self.program()
+            return cons("FILE", p, None)
+        else:
+            return cons("FILE", None, None)
 
     # include : INCLUDE STRING
     def include(self):
         # print("In include")
-        self.match("INCLUDE")
-        self.match("STRING")
+        i = self.match("INCLUDE")
+        s = self.match("STRING")
+        return cons("INCLUDE", i, cons("JOIN", s, None))
 
     # program : definition
     #         | definition program
     def program(self):
         # print("In program")
-        self.definition()
+        d = self.definition()
         if (self.programPending()):
-            self.program()
+            p = self.program()
+            return cons(d, p)
+        return cons("PROGRAM", d, None)
 
     # definition : variableDefinition
     #            | functionDefinition
@@ -73,87 +85,111 @@ class Parser():
     def definition(self):
         # print("In definition")
         if(self.variableDefinitionPending()):
-            self.variableDefinition()
+            v =self.variableDefinition()
+            return cons("DEFINITION", v, None)
         elif(self.functionDefinitionPending()):
-            self.functionDefinition()
+            f = self.functionDefinition()
+            return cons("DEFINITION", f, None)
         elif(self.idDefPending()):
-            self.idDef()
-            self.match("SEMI")
+            i = self.idDef()
+            s = self.match("SEMI")
+            return cons("DEFINITION", i, cons("JOIN", s, None))
 
     # variableDefinition : VAR ID EQUAL expr SEMI
     def variableDefinition(self):
         # print("In variableDefinition")
-        self.match("VAR")
-        self.match("ID")
-        self.match("EQUAL")
-        self.expr()
-        self.match("SEMI")
+        v = self.match("VAR")
+        i = self.match("ID")
+        eq = self.match("EQUAL")
+        e = self.expr()
+        s = self.match("SEMI")
+        return cons("VARDEF", v, cons("JOIN", i, cons("JOIN", eq, cons("JOIN", e, cons("JOIN", s, None)))))
 
     # functionDefinition : FUNCTION ID OPAREN optParamList CPAREN block
     def functionDefinition(self):
         # print("In functionDefinition")
-        self.match("FUNCTION")
-        self.match("ID")
-        self.match("OPAREN")
-        self.optParamList()
-        self.match("CPAREN")
-        self.block()
+        f = self.match("FUNCTION")
+        e = self.match("ID")
+        o = self.match("OPAREN")
+        op = self.optParamList()
+        c = self.match("CPAREN")
+        b = self.block()
+        return cons("FUNCDEF", f, cons("JOIN", e, cons("JOIN", o, cons("JOIN", op, cons("JOIN", c, cons("JOIN", b, None))))))
 
     # idDef : ID
     #       | ID OPAREN optExprList CPAREN
     #       | ID OBRACKET expr CBRACKET
     def idDef(self):
         # print("In idDef")
-        self.match("ID")
+        i = self.match("ID")
         if (self.check("OPAREN")):
-            self.match("OPAREN")
-            self.optExprList()
-            self.match("CPAREN")
+            o = self.match("OPAREN")
+            e = self.optExprList()
+            c = self.match("CPAREN")
+            return cons("IDDEF", i, cons("JOIN", o, cons("JOIN", e, cons("JOIN", c, None))))
         elif (self.check("OBRACKET")):
-            self.match("OBRACKET")
-            self.expr()
-            self.match("CBRACKET")
+            o = self.match("OBRACKET")
+            e = self.expr()
+            c = self.match("CBRACKET")
+            return cons("IDDEF", i, cons("JOIN", o, cons("JOIN", e, cons("JOIN", c, None))))
+        else:
+            return cons("IDDEF", i, None)
 
     # optParamList : EMPTY
     #              | paramList
     def optParamList(self):
         # print("In optParamList")
         if(self.paramListPending()):
-            self.paramList()
+            p = self.paramList()
+            return cons("OPTPARAMLIST", p, None)
+        else:
+            return cons("OPTPARAMLIST", None, None)
 
     # paramList : ID
     #           | ID COMMA paramList
     def paramList(self):
         # print("In paramList")
-        self.match("ID")
+        i = self.match("ID")
         if (self.check("COMMA")):
-            self.match("COMMA")
-            self.paramList()
+            c = self.match("COMMA")
+            p = self.paramList()
+            return cons("PARAMLIST", i, cons("JOIN", c, cons("JOIN", p, None)))
+        return cons("PARAMLIST", i, None)
 
     # optExprList : EMPTY
     #            | exprList
     def optExprList(self):
         # print("In optExprList")
         if(self.exprListPending()):
-            self.exprList()
+            e = self.exprList()
+            return cons("OPTEXPRLIST", e, None)
+        return cons("OPTEXPRLIST", None, None)
 
     # exprList : expr
     #          | expr COMMA exprList
     def exprList(self):
         # print("In exprList")
-        self.expr()
+        e = self.expr()
         if (self.check("COMMA")):
-            self.match("COMMA")
-            self.exprList()
+            c = self.match("COMMA")
+            ex = self.exprList()
+            return cons("EXPRLIST", e, cons("JOIN", c, cons("JOIN", ex, None)))
+        return cons("EXPRLIST", e, None)
 
     # expr : primary
     #      | primary operator expr
     def expr(self):
         # print("In expr")
-        self.primary()
+        p = self.primary()
         if(self.operatorPending()):
-            self.operator()
-            self.expr()
+            o = self.operator()
+            e = self.expr()
+            return cons("EXPR", p, cons("JOIN", o, cons("JOIN", e, None)))
+        return cons("EXPR", p, None)
+
+# =============================================================================
+#   WHERE I STOPPED
+# =============================================================================
 
     # primary : idDef
     #         | STRING
