@@ -4,4 +4,4 @@ class Lexeme():
         self.lvalue = v
 
     def __str__(self):
-        return (str(self.left) + " : " + str(self.right))
+        return (str(self.ltype) + " : " + str(self.lvalue))
