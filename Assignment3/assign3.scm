@@ -6,11 +6,18 @@
 
 (define (exprTest # $expr target)
     (define result (catch (eval $expr #)))
-    (if (error? result)
-        (println $expr " is EXCEPTION: " (result'value)
-            " (it should be " target ")")
-        (println $expr " is " result
-            " (it should be " target ")")
+    (println)
+    (cond
+        ((error? result)
+            (println $expr " is EXCEPTION:")
+            (println (result'value))
+            (println "It should be:")
+            (println target))
+        (else
+            (println $expr " is: ")
+            (println result ", it should be: ")
+            (println target)
+        )
     )
 )
 
