@@ -17,8 +17,8 @@ class Parser():
         # print("In parse")
         self.advance()
         root = self.k_file()
-        self.match("END_OF_INPUT")
-        return root
+        eof = self.match("END_OF_INPUT")
+        return self.cons("PARSE", root, eof)
         # print("Done")
 
     def check(self, t):
@@ -39,11 +39,12 @@ class Parser():
             return self.advance()
         self.fatal("Syntax Error. Expected "+str(t)+" , Received "+str(self.pending), self.lexer.lineNumber)
 
-    def cons(value, left, right):
-        return ConsCell(value, ConsCell(left, ConsCell(right, None)))
+    def cons(self, value, left, right):
+        # return ConsCell(value, ConsCell(left, ConsCell(right, None)))
+        return ConsCell(value, left, ConsCell("JOIN", right, None))
 
 # =============================================================================
-#   BELOW HERE IS THE GRAMMAR PORTION OF THE PARSING CLASS
+#   GRAMMAR PORTION OF THE PARSING CLASS
 # =============================================================================
 
 
@@ -55,19 +56,19 @@ class Parser():
         if (self.includePending()):
             i = self.include()
             f = self.k_file()
-            return cons("FILE", i, cons("JOIN", f, None))
+            return self.cons("FILE", i, self.cons("JOIN", f, None))
         elif (self.programPending()):
             p = self.program()
-            return cons("FILE", p, None)
+            return self.cons("FILE", p, None)
         else:
-            return cons("FILE", None, None)
+            return self.cons("FILE", None, None)
 
     # include : INCLUDE STRING
     def include(self):
         # print("In include")
         i = self.match("INCLUDE")
         s = self.match("STRING")
-        return cons("INCLUDE", i, cons("JOIN", s, None))
+        return self.cons("INCLUDE", i, self.cons("JOIN", s, None))
 
     # program : definition
     #         | definition program
@@ -76,8 +77,8 @@ class Parser():
         d = self.definition()
         if (self.programPending()):
             p = self.program()
-            return cons(d, p)
-        return cons("PROGRAM", d, None)
+            return self.cons("PROGRAM", d, self.cons("JOIN", p, None))
+        return self.cons("PROGRAM", d, None)
 
     # definition : variableDefinition
     #            | functionDefinition
@@ -86,14 +87,14 @@ class Parser():
         # print("In definition")
         if(self.variableDefinitionPending()):
             v =self.variableDefinition()
-            return cons("DEFINITION", v, None)
+            return self.cons("DEFINITION", v, None)
         elif(self.functionDefinitionPending()):
             f = self.functionDefinition()
-            return cons("DEFINITION", f, None)
+            return self.cons("DEFINITION", f, None)
         elif(self.idDefPending()):
             i = self.idDef()
             s = self.match("SEMI")
-            return cons("DEFINITION", i, cons("JOIN", s, None))
+            return self.cons("DEFINITION", i, self.cons("JOIN", s, None))
 
     # variableDefinition : VAR ID EQUAL expr SEMI
     def variableDefinition(self):
@@ -103,7 +104,7 @@ class Parser():
         eq = self.match("EQUAL")
         e = self.expr()
         s = self.match("SEMI")
-        return cons("VARDEF", v, cons("JOIN", i, cons("JOIN", eq, cons("JOIN", e, cons("JOIN", s, None)))))
+        return self.cons("VARDEF", v, self.cons("JOIN", i, self.cons("JOIN", eq, self.cons("JOIN", e, self.cons("JOIN", s, None)))))
 
     # functionDefinition : FUNCTION ID OPAREN optParamList CPAREN block
     def functionDefinition(self):
@@ -114,7 +115,7 @@ class Parser():
         op = self.optParamList()
         c = self.match("CPAREN")
         b = self.block()
-        return cons("FUNCDEF", f, cons("JOIN", e, cons("JOIN", o, cons("JOIN", op, cons("JOIN", c, cons("JOIN", b, None))))))
+        return self.cons("FUNCDEF", f, self.cons("JOIN", e, self.cons("JOIN", o, self.cons("JOIN", op, self.cons("JOIN", c, self.cons("JOIN", b, None))))))
 
     # idDef : ID
     #       | ID OPAREN optExprList CPAREN
@@ -126,14 +127,14 @@ class Parser():
             o = self.match("OPAREN")
             e = self.optExprList()
             c = self.match("CPAREN")
-            return cons("IDDEF", i, cons("JOIN", o, cons("JOIN", e, cons("JOIN", c, None))))
+            return self.cons("IDDEF", i, self.cons("JOIN", o, self.cons("JOIN", e, self.cons("JOIN", c, None))))
         elif (self.check("OBRACKET")):
             o = self.match("OBRACKET")
             e = self.expr()
             c = self.match("CBRACKET")
-            return cons("IDDEF", i, cons("JOIN", o, cons("JOIN", e, cons("JOIN", c, None))))
+            return self.cons("IDDEF", i, self.cons("JOIN", o, self.cons("JOIN", e, self.cons("JOIN", c, None))))
         else:
-            return cons("IDDEF", i, None)
+            return self.cons("IDDEF", i, None)
 
     # optParamList : EMPTY
     #              | paramList
@@ -141,9 +142,9 @@ class Parser():
         # print("In optParamList")
         if(self.paramListPending()):
             p = self.paramList()
-            return cons("OPTPARAMLIST", p, None)
+            return self.cons("OPTPARAMLIST", p, None)
         else:
-            return cons("OPTPARAMLIST", None, None)
+            return self.cons("OPTPARAMLIST", None, None)
 
     # paramList : ID
     #           | ID COMMA paramList
@@ -153,8 +154,8 @@ class Parser():
         if (self.check("COMMA")):
             c = self.match("COMMA")
             p = self.paramList()
-            return cons("PARAMLIST", i, cons("JOIN", c, cons("JOIN", p, None)))
-        return cons("PARAMLIST", i, None)
+            return self.cons("PARAMLIST", i, self.cons("JOIN", c, self.cons("JOIN", p, None)))
+        return self.cons("PARAMLIST", i, None)
 
     # optExprList : EMPTY
     #            | exprList
@@ -162,8 +163,8 @@ class Parser():
         # print("In optExprList")
         if(self.exprListPending()):
             e = self.exprList()
-            return cons("OPTEXPRLIST", e, None)
-        return cons("OPTEXPRLIST", None, None)
+            return self.cons("OPTEXPRLIST", e, None)
+        return self.cons("OPTEXPRLIST", None, None)
 
     # exprList : expr
     #          | expr COMMA exprList
@@ -173,8 +174,8 @@ class Parser():
         if (self.check("COMMA")):
             c = self.match("COMMA")
             ex = self.exprList()
-            return cons("EXPRLIST", e, cons("JOIN", c, cons("JOIN", ex, None)))
-        return cons("EXPRLIST", e, None)
+            return self.cons("EXPRLIST", e, self.cons("JOIN", c, self.cons("JOIN", ex, None)))
+        return self.cons("EXPRLIST", e, None)
 
     # expr : primary
     #      | primary operator expr
@@ -184,8 +185,8 @@ class Parser():
         if(self.operatorPending()):
             o = self.operator()
             e = self.expr()
-            return cons("EXPR", p, cons("JOIN", o, cons("JOIN", e, None)))
-        return cons("EXPR", p, None)
+            return self.cons("EXPR", p, self.cons("JOIN", o, self.cons("JOIN", e, None)))
+        return self.cons("EXPR", p, None)
 
     # primary : idDef
     #         | STRING
@@ -199,33 +200,33 @@ class Parser():
         # print("In primary")
         if (self.idDefPending()):
             p = self.idDef()
-            return cons("PRIMARY", p, None)
+            return self.cons("PRIMARY", p, None)
         elif (self.check("STRING")):
             p = self.match("STRING")
-            return cons("PRIMARY", p, None)
+            return self.cons("PRIMARY", p, None)
         elif (self.check("INTEGER")):
             p = self.match("INTEGER")
-            return cons("PRIMARY", p, None)
+            return self.cons("PRIMARY", p, None)
         elif (self.check("NOT")):
             n = self.match("NOT")
             p = self.primary()
-            return cons("EXPR", n, cons("JOIN", p, None))
+            return self.cons("EXPR", n, self.cons("JOIN", p, None))
         elif (self.check("OPAREN")):
             o = self.match("OPAREN")
             e = self.expr()
             c = self.match("CPAREN")
-            return cons("EXPR", o, cons("JOIN", e, cons("JOIN", c, None)))
+            return self.cons("EXPR", o, self.cons("JOIN", e, self.cons("JOIN", c, None)))
         elif (self.k_lambdaPending()):
             p = self.k_lambda()
-            return cons("PRIMARY", p, None)
+            return self.cons("PRIMARY", p, None)
         elif (self.functionDefinitionPending()):
             p = self.functionDefinition()
-            return cons("PRIMARY", p, None)
+            return self.cons("PRIMARY", p, None)
         elif (self.check("OBRACKET")):
             o = self.match("OBRACKET")
             e = self.optExprList()
             c = self.match("CBRACKET")
-            return cons("EXPR", o, cons("JOIN", e, cons("JOIN", c, None)))
+            return self.cons("EXPR", o, self.cons("JOIN", e, self.cons("JOIN", c, None)))
 
     # operator : EQUAL
     #          | NOTEQUAL
@@ -245,46 +246,46 @@ class Parser():
         # print("In operator")
         if(self.check("EQUAL")):
             op = self.match("EQUAL")
-            return cons("OPERATOR", op, None)
+            return self.cons("OPERATOR", op, None)
         elif(self.check("NOTEQUAL")):
             op = self.match("NOTEQUAL")
-            return cons("OPERATOR", op, None)
+            return self.cons("OPERATOR", op, None)
         elif(self.check("GREATER")):
             op = self.match("GREATER")
-            return cons("OPERATOR", op, None)
+            return self.cons("OPERATOR", op, None)
         elif(self.check("LESS")):
             op = self.match("LESS")
-            return cons("OPERATOR", op, None)
+            return self.cons("OPERATOR", op, None)
         elif(self.check("GREATEREQUAL")):
             op = self.match("GREATEREQUAL")
-            return cons("OPERATOR", op, None)
+            return self.cons("OPERATOR", op, None)
         elif(self.check("LESSEQUAL")):
             op = self.match("LESSEQUAL")
-            return cons("OPERATOR", op, None)
+            return self.cons("OPERATOR", op, None)
         elif(self.check("PLUS")):
             op = self.match("PLUS")
-            return cons("OPERATOR", op, None)
+            return self.cons("OPERATOR", op, None)
         elif(self.check("MINUS")):
             op = self.match("MINUS")
-            return cons("OPERATOR", op, None)
+            return self.cons("OPERATOR", op, None)
         elif(self.check("MULTIPLY")):
             op = self.match("MULTIPLY")
-            return cons("OPERATOR", op, None)
+            return self.cons("OPERATOR", op, None)
         elif(self.check("DIVIDE")):
             op = self.match("DIVIDE")
-            return cons("OPERATOR", op, None)
+            return self.cons("OPERATOR", op, None)
         elif(self.check("POWER")):
             op = self.match("POWER")
-            return cons("OPERATOR", op, None)
+            return self.cons("OPERATOR", op, None)
         elif(self.check("AND")):
             op = self.match("AND")
-            return cons("OPERATOR", op, None)
+            return self.cons("OPERATOR", op, None)
         elif(self.check("OR")):
             op = self.match("OR")
-            return cons("OPERATOR", op, None)
+            return self.cons("OPERATOR", op, None)
         elif(self.check("ASSIGN")):
             op = self.match("ASSIGN")
-            return cons("OPERATOR", op, None)
+            return self.cons("OPERATOR", op, None)
 
     # block : OBRACE optStatementList CBRACE
     def block(self):
@@ -292,26 +293,26 @@ class Parser():
         o = self.match("OBRACE")
         s = self.optStatementList()
         c = self.match("CBRACE")
-        return cons("BLOCK", o, cons("JOIN", s, cons("JOINS", c, None)))
-
-# =============================================================================
-#   WHERE I STOPPED
-# =============================================================================
+        return self.cons("BLOCK", o, self.cons("JOIN", s, self.cons("JOINS", c, None)))
 
     # optStatementList : EMPTY
     #                  | statementList
     def optStatementList(self):
         # print("In optStatementList")
         if (self.statementListPending()):
-            self.statementList()
+            s = self.statementList()
+            return self.cons("OPTSTATEMENTLIST", s, None)
+        return self.cons("OPTSTATEMENTLIST", None, None)
 
     # statementList : statement
     #               | statement statementList
     def statementList(self):
         # print("In statementList")
-        self.statement()
+        s= self.statement()
         if(self.statementListPending()):
-            self.statementList()
+            sl = self.statementList()
+            return self.cons("STATEMENTLIST", s, self.cons("JOIN", sl, None))
+        return self.cons("STATEMENTLIST", s, None)
 
     # statement : variableDefinition
     #           | functionDefinition
@@ -322,65 +323,82 @@ class Parser():
     def statement(self):
         # print("In statement")
         if(self.variableDefinitionPending()):
-            self.variableDefinition()
+            v = self.variableDefinition()
+            return self.cons("STATEMENT", v, None)
         elif(self.functionDefinitionPending()):
-            self.functionDefinition()
+            f = self.functionDefinition()
+            return self.cons("STATEMENT", f, None)
         elif(self.exprPending()):
-            self.expr()
-            self.match("SEMI")
+            e = self.expr()
+            s = self.match("SEMI")
+            return self.cons("STATEMENT", e, self.cons("JOIN", s, None))
         elif(self.whileLoopPending()):
-            self.whileLoop()
+            w = self.whileLoop()
+            return self.cons("STATEMENT", w, None)
         elif(self.ifStatementPending()):
-            self.ifStatement()
+            i = self.ifStatement()
+            return self.cons("STATEMENT", i, None)
         elif(self.check("RETURN")):
-            self.match("RETURN")
-            self.expr()
-            self.match("SEMI")
+            r = self.match("RETURN")
+            e = self.expr()
+            s = self.match("SEMI")
+            return self.cons("STATEMENT", r ,self.cons("JOIN", e, self.cons("JOIN", s, None)))
 
     # whileLoop : WHILE OPAREN expr CPAREN block
     def whileLoop(self):
         # print("In whileLoop")
-        self.match("WHILE")
-        self.match("OPAREN")
-        self.expr()
-        self.match("CPAREN")
-        self.block()
+        w = self.match("WHILE")
+        o = self.match("OPAREN")
+        e = self.expr()
+        c = self.match("CPAREN")
+        b = self.block()
+        return self.cons("WHILELOOP", w ,self.cons("JOIN", o, self.cons("JOIN", e, self.cons("JOIN", c, self.cons("JOIN", b, None)))))
 
     # ifStatement : IF OPAREN expr CPAREN block optElseStatement
     def ifStatement(self):
         # print("In ifStatement")
-        self.match("IF")
-        self.match("OPAREN")
-        self.expr()
-        self.match("CPAREN")
-        self.block()
-        self.optElseStatement()
+        i = self.match("IF")
+        o = self.match("OPAREN")
+        e = self.expr()
+        c = self.match("CPAREN")
+        b = self.block()
+        oe = self.optElseStatement()
+        return self.cons("IFSTATEMENT", i ,self.cons("JOIN", o, self.cons("JOIN", e, self.cons("JOIN", c, self.cons("JOIN", b, self.cons("JOIN", oe, None))))))
 
     # optElseStatement : EMPTY
     #                  | elseStatement
     def optElseStatement(self):
         # print("In optElseStatement")
         if (self.elseStatementPending()):
-            self.elseStatement()
+            e = self.elseStatement()
+            return self.cons("OPTELSESTATEMENT", e, None)
 
     # elseStatement : ELSE block
     #               | ELSE ifStatement
     def elseStatement(self):
         # print("In elseStatement")
-        self.match("ELSE")
+        e = self.match("ELSE")
         if(self.blockPending()):
-            self.block()
+            b = self.block()
+            return self.cons("ELSESTATEMENT", e, self.cons("JOIN", b, None))
         elif(self.ifStatementPending()):
-            self.ifStatement()
+            i = self.ifStatement()
+            return self.cons("ELSESTATEMENT", e, self.cons("JOIN", i, None))
+        return self.cons("ELSESTATEMENT", e, None)
 
     # k_lambda : LAMBDA OPAREN optParamList CPAREN block
     def k_lambda(self):
         # print("In k_lambda")
-        self.match("LAMBDA")
-        self.match("OPAREN")
-        self.optParamList()
-        self.match("CPAREN")
-        self.block()
+        l = self.match("LAMBDA")
+        o = self.match("OPAREN")
+        op = self.optParamList()
+        c = self.match("CPAREN")
+        b = self.block()
+        return self.cons("LAMBDA", l ,self.cons("JOIN", o, self.cons("JOIN", op, self.cons("JOIN", c, self.cons("JOIN", b, None)))))
+
+# =============================================================================
+#   Pending Statements
+# =============================================================================
 
     def includePending(self):
         # print("In includePending")
