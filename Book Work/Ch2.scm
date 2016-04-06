@@ -125,7 +125,6 @@
   (display ",")
   (display (y-point p))
   (display ")")
-  (newline)
 )
 
 ; Tests
@@ -147,7 +146,8 @@
 ; (exprTest (div-rat a b) (cons 2 3))
 ; (exprTest (div-rat b a) (cons 3 2))
 
-(define a (make-point 1 1))
-(define b (make-point 3 3))
-(define s (make-segment a b))
-(print-point (midpoint-segment s))
+; Line Segment Tests
+; (define a (make-point 1 1))
+; (define b (make-point 3 3))
+; (define s (make-segment a b))
+; (print-point (midpoint-segment s))
