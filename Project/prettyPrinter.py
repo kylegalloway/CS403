@@ -1,4 +1,5 @@
 from parser import Parser
+from conscell import ConsCell
 
 def main(filename):
     p = Parser(filename)
@@ -6,6 +7,8 @@ def main(filename):
     prettyPrint(parse_tree)
 
 def prettyPrint(tree):
-    pass
+        print(tree.value)
+        prettyPrint(tree.left)
+        prettyPrint(tree.right)
 
 main("program.txt")
