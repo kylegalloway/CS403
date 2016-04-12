@@ -12,23 +12,23 @@ class Lexer():
         ch = self.getCharacter()
 
         if (ch == ""): return Lexeme("END_OF_INPUT")
-        if (ch == ';'): return Lexeme("SEMI")
-        if (ch == ','): return Lexeme("COMMA")
-        if (ch == '('): return Lexeme("OPAREN")
-        if (ch == ')'): return Lexeme("CPAREN")
-        if (ch == '{'): return Lexeme("OBRACE")
-        if (ch == '}'): return Lexeme("CBRACE")
-        if (ch == '['): return Lexeme("OBRACKET")
-        if (ch == ']'): return Lexeme("CBRACKET")
-        if (ch == '+'): return Lexeme("PLUS")
-        if (ch == '-'): return Lexeme("MINUS")
-        if (ch == '*'): return Lexeme("TIMES")
-        if (ch == '/'): return Lexeme("DIVIDE")
-        if (ch == '%'): return Lexeme("MODULO")
-        if (ch == '^'): return Lexeme("EXPONENT")
-        if (ch == '&'): return Lexeme("AMPERSAND")
-        if (ch == '.'): return Lexeme("PERIOD")
-        if (ch == '|'): return Lexeme("BAR")
+        if (ch == ';'): return Lexeme("SEMI", ";")
+        if (ch == ','): return Lexeme("COMMA", ",")
+        if (ch == '('): return Lexeme("OPAREN", "(")
+        if (ch == ')'): return Lexeme("CPAREN", ")")
+        if (ch == '{'): return Lexeme("OBRACE", "{")
+        if (ch == '}'): return Lexeme("CBRACE", "}")
+        if (ch == '['): return Lexeme("OBRACKET", "[")
+        if (ch == ']'): return Lexeme("CBRACKET", "]")
+        if (ch == '+'): return Lexeme("PLUS", "+")
+        if (ch == '-'): return Lexeme("MINUS", "-")
+        if (ch == '*'): return Lexeme("TIMES", "*")
+        if (ch == '/'): return Lexeme("DIVIDE", "/")
+        if (ch == '%'): return Lexeme("MODULO", "%")
+        if (ch == '^'): return Lexeme("EXPONENT", "^")
+        if (ch == '&'): return Lexeme("AMPERSAND", "&")
+        if (ch == '.'): return Lexeme("PERIOD", ".")
+        if (ch == '|'): return Lexeme("BAR", "|")
 
         if (ch in ['<', '>', '=', '!']): return self.lexOp(ch)
         if (ch == '\"'): return self.lexString()
@@ -43,28 +43,28 @@ class Lexer():
         ch = self.getCharacter()
         if (buff == ">"):
             if (ch == "="):
-                return Lexeme("GREATEREQUAL")
+                return Lexeme("GREATEREQUAL", ">=")
             else:
                 self.pushbackCharacter()
-                return Lexeme("GREATER")
+                return Lexeme("GREATER", ">")
         elif (buff == "<"):
             if (ch == "="):
-                return Lexeme("LESSEQUAL")
+                return Lexeme("LESSEQUAL", "<=")
             else:
                 self.pushbackCharacter()
-                return Lexeme("LESS")
+                return Lexeme("LESS", "<")
         elif (buff == "="):
             if (ch == "="):
-                return Lexeme("DOUBLEEQUAL")
+                return Lexeme("DOUBLEEQUAL", "==")
             else:
                 self.pushbackCharacter()
-                return Lexeme("EQUAL")
+                return Lexeme("EQUAL", "=")
         elif (buff == "!"):
             if (ch == "="):
-                return Lexeme("NOTEQUAL")
+                return Lexeme("NOTEQUAL", "!=")
             else:
                 self.pushbackCharacter()
-                return Lexeme("NOT")
+                return Lexeme("NOT", "!")
 
 
     def skipComment(self):
@@ -112,13 +112,13 @@ class Lexer():
             ch = self.getCharacter()
         self.pushbackCharacter()
 
-        if (buff == "func"): return Lexeme("FUNCTION")
-        if (buff == "var"): return Lexeme("VAR")
-        if (buff == "while"): return Lexeme("WHILE")
-        if (buff == "if"): return Lexeme("IF")
-        if (buff == "else"): return Lexeme("ELSE")
-        if (buff == "return"): return Lexeme("RETURN")
-        if (buff == "include"): return Lexeme("INCLUDE")
+        if (buff == "func"): return Lexeme("FUNCTION", "func")
+        if (buff == "var"): return Lexeme("VAR", "var")
+        if (buff == "while"): return Lexeme("WHILE", "while")
+        if (buff == "if"): return Lexeme("IF", "if")
+        if (buff == "else"): return Lexeme("ELSE", "else")
+        if (buff == "return"): return Lexeme("RETURN", "return")
+        if (buff == "include"): return Lexeme("INCLUDE", "include")
 
         return Lexeme("ID", buff)
 

@@ -41,7 +41,8 @@ class Parser():
 
     def cons(self, value, left, right):
         # return ConsCell(value, ConsCell(left, ConsCell(right, None)))
-        return ConsCell(value, left, ConsCell("JOIN", right, None))
+        # return ConsCell(value, left, ConsCell("JOIN", right, None))
+        return Lexeme(value, value, left, right)
 
 # =============================================================================
 #   GRAMMAR PORTION OF THE PARSING CLASS
@@ -293,7 +294,7 @@ class Parser():
         o = self.match("OBRACE")
         s = self.optStatementList()
         c = self.match("CBRACE")
-        return self.cons("BLOCK", o, self.cons("JOIN", s, self.cons("JOINS", c, None)))
+        return self.cons("BLOCK", o, self.cons("JOIN", s, self.cons("JOIN", c, None)))
 
     # optStatementList : EMPTY
     #                  | statementList
