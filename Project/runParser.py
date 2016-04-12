@@ -5,5 +5,9 @@ def main(filename):
     parse_tree = p.parse()
     print(parse_tree)
 
-main("program.txt")
-# main("bad_program.txt")
+import sys
+if(len(sys.argv) == 2):
+    filename = sys.argv[1]
+else:
+    filename = "program.txt"
+main(filename)

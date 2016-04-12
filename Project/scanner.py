@@ -12,5 +12,9 @@ def scanner(file):
         print(pending)
         pending = lexer.lex()
 
-# main("program.txt")
-main("no_coms_program.txt")
+import sys
+if(len(sys.argv) == 2):
+    filename = sys.argv[1]
+else:
+    filename = "program.txt"
+main(filename)

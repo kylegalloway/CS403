@@ -50,12 +50,12 @@ class Parser():
 
 
     # file : EMPTY
-    #      | include file
+    #      | inclusion file
     #      | program
     def k_file(self):
         # print("In k_file")
-        if (self.includePending()):
-            i = self.include()
+        if (self.inclusionPending()):
+            i = self.inclusion()
             f = self.k_file()
             return self.cons("FILE", i, self.cons("JOIN", f, None))
         elif (self.programPending()):
@@ -64,12 +64,12 @@ class Parser():
         else:
             return self.cons("FILE", None, None)
 
-    # include : INCLUDE STRING
-    def include(self):
-        # print("In include")
+    # inclusion : INCLUDE STRING
+    def inclusion(self):
+        # print("In inclusion")
         i = self.match("INCLUDE")
         s = self.match("STRING")
-        return self.cons("INCLUDE", i, self.cons("JOIN", s, None))
+        return self.cons("INCLUSION", i, self.cons("JOIN", s, None))
 
     # program : definition
     #         | definition program
@@ -144,8 +144,7 @@ class Parser():
         if(self.paramListPending()):
             p = self.paramList()
             return self.cons("OPTPARAMLIST", p, None)
-        else:
-            return self.cons("OPTPARAMLIST", None, None)
+        return self.cons("OPTPARAMLIST", None, None)
 
     # paramList : ID
     #           | ID COMMA paramList
@@ -373,6 +372,7 @@ class Parser():
         if (self.elseStatementPending()):
             e = self.elseStatement()
             return self.cons("OPTELSESTATEMENT", e, None)
+        return self.cons("OPTELSESTATEMENT", None, None)
 
     # elseStatement : ELSE block
     #               | ELSE ifStatement
@@ -401,8 +401,8 @@ class Parser():
 #   Pending Statements
 # =============================================================================
 
-    def includePending(self):
-        # print("In includePending")
+    def inclusionPending(self):
+        # print("In inclusionPending")
         return self.check("INCLUDE")
 
     def programPending(self):

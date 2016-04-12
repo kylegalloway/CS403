@@ -1,8 +1,8 @@
 file : EMPTY
-     | include file
+     | inclusion file
      | program
 
-include : INCLUDE STRING
+inclusion : INCLUDE STRING
 
 program : definition
         | definition program
