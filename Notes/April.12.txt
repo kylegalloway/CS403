@@ -1,0 +1,111 @@
+;{
+CALL-BY-VALUE
+    every modern language
+    (except C++)
+
+int swap(int a, int b)
+{
+    int temp = a;
+    a = b;
+    b = temp;
+}
+
+int x = 5;
+int y = 13;
+
+swap(x, y);
+
+a and b get swapped but x and y do not
+
+swap(&x, &y);
+swaps x and y.
+
+CALL-BY-REFERENCE
+
+int swap(int &a, int &b)
+{
+    int temp = a;
+    a = b;
+    b = temp;
+}
+
+swap(x, y);
+swaps x and y
+
+CALL-BY-REFERENCE
+    in scam
+;}
+(define (swap # $a $b)
+    (define temp (# $a))
+    (set $a (# $b) #)
+    (set $b temp #)
+)
+
+(define x 5)
+(define y 13)
+(print x ":" y "\n")
+(swap x y)
+(print x ":" y "\n")
+
+;{
+CALL-BY-VALUE-RESULT (Ada)
+
+var x = 3;
+function f(a)
+{
+    a = 0;
+    a = a + x
+    // Under Call-by-reference, updating a automatically update
+    //  x since that is what was passed therefore a is 0, therefore x is 0, then returned as 0. x is now 0
+    // In Call-by-value-result, updating a does nothing
+    //  until the value is returned so a = 0 does nothing, a = a + x sets a to //   3 then returns 3. x is still 3
+    return a;
+}
+
+f(x);
+
+;}
+
+;{
+
+CALL-BY-NAME
+int x = 3;
+int y = 7;
+swap(x, y);
+
+// This would get translated to
+
+int x = 3;
+int y = 7;
+int temp = x;
+x = y;
+y = temp;
+
+int temp = readTemp();
+int temp2 = readTemp();
+
+swap(temp, temp2);
+// Causes problems by having the variable temp in swap causing a name clash
+
+;}
+
+;{
+
+CALL-BY-NEED
+    delays all arguments passed to functions
+int x = 3;
+int y = 7;
+
+function myIf(test, trueExpr, falseExpr)
+{
+    ifcalls += 1;
+    if(test)
+        trueExpr;
+    else
+        falseExpr;
+}
+
+myIf(x == 0, 1, (a / x));
+
+
+;}
