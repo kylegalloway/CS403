@@ -1,6 +1,5 @@
 from lex import Lexer
 from lexeme import Lexeme
-from conscell import ConsCell
 
 class Parser():
 
