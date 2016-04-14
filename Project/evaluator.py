@@ -38,7 +38,7 @@ def evaluate(tree, env):
             evalIDDEF(tree, env)
         elif(tree.ltype == "ARRAYACCESS"):
             evalARRAYACCESS(tree, env)
-        elif(tree.ltype == "ID"):
+        elif(tree.ltype == "LONEID"):
             evalID(tree, env)
         elif(tree.ltype == "OPTPARAMLIST"):
             evalOPTPARAMLIST(tree, env)
@@ -142,6 +142,26 @@ def evaluate(tree, env):
             evalLAMBDA(tree, env):
         elif(tree.ltype == "JOIN")
             evalJOIN(tree, env):
+        elif(tree.ltype == "STRING"):
+            evalSTRING(tree,env)
+        elif(tree.ltype == "INTEGER"):
+            evalINTEGER(tree,env)
+        elif(tree.ltype == "FUNCTION"):
+            evalFUNCTION(tree,env)
+        elif(tree.ltype == "VAR"):
+            evalVAR(tree,env)
+        elif(tree.ltype == "WHILE"):
+            evalWHILE(tree,env)
+        elif(tree.ltype == "IF"):
+            evalIF(tree,env)
+        elif(tree.ltype == "ELSE"):
+            evalELSE(tree,env)
+        elif(tree.ltype == "RETURN"):
+            evalRETURN(tree,env)
+        elif(tree.ltype == "INCLUDE"):
+            evalINCLUDE(tree,env)
+        elif(tree.ltype == "ID"):
+            evalID(tree,env)
         else:
             print("ERROR: "+tree.ltype+" : "+tree.lvalue)
 
@@ -187,7 +207,7 @@ def evalIDDEF(tree, env):
 def evalARRAYACCESS(tree, env):
     pass
 
-def evalID(tree, env):
+def evalLONEID(tree, env):
     pass
 
 def evalOPTPARAMLIST(tree, env):
@@ -339,6 +359,40 @@ def evalELSEIFSTATEMENT(tree, env):
 
 def evalLAMBDA(tree, env):
     pass
+
+def evalJOIN(tree, env):
+    pass
+
+def evalSTRING(tree,env):
+    pass
+
+def evalINTEGER(tree,env):
+    pass
+
+def evalFUNCTION(tree,env):
+    pass
+
+def evalVAR(tree,env):
+    pass
+
+def evalWHILE(tree,env):
+    pass
+
+def evalIF(tree,env):
+    pass
+
+def evalELSE(tree,env):
+    pass
+
+def evalRETURN(tree,env):
+    pass
+
+def evalINCLUDE(tree,env):
+    pass
+
+def evalID(tree,env):
+    pass
+
 
 
 

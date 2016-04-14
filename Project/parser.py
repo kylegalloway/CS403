@@ -134,7 +134,7 @@ class Parser():
             c = self.match("CBRACKET")
             return self.cons("ARRAYACCESS", i, self.cons("JOIN", o, self.cons("JOIN", e, self.cons("JOIN", c, None))))
         else:
-            return self.cons("ID", i, None)
+            return self.cons("LONEID", i, None)
 
     # optParamList : EMPTY
     #              | paramList
