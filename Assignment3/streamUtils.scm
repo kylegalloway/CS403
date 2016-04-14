@@ -1,6 +1,10 @@
 (define scons cons-stream)
 (define scar stream-car)
 (define scdr stream-cdr)
+(define (scadr s) (scar (scdr s)))
+(define (scddr s) (scdr (scdr s)))
+(define (scaddr s) (scar (scddr s)))
+(define (scdddr s) (scdr (scddr s)))
 
 (define (ints-from n)
     (scons n (ints-from (+ n 1)))
@@ -76,19 +80,6 @@
 ; PI/4 = 1 - 1/3 + 1/5 - 1/7 + 1/9 ...
 ; Need alt-ones / odds
 (define pi-by-4-stream (div-streams alt-ones odds))
-
-; ; Partial Sum
-; (define (psum s)
-;     (scons
-;         (scar s)
-;         (psum
-;             (scons
-;                 (+ (scar s) (scar (scdr s)))
-;                 (scdr (scdr s))
-;             )
-;         )
-;     )
-; )
 
 (define (psum s)
     (scons

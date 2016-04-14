@@ -21,7 +21,6 @@ class Lexer():
         if (ch == '['): return Lexeme("OBRACKET", "[")
         if (ch == ']'): return Lexeme("CBRACKET", "]")
         if (ch == '+'): return Lexeme("PLUS", "+")
-        if (ch == '-'): return Lexeme("MINUS", "-")
         if (ch == '*'): return Lexeme("TIMES", "*")
         if (ch == '/'): return Lexeme("DIVIDE", "/")
         if (ch == '%'): return Lexeme("MODULO", "%")
@@ -30,6 +29,7 @@ class Lexer():
         if (ch == '.'): return Lexeme("PERIOD", ".")
         if (ch == '|'): return Lexeme("BAR", "|")
 
+        if (ch == '-'): return self.lexMinus()
         if (ch in ['<', '>', '=', '!']): return self.lexOp(ch)
         if (ch == '\"'): return self.lexString()
         if (ch == '\''): return self.lexString()
@@ -65,6 +65,19 @@ class Lexer():
             else:
                 self.pushbackCharacter()
                 return Lexeme("NOT", "!")
+
+        def lexMinus(self.ch):
+            buff = "" + ch
+            ch = self.getCharacter()
+            if (not(isdigit(ch))):
+                self.pushbackCharacter()
+                return Lexeme("MINUS", "-")
+            else:
+                while (ch.isdigit()):
+                    buff += ch
+                    ch = self.getCharacter()
+                self.pushbackCharacter()
+                return Lexeme("INTEGER", buff)
 
 
     def skipComment(self):

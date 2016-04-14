@@ -37,7 +37,7 @@ def prettyPrint(tree):
         elif(tree.ltype == "ARRAYACCESS"):
             printARRAYACCESS(tree)
         elif(tree.ltype == "LONEID"):
-            printID(tree)
+            printLONEID(tree)
         elif(tree.ltype == "OPTPARAMLIST"):
             printOPTPARAMLIST(tree)
         elif(tree.ltype == "EMPTYOPTPARAMLIST"):
@@ -210,6 +210,8 @@ def prettyPrint(tree):
             printNOTEQUAL(tree)
         elif(tree.ltype == "NOT"):
             printNOT(tree)
+        elif(tree.ltype == "END_OF_INPUT"):
+            print("\n")
         else:
             print("ERROR: "+tree.ltype+" : "+tree.lvalue)
 
@@ -412,46 +414,88 @@ def printEXPRLISTPRIMARY(tree):
         prettyPrint(tree.right)
 
 def printEQUALOPERATOR(tree):
-    print(tree.lvalue)
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printNOTEQUALOPERATOR(tree):
-    print(tree.lvalue)
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printGREATEROPERATOR(tree):
-    print(tree.lvalue)
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printLESSOPERATOR(tree):
-    print(tree.lvalue)
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printGREATEREQUALOPERATOR(tree):
-    print(tree.lvalue)
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printLESSEQUALOPERATOR(tree):
-    print(tree.lvalue)
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printPLUSOPERATOR(tree):
-    print(tree.lvalue)
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printMINUSOPERATOR(tree):
-    print(tree.lvalue)
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printMULTIPLYOPERATOR(tree):
-    print(tree.lvalue)
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printDIVIDEOPERATOR(tree):
-    print(tree.lvalue)
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printPOWEROPERATOR(tree):
-    print(tree.lvalue)
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printANDOPERATOR(tree):
-    print(tree.lvalue)
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printOROPERATOR(tree):
-    print(tree.lvalue)
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printASSIGNOPERATOR(tree):
-    print(tree.lvalue)
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printBLOCK(tree):
     if(tree.left):

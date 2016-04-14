@@ -7,13 +7,13 @@
             (scons
                 (scar S)
                 (scons
-                    (scar (scdr S))
+                    (scadr S)
                     (scons
                         (+
                             (scar S)
-                            (scar (scdr S))
+                            (scadr S)
                         )
-                        (scdr (scdr S))
+                        (scddr S)
                     )
                 )
             )
