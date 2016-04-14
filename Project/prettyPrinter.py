@@ -36,7 +36,7 @@ def prettyPrint(tree):
             printIDDEF(tree)
         elif(tree.ltype == "ARRAYACCESS"):
             printARRAYACCESS(tree)
-        elif(tree.ltype == "ID"):
+        elif(tree.ltype == "LONEID"):
             printID(tree)
         elif(tree.ltype == "OPTPARAMLIST"):
             printOPTPARAMLIST(tree)
@@ -136,260 +136,542 @@ def prettyPrint(tree):
             printELSESTATEMENT(tree)
         elif(tree.ltype == "ELSEIFSTATEMENT"):
             printELSEIFSTATEMENT(tree)
-        elif(tree.ltype == "LAMBDA")
-            printLAMBDA(tree):
-        elif(tree.ltype == "JOIN")
-            printJOIN(tree):
+        elif(tree.ltype == "LAMBDA"):
+            printLAMBDA(tree)
+        elif(tree.ltype == "JOIN"):
+            printJOIN(tree)
         elif(tree.ltype == "STRING"):
-            printSTRING(tree
+            printSTRING(tree)
         elif(tree.ltype == "INTEGER"):
-            printINTEGER(tree
+            printINTEGER(tree)
         elif(tree.ltype == "FUNCTION"):
-            printFUNCTION(tree
+            printFUNCTION(tree)
         elif(tree.ltype == "VAR"):
-            printVAR(tree
+            printVAR(tree)
         elif(tree.ltype == "WHILE"):
-            printWHILE(tree
+            printWHILE(tree)
         elif(tree.ltype == "IF"):
-            printIF(tree
+            printIF(tree)
         elif(tree.ltype == "ELSE"):
-            printELSE(tree
+            printELSE(tree)
         elif(tree.ltype == "RETURN"):
-            printRETURN(tree
+            printRETURN(tree)
         elif(tree.ltype == "INCLUDE"):
-            printINCLUDE(tree
+            printINCLUDE(tree)
         elif(tree.ltype == "ID"):
-            printID(tree
+            printID(tree)
+        elif(tree.ltype == "SEMI"):
+            printSEMI(tree)
+        elif(tree.ltype == "COMMA"):
+            printCOMMA(tree)
+        elif(tree.ltype == "OPAREN"):
+            printOPAREN(tree)
+        elif(tree.ltype == "CPAREN"):
+            printCPAREN(tree)
+        elif(tree.ltype == "OBRACE"):
+            printOBRACE(tree)
+        elif(tree.ltype == "CBRACE"):
+            printCBRACE(tree)
+        elif(tree.ltype == "OBRACKET"):
+            printOBRACKET(tree)
+        elif(tree.ltype == "CBRACKET"):
+            printCBRACKET(tree)
+        elif(tree.ltype == "PLUS"):
+            printPLUS(tree)
+        elif(tree.ltype == "MINUS"):
+            printMINUS(tree)
+        elif(tree.ltype == "TIMES"):
+            printTIMES(tree)
+        elif(tree.ltype == "DIVIDE"):
+            printDIVIDE(tree)
+        elif(tree.ltype == "MODULO"):
+            printMODULO(tree)
+        elif(tree.ltype == "EXPONENT"):
+            printEXPONENT(tree)
+        elif(tree.ltype == "AMPERSAND"):
+            printAMPERSAND(tree)
+        elif(tree.ltype == "PERIOD"):
+            printPERIOD(tree)
+        elif(tree.ltype == "BAR"):
+            printBAR(tree)
+        elif(tree.ltype == "GREATEREQUAL"):
+            printGREATEREQUAL(tree)
+        elif(tree.ltype == "GREATER"):
+            printGREATER(tree)
+        elif(tree.ltype == "LESSEQUAL"):
+            printLESSEQUAL(tree)
+        elif(tree.ltype == "LESS"):
+            printLESS(tree)
+        elif(tree.ltype == "DOUBLEEQUAL"):
+            printDOUBLEEQUAL(tree)
+        elif(tree.ltype == "EQUAL"):
+            printEQUAL(tree)
+        elif(tree.ltype == "NOTEQUAL"):
+            printNOTEQUAL(tree)
+        elif(tree.ltype == "NOT"):
+            printNOT(tree)
         else:
             print("ERROR: "+tree.ltype+" : "+tree.lvalue)
 
 def printPARSE(tree):
-    pass
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printINCLUDEFILE(tree):
-    pass
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printFILE(tree):
-    pass
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printEMPTYFILE(tree):
-    pass
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printINCLUSION(tree):
-    pass
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printPROGRAM(tree):
-    pass
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printLASTDEF(tree):
-    pass
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printVARDEFINITION(tree):
-    pass
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printFUNCDEFINITION(tree):
-    pass
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printDEFINITION(tree):
-    pass
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printVARDEF(tree):
-    pass
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printFUNCDEF(tree):
-    pass
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printIDDEF(tree):
-    pass
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printARRAYACCESS(tree):
-    pass
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
-def printID(tree):
-    pass
+def printLONEID(tree):
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printOPTPARAMLIST(tree):
-    pass
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printEMPTYOPTPARAMLIST(tree):
-    pass
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printPARAMLIST(tree):
-    pass
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printLASTPARAM(tree):
-    pass
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printOPTEXPRLIST(tree):
-    pass
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printEMPTYOPTEXPRLIST(tree):
-    pass
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printEXPRLIST(tree):
-    pass
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printLASTEXPR(tree):
-    pass
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printEXPR(tree):
-    pass
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printSINGLEPRIMARY(tree):
-    pass
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printIDPRIMARY(tree):
-    pass
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printSTRINGPRIMARY(tree):
-    pass
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printINTEGERPRIMARY(tree):
-    pass
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printNOTPRIMARY(tree):
-    pass
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printEXPRPRIMARY(tree):
-    pass
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printLAMBDAPRIMARY(tree):
-    pass
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printFUNCDEFPRIMARY(tree):
-    pass
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printEXPRLISTPRIMARY(tree):
-    pass
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printEQUALOPERATOR(tree):
-    pass
+    print(tree.lvalue)
 
 def printNOTEQUALOPERATOR(tree):
-    pass
+    print(tree.lvalue)
 
 def printGREATEROPERATOR(tree):
-    pass
+    print(tree.lvalue)
 
 def printLESSOPERATOR(tree):
-    pass
+    print(tree.lvalue)
 
 def printGREATEREQUALOPERATOR(tree):
-    pass
+    print(tree.lvalue)
 
 def printLESSEQUALOPERATOR(tree):
-    pass
+    print(tree.lvalue)
 
 def printPLUSOPERATOR(tree):
-    pass
+    print(tree.lvalue)
 
 def printMINUSOPERATOR(tree):
-    pass
+    print(tree.lvalue)
 
 def printMULTIPLYOPERATOR(tree):
-    pass
+    print(tree.lvalue)
 
 def printDIVIDEOPERATOR(tree):
-    pass
+    print(tree.lvalue)
 
 def printPOWEROPERATOR(tree):
-    pass
+    print(tree.lvalue)
 
 def printANDOPERATOR(tree):
-    pass
+    print(tree.lvalue)
 
 def printOROPERATOR(tree):
-    pass
+    print(tree.lvalue)
 
 def printASSIGNOPERATOR(tree):
-    pass
+    print(tree.lvalue)
 
 def printBLOCK(tree):
-    pass
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printOPTSTATEMENTLIST(tree):
-    pass
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printEMPTYOPTSTATEMENTLIST(tree):
-    pass
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printSTATEMENTLIST(tree):
-    pass
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printLASTSTATEMENT(tree):
-    pass
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printVARDEFSTATEMENT(tree):
-    pass
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printFUNCDEFSTATEMENT(tree):
-    pass
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printEXPRSTATEMENT(tree):
-    pass
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printWHILELOOPSTATEMENT(tree):
-    pass
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printIFSTATEMENTSTATEMENT(tree):
-    pass
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printRETURNSTATEMENT(tree):
-    pass
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printWHILELOOP(tree):
-    pass
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printIFSTATEMENT(tree):
-    pass
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printOPTELSESTATEMENT(tree):
-    pass
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printEMPTYOPTELSESTATEMENT(tree):
-    pass
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printELSESTATEMENT(tree):
-    pass
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printELSEIFSTATEMENT(tree):
-    pass
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printLAMBDA(tree):
-    pass
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printJOIN(tree):
-    pass
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
-def printSTRING(tree:
-    pass
+def printSTRING(tree):
+    print(tree.lvalue)
 
-def printINTEGER(tree:
-    pass
+def printINTEGER(tree):
+    print(tree.lvalue)
 
-def printFUNCTION(tree:
-    pass
+def printFUNCTION(tree):
+    print(tree.lvalue)
 
-def printVAR(tree:
-    pass
+def printVAR(tree):
+    print(tree.lvalue)
 
-def printWHILE(tree:
-    pass
+def printWHILE(tree):
+    print(tree.lvalue)
 
-def printIF(tree:
-    pass
+def printIF(tree):
+    print(tree.lvalue)
 
-def printELSE(tree:
-    pass
+def printELSE(tree):
+    print(tree.lvalue)
 
-def printRETURN(tree:
-    pass
+def printRETURN(tree):
+    print(tree.lvalue)
 
-def printINCLUDE(tree:
-    pass
+def printINCLUDE(tree):
+    print(tree.lvalue)
 
-def printID(tree:
-    pass
+def printID(tree):
+    print(tree.lvalue)
+
+def printSEMI(tree):
+    print(tree.lvalue)
+
+def printCOMMA(tree):
+    print(tree.lvalue)
+
+def printOPAREN(tree):
+    print(tree.lvalue)
+
+def printCPAREN(tree):
+    print(tree.lvalue)
+
+def printOBRACE(tree):
+    print(tree.lvalue)
+
+def printCBRACE(tree):
+    print(tree.lvalue)
+
+def printOBRACKET(tree):
+    print(tree.lvalue)
+
+def printCBRACKET(tree):
+    print(tree.lvalue)
+
+def printPLUS(tree):
+    print(tree.lvalue)
+
+def printMINUS(tree):
+    print(tree.lvalue)
+
+def printTIMES(tree):
+    print(tree.lvalue)
+
+def printDIVIDE(tree):
+    print(tree.lvalue)
+
+def printMODULO(tree):
+    print(tree.lvalue)
+
+def printEXPONENT(tree):
+    print(tree.lvalue)
+
+def printAMPERSAND(tree):
+    print(tree.lvalue)
+
+def printPERIOD(tree):
+    print(tree.lvalue)
+
+def printBAR(tree):
+    print(tree.lvalue)
+
+def printGREATEREQUAL(tree):
+    print(tree.lvalue)
+
+def printGREATER(tree):
+    print(tree.lvalue)
+
+def printLESSEQUAL(tree):
+    print(tree.lvalue)
+
+def printLESS(tree):
+    print(tree.lvalue)
+
+def printDOUBLEEQUAL(tree):
+    print(tree.lvalue)
+
+def printEQUAL(tree):
+    print(tree.lvalue)
+
+def printNOTEQUAL(tree):
+    print(tree.lvalue)
+
+def printNOT(tree):
+    print(tree.lvalue)
+
 
 import sys
 if(len(sys.argv) == 2):
