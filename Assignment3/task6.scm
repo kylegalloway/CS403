@@ -1,21 +1,23 @@
 (include "exprTest.scm")
 (include "streamUtils.scm")
 
+
 (define (pf-3-11-17)
-    (scdr
-        (scons 1 (smerge
-                    (smerge
-                        (sscale ints 3)
-                        (sscale ints 11)
-                    )
-                    (sscale ints 17)
-                 )
+    (define S
+        (scons
+            1
+            (smerge
+                (sscale S 3)
+                (smerge
+                    (sscale S 11)
+                    (sscale S 17)
+                )
+            )
         )
     )
+    (scdr S)
 )
 
-(sdisplay pf-3-11-17 25)
-
-; (define (run6)
-
-; )
+(define (run6)
+    (sdisplay (pf-3-11-17) 25)
+)

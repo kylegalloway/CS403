@@ -153,13 +153,14 @@
                 ((> (scar s1) (scar s2))
                  (scons (scar s2) (smerge s1 (scdr s2)))
                 )
-                (else (scons
+                (else
+                    (scons
                         (scar s1)
                         (smerge
                             (scdr s1)
                             (scdr s2)
                         )
-                       )
+                    )
                 )
             )
         )
