@@ -11,350 +11,335 @@ def evaluate(tree, env):
     if(tree != None):
         # print(tree.ltype)
         if(tree.ltype == "PARSE"):
-            evalParse(tree,env)
+            evalPARSE(tree, env)
+        elif(tree.ltype == "INCLUDEFILE"):
+            evalINCLUDEFILE(tree, env)
         elif(tree.ltype == "FILE"):
-            evalFile(tree,env)
+            evalFILE(tree, env)
+        elif(tree.ltype == "EMPTYFILE"):
+            evalEMPTYFILE(tree, env)
         elif(tree.ltype == "INCLUSION"):
-            evalInclusion(tree,env)
+            evalINCLUSION(tree, env)
         elif(tree.ltype == "PROGRAM"):
-            evalProgram(tree,env)
+            evalPROGRAM(tree, env)
+        elif(tree.ltype == "LASTDEF"):
+            evalLASTDEF(tree, env)
+        elif(tree.ltype == "VARDEFINITION"):
+            evalVARDEFINITION(tree, env)
+        elif(tree.ltype == "FUNCDEFINITION"):
+            evalFUNCDEFINITION(tree, env)
         elif(tree.ltype == "DEFINITION"):
-            evalDefinition(tree,env)
+            evalDEFINITION(tree, env)
         elif(tree.ltype == "VARDEF"):
-            evalVariableDefinition(tree,env)
+            evalVARDEF(tree, env)
         elif(tree.ltype == "FUNCDEF"):
-            evalFunctionDefinition(tree,env)
+            evalFUNCDEF(tree, env)
         elif(tree.ltype == "IDDEF"):
-            evalIDDef(tree,env)
-        elif(tree.ltype == "OPTPARAMLIST"):
-            evalOptParamList(tree,env)
-        elif(tree.ltype == "PARAMLIST"):
-            evalParamList(tree,env)
-        elif(tree.ltype == "OPTEXPRLIST"):
-            evalOptExprList(tree,env)
-        elif(tree.ltype == "EXPRLIST"):
-            evalExprList(tree,env)
-        elif(tree.ltype == "EXPR"):
-            evalExpr(tree,env)
-        elif(tree.ltype == "PRIMARY"):
-            evalPrimary(tree,env)
-        elif(tree.ltype == "OPERATOR"):
-            evalOperator(tree,env)
-        elif(tree.ltype == "BLOCK"):
-            evalBlock(tree,env)
-        elif(tree.ltype == "OPTSTATEMENTLIST"):
-            evalOptStatementList(tree,env)
-        elif(tree.ltype == "STATEMENTLIST"):
-            evalStatementList(tree,env)
-        elif(tree.ltype == "STATEMENT"):
-            evalStatement(tree,env)
-        elif(tree.ltype == "WHILELOOP"):
-            evalWhileLoop(tree,env)
-        elif(tree.ltype == "IFSTATEMENT"):
-            evalIfStatement(tree,env)
-        elif(tree.ltype == "OPTELSESTATEMENT"):
-            evalOptElseStatement(tree,env)
-        elif(tree.ltype == "ELSESTATEMENT"):
-            evalElseStatement(tree,env)
-        elif(tree.ltype == "K_LAMBDA"):
-            evalK_Lambda(tree,env)
-        elif(tree.ltype == "JOIN"):
-            evalJoin(tree,env)
-        elif(tree.ltype == "SEMI"):
-            evalSEMI(tree,env)
-        elif(tree.ltype == "COMMA"):
-            evalCOMMA(tree,env)
-        elif(tree.ltype == "OPAREN"):
-            evalOPAREN(tree,env)
-        elif(tree.ltype == "CPAREN"):
-            evalCPAREN(tree,env)
-        elif(tree.ltype == "OBRACE"):
-            evalOBRACE(tree,env)
-        elif(tree.ltype == "CBRACE"):
-            evalCBRACE(tree,env)
-        elif(tree.ltype == "OBRACKET"):
-            evalOBRACKET(tree,env)
-        elif(tree.ltype == "CBRACKET"):
-            evalCBRACKET(tree,env)
-        elif(tree.ltype == "PLUS"):
-            evalPLUS(tree,env)
-        elif(tree.ltype == "MINUS"):
-            evalMINUS(tree,env)
-        elif(tree.ltype == "TIMES"):
-            evalTIMES(tree,env)
-        elif(tree.ltype == "DIVIDE"):
-            evalDIVIDE(tree,env)
-        elif(tree.ltype == "MODULO"):
-            evalMODULO(tree,env)
-        elif(tree.ltype == "EXPONENT"):
-            evalEXPONENT(tree,env)
-        elif(tree.ltype == "AMPERSAND"):
-            evalAMPERSAND(tree,env)
-        elif(tree.ltype == "PERIOD"):
-            evalPERIOD(tree,env)
-        elif(tree.ltype == "BAR"):
-            evalBAR(tree,env)
-        elif(tree.ltype == "GREATEREQUAL"):
-            evalGREATEREQUAL(tree,env)
-        elif(tree.ltype == "GREATER"):
-            evalGREATER(tree,env)
-        elif(tree.ltype == "LESSEQUAL"):
-            evalLESSEQUAL(tree,env)
-        elif(tree.ltype == "LESS"):
-            evalLESS(tree,env)
-        elif(tree.ltype == "DOUBLEEQUAL"):
-            evalDOUBLEEQUAL(tree,env)
-        elif(tree.ltype == "EQUAL"):
-            evalEQUAL(tree,env)
-        elif(tree.ltype == "NOTEQUAL"):
-            evalNOTEQUAL(tree,env)
-        elif(tree.ltype == "NOT"):
-            evalNOT(tree,env)
-        elif(tree.ltype == "STRING"):
-            evalSTRING(tree,env)
-        elif(tree.ltype == "INTEGER"):
-            evalINTEGER(tree,env)
-        elif(tree.ltype == "FUNCTION"):
-            evalFUNCTION(tree,env)
-        elif(tree.ltype == "VAR"):
-            evalVAR(tree,env)
-        elif(tree.ltype == "WHILE"):
-            evalWHILE(tree,env)
-        elif(tree.ltype == "IF"):
-            evalIF(tree,env)
-        elif(tree.ltype == "ELSE"):
-            evalELSE(tree,env)
-        elif(tree.ltype == "RETURN"):
-            evalRETURN(tree,env)
-        elif(tree.ltype == "INCLUDE"):
-            evalINCLUDE(tree,env)
+            evalIDDEF(tree, env)
+        elif(tree.ltype == "ARRAYACCESS"):
+            evalARRAYACCESS(tree, env)
         elif(tree.ltype == "ID"):
-            evalID(tree,env)
+            evalID(tree, env)
+        elif(tree.ltype == "OPTPARAMLIST"):
+            evalOPTPARAMLIST(tree, env)
+        elif(tree.ltype == "EMPTYOPTPARAMLIST"):
+            evalEMPTYOPTPARAMLIST(tree, env)
+        elif(tree.ltype == "PARAMLIST"):
+            evalPARAMLIST(tree, env)
+        elif(tree.ltype == "LASTPARAM"):
+            evalLASTPARAM(tree, env)
+        elif(tree.ltype == "OPTEXPRLIST"):
+            evalOPTEXPRLIST(tree, env)
+        elif(tree.ltype == "EMPTYOPTEXPRLIST"):
+            evalEMPTYOPTEXPRLIST(tree, env)
+        elif(tree.ltype == "EXPRLIST"):
+            evalEXPRLIST(tree, env)
+        elif(tree.ltype == "LASTEXPR"):
+            evalLASTEXPR(tree, env)
+        elif(tree.ltype == "EXPR"):
+            evalEXPR(tree, env)
+        elif(tree.ltype == "SINGLEPRIMARY"):
+            evalSINGLEPRIMARY(tree, env)
+        elif(tree.ltype == "IDPRIMARY"):
+            evalIDPRIMARY(tree, env)
+        elif(tree.ltype == "STRINGPRIMARY"):
+            evalSTRINGPRIMARY(tree, env)
+        elif(tree.ltype == "INTEGERPRIMARY"):
+            evalINTEGERPRIMARY(tree, env)
+        elif(tree.ltype == "NOTPRIMARY"):
+            evalNOTPRIMARY(tree, env)
+        elif(tree.ltype == "EXPRPRIMARY"):
+            evalEXPRPRIMARY(tree, env)
+        elif(tree.ltype == "LAMBDAPRIMARY"):
+            evalLAMBDAPRIMARY(tree, env)
+        elif(tree.ltype == "FUNCDEFPRIMARY"):
+            evalFUNCDEFPRIMARY(tree, env)
+        elif(tree.ltype == "EXPRLISTPRIMARY"):
+            evalEXPRLISTPRIMARY(tree, env)
+        elif(tree.ltype == "EQUALOPERATOR"):
+            evalEQUALOPERATOR(tree, env)
+        elif(tree.ltype == "NOTEQUALOPERATOR"):
+            evalNOTEQUALOPERATOR(tree, env)
+        elif(tree.ltype == "GREATEROPERATOR"):
+            evalGREATEROPERATOR(tree, env)
+        elif(tree.ltype == "LESSOPERATOR"):
+            evalLESSOPERATOR(tree, env)
+        elif(tree.ltype == "GREATEREQUALOPERATOR"):
+            evalGREATEREQUALOPERATOR(tree, env)
+        elif(tree.ltype == "LESSEQUALOPERATOR"):
+            evalLESSEQUALOPERATOR(tree, env)
+        elif(tree.ltype == "PLUSOPERATOR"):
+            evalPLUSOPERATOR(tree, env)
+        elif(tree.ltype == "MINUSOPERATOR"):
+            evalMINUSOPERATOR(tree, env)
+        elif(tree.ltype == "MULTIPLYOPERATOR"):
+            evalMULTIPLYOPERATOR(tree, env)
+        elif(tree.ltype == "DIVIDEOPERATOR"):
+            evalDIVIDEOPERATOR(tree, env)
+        elif(tree.ltype == "POWEROPERATOR"):
+            evalPOWEROPERATOR(tree, env)
+        elif(tree.ltype == "ANDOPERATOR"):
+            evalANDOPERATOR(tree, env)
+        elif(tree.ltype == "OROPERATOR"):
+            evalOROPERATOR(tree, env)
+        elif(tree.ltype == "ASSIGNOPERATOR"):
+            evalASSIGNOPERATOR(tree, env)
+        elif(tree.ltype == "BLOCK"):
+            evalBLOCK(tree, env)
+        elif(tree.ltype == "OPTSTATEMENTLIST"):
+            evalOPTSTATEMENTLIST(tree, env)
+        elif(tree.ltype == "EMPTYOPTSTATEMENTLIST"):
+            evalEMPTYOPTSTATEMENTLIST(tree, env)
+        elif(tree.ltype == "STATEMENTLIST"):
+            evalSTATEMENTLIST(tree, env)
+        elif(tree.ltype == "LASTSTATEMENT"):
+            evalLASTSTATEMENT(tree, env)
+        elif(tree.ltype == "VARDEFSTATEMENT"):
+            evalVARDEFSTATEMENT(tree, env)
+        elif(tree.ltype == "FUNCDEFSTATEMENT"):
+            evalFUNCDEFSTATEMENT(tree, env)
+        elif(tree.ltype == "EXPRSTATEMENT"):
+            evalEXPRSTATEMENT(tree, env)
+        elif(tree.ltype == "WHILELOOPSTATEMENT"):
+            evalWHILELOOPSTATEMENT(tree, env)
+        elif(tree.ltype == "IFSTATEMENTSTATEMENT"):
+            evalIFSTATEMENTSTATEMENT(tree, env)
+        elif(tree.ltype == "RETURNSTATEMENT"):
+            evalRETURNSTATEMENT(tree, env)
+        elif(tree.ltype == "WHILELOOP"):
+            evalWHILELOOP(tree, env)
+        elif(tree.ltype == "IFSTATEMENT"):
+            evalIFSTATEMENT(tree, env)
+        elif(tree.ltype == "OPTELSESTATEMENT"):
+            evalOPTELSESTATEMENT(tree, env)
+        elif(tree.ltype == "EMPTYOPTELSESTATEMENT"):
+            evalEMPTYOPTELSESTATEMENT(tree, env)
+        elif(tree.ltype == "ELSESTATEMENT"):
+            evalELSESTATEMENT(tree, env)
+        elif(tree.ltype == "ELSEIFSTATEMENT"):
+            evalELSEIFSTATEMENT(tree, env)
+        elif(tree.ltype == "LAMBDA")
+            evalLAMBDA(tree, env):
+        elif(tree.ltype == "JOIN")
+            evalJOIN(tree, env):
         else:
             print("ERROR: "+tree.ltype+" : "+tree.lvalue)
 
-def evalParse(tree,env):
-    evaluate(tree.left, env)
-    print("\n")
+def evalPARSE(tree, env):
+    pass
 
-def evalFile(tree,env):
-    if(tree.left):
-        evaluate(tree.left, env)
-    if(tree.right):
-        evaluate(tree.right, env)
+def evalINCLUDEFILE(tree, env):
+    pass
 
-def evalInclusion(tree,env):
-    evaluate(tree.left, env)
-    evaluate(tree.right, env)
+def evalFILE(tree, env):
+    pass
 
-def evalProgram(tree,env):
-    evaluate(tree.left, env)
-    if(tree.right):
-        evaluate(tree.right, env)
+def evalEMPTYFILE(tree, env):
+    pass
 
-def evalDefinition(tree,env):
-    evaluate(tree.left, env)
-    if(tree.right):
-        evaluate(tree.right, env)
+def evalINCLUSION(tree, env):
+    pass
 
-def evalVariableDefinition(tree,env):
-    evaluate(tree.left, env)
-    evaluate(tree.right, env)
+def evalPROGRAM(tree, env):
+    pass
 
-def evalFunctionDefinition(tree,env):
-    evaluate(tree.left, env)
-    evaluate(tree.right, env)
+def evalLASTDEF(tree, env):
+    pass
 
-def evalIDDef(tree,env):
-    evaluate(tree.left, env)
-    if(tree.right):
-        evaluate(tree.right, env)
+def evalVARDEFINITION(tree, env):
+    pass
 
-def evalOptParamList(tree,env):
-    if(tree.left):
-        evaluate(tree.left, env)
-    if(tree.right):
-        evaluate(tree.right, env)
+def evalFUNCDEFINITION(tree, env):
+    pass
 
-def evalParamList(tree,env):
-    evaluate(tree.left, env)
-    if(tree.right):
-        evaluate(tree.right, env)
+def evalDEFINITION(tree, env):
+    pass
 
-def evalOptExprList(tree,env):
-    if(tree.left):
-        evaluate(tree.left, env)
-    if(tree.right):
-        evaluate(tree.right, env)
+def evalVARDEF(tree, env):
+    pass
 
-def evalExprList(tree,env):
-    evaluate(tree.left, env)
-    if(tree.right):
-        evaluate(tree.right, env)
+def evalFUNCDEF(tree, env):
+    pass
 
-def evalExpr(tree,env):
-    evaluate(tree.left, env)
-    if(tree.right):
-        evaluate(tree.right, env)
+def evalIDDEF(tree, env):
+    pass
 
-def evalPrimary(tree,env):
-    evaluate(tree.left, env)
-    if(tree.right):
-        evaluate(tree.right, env)
+def evalARRAYACCESS(tree, env):
+    pass
 
-def evalOperator(tree,env):
-    evaluate(tree.left, env)
+def evalID(tree, env):
+    pass
 
-def evalBlock(tree,env):
-    evaluate(tree.left, env)
-    evaluate(tree.right, env)
+def evalOPTPARAMLIST(tree, env):
+    pass
 
-def evalOptStatementList(tree,env):
-    if(tree.left):
-        evaluate(tree.left, env)
-    if(tree.right):
-        evaluate(tree.right, env)
+def evalEMPTYOPTPARAMLIST(tree, env):
+    pass
 
-def evalStatementList(tree,env):
-    evaluate(tree.left, env)
-    if(tree.right):
-        evaluate(tree.right, env)
+def evalPARAMLIST(tree, env):
+    pass
 
-def evalStatement(tree,env):
-    evaluate(tree.left, env)
-    if(tree.right):
-        evaluate(tree.right, env)
+def evalLASTPARAM(tree, env):
+    pass
 
-def evalWhileLoop(tree,env):
-    evaluate(tree.left, env)
-    evaluate(tree.right, env)
+def evalOPTEXPRLIST(tree, env):
+    pass
 
-def evalIfStatement(tree,env):
-    evaluate(tree.left, env)
-    evaluate(tree.right, env)
+def evalEMPTYOPTEXPRLIST(tree, env):
+    pass
 
-def evalOptElseStatement(tree,env):
-    evaluate(tree.left, env)
-    if(tree.right):
-        evaluate(tree.right, env)
+def evalEXPRLIST(tree, env):
+    pass
 
-def evalElseStatement(tree,env):
-    evaluate(tree.left, env)
-    evaluate(tree.right, env)
+def evalLASTEXPR(tree, env):
+    pass
 
-def evalK_Lambda(tree,env):
-    evaluate(tree.left, env)
-    evaluate(tree.right, env)
+def evalEXPR(tree, env):
+    pass
 
-def evalJoin(tree,env):
-    evaluate(tree.left, env)
-    if(tree.right):
-        evaluate(tree.right, env)
+def evalSINGLEPRIMARY(tree, env):
+    pass
 
-def evalSEMI(tree,env):
-    print(tree.lvalue)
+def evalIDPRIMARY(tree, env):
+    pass
 
-def evalCOMMA(tree,env):
-    print(tree.lvalue)
+def evalSTRINGPRIMARY(tree, env):
+    pass
 
-def evalOPAREN(tree,env):
-    print(tree.lvalue)
+def evalINTEGERPRIMARY(tree, env):
+    pass
 
-def evalCPAREN(tree,env):
-    print(tree.lvalue)
+def evalNOTPRIMARY(tree, env):
+    pass
 
-def evalOBRACE(tree,env):
-    print(tree.lvalue)
+def evalEXPRPRIMARY(tree, env):
+    pass
 
-def evalCBRACE(tree,env):
-    print(tree.lvalue)
+def evalLAMBDAPRIMARY(tree, env):
+    pass
 
-def evalOBRACKET(tree,env):
-    print(tree.lvalue)
+def evalFUNCDEFPRIMARY(tree, env):
+    pass
 
-def evalCBRACKET(tree,env):
-    print(tree.lvalue)
+def evalEXPRLISTPRIMARY(tree, env):
+    pass
 
-def evalPLUS(tree,env):
-    print(tree.lvalue)
+def evalEQUALOPERATOR(tree, env):
+    pass
 
-def evalMINUS(tree,env):
-    print(tree.lvalue)
+def evalNOTEQUALOPERATOR(tree, env):
+    pass
 
-def evalTIMES(tree,env):
-    print(tree.lvalue)
+def evalGREATEROPERATOR(tree, env):
+    pass
 
-def evalDIVIDE(tree,env):
-    print(tree.lvalue)
+def evalLESSOPERATOR(tree, env):
+    pass
 
-def evalMODULO(tree,env):
-    print(tree.lvalue)
+def evalGREATEREQUALOPERATOR(tree, env):
+    pass
 
-def evalEXPONENT(tree,env):
-    print(tree.lvalue)
+def evalLESSEQUALOPERATOR(tree, env):
+    pass
 
-def evalAMPERSAND(tree,env):
-    print(tree.lvalue)
+def evalPLUSOPERATOR(tree, env):
+    pass
 
-def evalPERIOD(tree,env):
-    print(tree.lvalue)
+def evalMINUSOPERATOR(tree, env):
+    pass
 
-def evalBAR(tree,env):
-    print(tree.lvalue)
+def evalMULTIPLYOPERATOR(tree, env):
+    pass
 
-def evalGREATEREQUAL(tree,env):
-    print(tree.lvalue)
+def evalDIVIDEOPERATOR(tree, env):
+    pass
 
-def evalGREATER(tree,env):
-    print(tree.lvalue)
+def evalPOWEROPERATOR(tree, env):
+    pass
 
-def evalLESSEQUAL(tree,env):
-    print(tree.lvalue)
+def evalANDOPERATOR(tree, env):
+    pass
 
-def evalLESS(tree,env):
-    print(tree.lvalue)
+def evalOROPERATOR(tree, env):
+    pass
 
-def evalDOUBLEEQUAL(tree,env):
-    print(tree.lvalue)
+def evalASSIGNOPERATOR(tree, env):
+    pass
 
-def evalEQUAL(tree,env):
-    print(tree.lvalue)
+def evalBLOCK(tree, env):
+    pass
 
-def evalNOTEQUAL(tree,env):
-    print(tree.lvalue)
+def evalOPTSTATEMENTLIST(tree, env):
+    pass
 
-def evalNOT(tree,env):
-    print(tree.lvalue)
+def evalEMPTYOPTSTATEMENTLIST(tree, env):
+    pass
 
-def evalSTRING(tree,env):
-    print(tree.lvalue)
+def evalSTATEMENTLIST(tree, env):
+    pass
 
-def evalINTEGER(tree,env):
-    print(tree.lvalue)
+def evalLASTSTATEMENT(tree, env):
+    pass
 
-def evalFUNCTION(tree,env):
-    print(tree.lvalue)
+def evalVARDEFSTATEMENT(tree, env):
+    pass
 
-def evalVAR(tree,env):
-    print(tree.lvalue)
+def evalFUNCDEFSTATEMENT(tree, env):
+    pass
 
-def evalWHILE(tree,env):
-    print(tree.lvalue)
+def evalEXPRSTATEMENT(tree, env):
+    pass
 
-def evalIF(tree,env):
-    print(tree.lvalue)
+def evalWHILELOOPSTATEMENT(tree, env):
+    pass
 
-def evalELSE(tree,env):
-    print(tree.lvalue)
+def evalIFSTATEMENTSTATEMENT(tree, env):
+    pass
 
-def evalRETURN(tree,env):
-    print(tree.lvalue)
+def evalRETURNSTATEMENT(tree, env):
+    pass
 
-def evalINCLUDE(tree,env):
-    print(tree.lvalue)
+def evalWHILELOOP(tree, env):
+    pass
 
-def evalID(tree,env):
-    print(tree.lvalue)
+def evalIFSTATEMENT(tree, env):
+    pass
+
+def evalOPTELSESTATEMENT(tree, env):
+    pass
+
+def evalEMPTYOPTELSESTATEMENT(tree, env):
+    pass
+
+def evalELSESTATEMENT(tree, env):
+    pass
+
+def evalELSEIFSTATEMENT(tree, env):
+    pass
+
+def evalLAMBDA(tree, env):
+    pass
+
 
 
 import sys

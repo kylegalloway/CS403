@@ -1,12 +1,16 @@
 (define (level # id)
-    (this'__context)
+    (inspect (cadr (get'__context)))
+    (inspect (caddr (get'__context)))
 )
 
 ; Tests
+(define a 4)
 (define (f x y)
-    (* (+ x y))
+    (level 'a)
+    (* (+ x y) a)
+
 )
 
-(define (run1)
-    (inspect (level 'f))
-)
+(f 1 2)
+; (define (run1)
+; )

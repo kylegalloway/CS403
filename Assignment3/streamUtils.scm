@@ -6,6 +6,10 @@
     (scons n (ints-from (+ n 1)))
 )
 
+(define (floats-from n)
+    (scons (* 1.0 n) (floats-from (+ n 1)))
+)
+
 (define (sdisplay s n)
     (cond
         ((= n 0) (print "...\n"))
