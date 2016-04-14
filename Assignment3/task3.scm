@@ -1,3 +1,6 @@
+; Rewrite ../Notes/priority-queue.scm to have that functionality with this
+; wrapper.
+
 (define (item v r)
     (define (dispatch m)
         (cond
