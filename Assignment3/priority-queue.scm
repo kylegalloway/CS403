@@ -37,7 +37,12 @@
         (go)
       ))
   )
-  (define (peekTime) (car (car events)))
+  (define (peekTime)
+    (if (null? events)
+      clock
+      (car (car events))
+    )
+  )
   (define (peekFunction) (cadr (car events)))
   ; you should also make a print function
   this

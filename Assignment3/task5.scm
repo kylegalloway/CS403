@@ -1,15 +1,25 @@
-; list of holders = nil
-; p use gettid to add to list of holders
-; v check gettid to see if there
-
-; (define m (mmutex 3))
-; ((m'p))
-; ACQUIRED
-; gettid
+(include "exprTest.scm")
 
 (define (mmutex n)
-    (define protected make-serializer)
-    (define (p) (protected wait))
-    (define (v) (protected signal))
+    (define number n)
+    (define owners '())
+    (define (check id)
+        ; If id in owners
+    )
+
+    (define (p)
+        (lock)
+        (check (gettid))
+        (unlock)
+    )
+    (define (v)
+        (lock)
+        (check (gettid))
+        (unlock)
+    )
     this
 )
+
+(define m (mmutex 3))
+(exprTest (m'p) 'ACQUIRED)
+(exprTest (m'v) 'RELEASED)

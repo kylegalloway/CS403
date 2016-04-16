@@ -1,44 +1,45 @@
 (include "exprTest.scm")
 
-(define (front-ptr queue) (car queue))
-(define (rear-ptr queue) (cdr queue))
-(define (set-front-ptr! queue item) (set-car! queue item))
-(define (set-rear-ptr! queue item) (set-cdr! queue item))
+(define (Queue)
+    (define front (list 'head))
+    (define back nil)
 
-(define (empty-queue? queue) (null? (front-ptr queue)))
-
-(define (make-queue) (cons nil nil))
-
-(define (front-queue queue)
-    (if (empty-queue? queue)
-        (error "FRONT called with an empty queue" queue)
-        (car (front-ptr queue))
-    )
-)
-
-(define (insert-queue! queue item)
-    (let ((new-pair (cons item nil)))
-        (cond ((empty-queue? queue)
-               (set-front-ptr! queue new-pair)
-               (set-rear-ptr! queue new-pair)
-               queue
-              )
-              (else
-                (set-cdr! (rear-ptr queue) new-pair)
-                (set-rear-ptr! queue new-pair)
-                queue
-              )
+    (define (this msg @)
+        (cond
+            ((eq? msg 'enqueue) (enqueue @))
+            ((eq? msg 'dequeue) (dequeue))
+            ((eq? msg 'empty?) (empty?))
+            (else (error "queue message not understood: " msg))
         )
     )
+    (define (enqueue x) ; add to the back
+        (set-cdr! back (list x))
+        (set! back (cdr back))
+    )
+
+    (define (dequeue) ; remove from the front
+        ; user is responsible ensuring queue is non empty
+        (define tmp (cadr front))
+        (set-cdr! front (cddr front))
+        (if (null? (cdr front))
+            (set! back front)
+        )
+        tmp
+    )
+    (define (empty?)
+        (eq? (cdr front) nil)
+    )
+
+    (set! back front)
+    this
 )
 
-(define (delete-queue! queue)
-    (cond ((empty-queue? queue)
-            (error "DELETE! called with an empty queue" queue)
-          )
-          (else
-            (set-front-ptr! queue (cdr (front-ptr queue)))
-            queue
-          )
-    )
-)
+; (inspect (define p (Queue)))
+; (define p (Queue))
+; (exprTest ((p 'empty?)) #t)
+; (p 'enqueue 111)
+; (inspect (p 'enqueue 111))
+; (exprTest ((p 'empty?)) #f)
+; (inspect (p 'dequeue))
+; (p 'dequeue)
+; (exprTest ((p 'empty?)) #t)
