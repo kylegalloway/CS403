@@ -1,4 +1,4 @@
-(include "exprTest.scm")
+(include "extras/exprTest.scm")
 
 (define (item v r)
     (define (dispatch m)

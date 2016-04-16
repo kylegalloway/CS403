@@ -1,16 +1,19 @@
+(include "extras/exprTest.scm")
+
 (define (level # id)
     (define spot (find-position (cadr (get'__context)) id))
     ; (list-ref (caddr (get'__context)) spot)
     (define (env-iter env id count)
         (if (== spot 'UNDEFINED)
+            (set! spot (find-position (cadr (env'__context)) id))
             (if (null? (env'__context))
-                spot
+                count
                 (env-iter (env'__context) id (+ count 1))
             )
             count
         )
     )
-    (env-iter (get'__context) id 0)
+    (env-iter # id 0)
 )
 
 (define (find-position L x)
@@ -35,27 +38,22 @@
 
 ; Tests
 (define a 4)
+
 (define (f x y)
     (inspect (level 'a))
     (inspect (level 'b))
     (* (+ x y) a)
 )
-(define s
-    (define (g x y)
+(define (s)
+    (define b 3)
+    (lambda (x y)
         (inspect (level 'a))
         (inspect (level 'b))
-        (* (+ x y) a)
+        (* (+ x y) a b)
     )
-    (define (this msg @)
-        (cond
-            ((eq? msg 'g) (g (car @) (cadr @)))
-            (else (error "Message not understood: " msg))
-        )
-    )
-    this
 )
 
-; (define (run1)
-;     (f 1 2)
-;     (s'f 1 2)
-; )
+(define (run1)
+    (f 1 2)
+    ((s) 1 2)
+)

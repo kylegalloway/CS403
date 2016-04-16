@@ -1,8 +1,8 @@
-(include "book-queue.scm")
-(include "wire.scm")
-(include "and-gate.scm")
-(include "or-gate.scm")
-(include "inverter.scm")
+(include "extras/book-queue.scm")
+(include "extras/wire.scm")
+(include "extras/and-gate.scm")
+(include "extras/or-gate.scm")
+(include "extras/inverter.scm")
 
 (define (add1 a b c-in sum c-out)
     (define s (make-wire))

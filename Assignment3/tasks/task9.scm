@@ -1,5 +1,5 @@
-(include "exprTest.scm")
-(include "streamUtils.scm")
+(include "extras/exprTest.scm")
+(include "extras/streamUtils.scm")
 
 (define (cube m) (* m m m))
 (define (sum-cubed pair)

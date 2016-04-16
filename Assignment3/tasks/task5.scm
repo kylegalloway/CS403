@@ -1,4 +1,4 @@
-(include "exprTest.scm")
+(include "extras/exprTest.scm")
 
 (define (mmutex n)
     (define number n)
@@ -20,6 +20,6 @@
     this
 )
 
-(define m (mmutex 3))
-(exprTest (m'p) 'ACQUIRED)
-(exprTest (m'v) 'RELEASED)
+; (define m (mmutex 3))
+; (exprTest (m'p) 'ACQUIRED)
+; (exprTest (m'v) 'RELEASED)

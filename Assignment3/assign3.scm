@@ -33,7 +33,7 @@
 (include "task9.scm")
 
 ; Run tests
-(print "PROBLEM 1: Need to add tests\n\n")
+(print "PROBLEM 1:\n\n")
 (if (defined? 'run1 this)
     (run1)
     (println "\tNOT IMPLEMENTED")
