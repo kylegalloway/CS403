@@ -1,3 +1,9 @@
+(define (denv # id) ((get'__context) id))
+
+(define listofsymbols '(+ - * / ^))
+
+(println (denv (car listofsymbols)))
+
 ; (define (cache x)
 
 ; )

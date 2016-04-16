@@ -138,24 +138,18 @@
 
 (define (smerge s1 s2)
    (cond
-        ((null? s1) s2)
-        ((null? s2) s1)
+        ((< (scar s1) (scar s2))
+         (scons (scar s1) (smerge (scdr s1) s2))
+        )
+        ((> (scar s1) (scar s2))
+         (scons (scar s2) (smerge s1 (scdr s2)))
+        )
         (else
-            (cond
-                ((< (scar s1) (scar s2))
-                 (scons (scar s1) (smerge (scdr s1) s2))
-                )
-                ((> (scar s1) (scar s2))
-                 (scons (scar s2) (smerge s1 (scdr s2)))
-                )
-                (else
-                    (scons
-                        (scar s1)
-                        (smerge
-                            (scdr s1)
-                            (scdr s2)
-                        )
-                    )
+            (scons
+                (scar s1)
+                (smerge
+                    (scdr s1)
+                    (scdr s2)
                 )
             )
         )
@@ -163,20 +157,14 @@
 )
 
 (define (merge-weighted s1 s2 weight)
-    (cond
-        ((null? s1) s2)
-        ((null? s2) s1)
-        (else
-            (if (<= (weight (scar s1)) (weight (scar s2)))
-                (scons
-                    (scar s1)
-                    (merge-weighted (scdr s1) s2 weight)
-                )
-                (scons
-                    (scar s2)
-                    (merge-weighted s1 (scdr s2) weight)
-                )
-            )
+    (if (<= (weight (scar s1)) (weight (scar s2)))
+        (scons
+            (scar s1)
+            (merge-weighted (scdr s1) s2 weight)
+        )
+        (scons
+            (scar s2)
+            (merge-weighted s1 (scdr s2) weight)
         )
     )
 )

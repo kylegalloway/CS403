@@ -33,5 +33,5 @@
 
 (define (run9)
     (sdisplay (ramanujan) 6)
-    (inspect (sref (ramanujan) 20))
+    (inspect (sref (ramanujan) 10))
 )

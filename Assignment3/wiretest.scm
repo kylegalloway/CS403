@@ -9,11 +9,12 @@
     (add-action! wire
                 (lambda ()
                     (newline)
-                    (display name)
-                    (display " ")
                     (display (current-time the-agenda))
-                    (display " New-value = ")
+                    (display " | ")
+                    (display name)
+                    (display " changed to: ")
                     (display (get-signal wire))
+                    (newline)
                 )
     )
 )
@@ -35,8 +36,8 @@
 
 (set-signal! input-1 1)
 
-(propogate)
+(propagate)
 
 (set-signal! input-2 1)
 
-(propogate)
+(propagate)

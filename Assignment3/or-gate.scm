@@ -2,7 +2,7 @@
     (define (or-action-procedure)
         (let ((new-value
                 (logical-or (get-signal o1) (get-signal o2))))
-             (after-delay or-gate-delay
+             (after-delay or-delay
                          (lambda ()
                             (set-signal! output new-value)
                          )

@@ -19,7 +19,7 @@
         (define (dispatch m)
             (cond
                 ((eq? m 'get-signal) signal-value)
-                ((eq? m 'set-signal) set-my-signal)
+                ((eq? m 'set-signal!) set-my-signal!)
                 ((eq? m 'add-action!) accept-action-procedure!)
                 (else (error "Unknown operation -- WIRE" m))
             )
@@ -128,10 +128,13 @@
     )
     (let ((segments (segments agenda)))
         (if (belongs-before? segments)
-            (set-segments! agenda
-                           (cons (make-new-time-segment time action)
-                                 (cdr segments)
-                           )
+            (if (null? segments)
+                (set-segments! agenda (list (make-new-time-segment time action)))
+                (set-segments! agenda
+                               (cons (make-new-time-segment time action)
+                                     (cdr segments)
+                               )
+                )
             )
             (add-to-segments! segments)
         )
