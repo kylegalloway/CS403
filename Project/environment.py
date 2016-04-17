@@ -6,8 +6,7 @@ class Environment():
         self.globalenv = create()
 
     def cons(self, value, left, right):
-        # return ConsCell(value, ConsCell(left, ConsCell(right, None)))
-        return ConsCell(value, left, ConsCell("JOIN", right, None))
+        return Lexeme(value, value, left, right)
 
     def car(self, lyst):
         return lyst.left
