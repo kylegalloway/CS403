@@ -3,23 +3,69 @@
 (define (mmutex n)
     (define number n)
     (define owners '())
-    (define (check id)
-        ; If id in owners
+
+    (define (included? x L)
+        (if (null? L)
+            #f
+            (begin
+                (if (== (car L) x)
+                    #t
+                    (included? x (cdr L))
+                )
+            )
+        )
+    )
+
+    (define (list-remove x L)
+        (if (== (car L) x)
+            (cdr L)
+            (cons (car L) (list-remove x (cdr L)))
+        )
     )
 
     (define (p)
+        ; lock the semaphore
         (lock)
-        (check (gettid))
-        (unlock)
+        ; check if there is an open slot to take
+        (if (> number 0)
+            (begin
+                ; decrease the number of slots left
+                (set! number (- number 1))
+                ; add the id to the owners array
+                (set! owners (cons (gettid) owners))
+                ; unlock the semaphore
+                (unlock)
+                'ACQUIRED
+            )
+            (begin
+                ; can't get in the owners array, so unlock and try again
+                (unlock)
+                (p)
+            )
+        )
     )
     (define (v)
         (lock)
-        (check (gettid))
-        (unlock)
+        (if (included? (gettid) owners)
+            (begin
+                (set! number (+ number 1))
+                (set! owners (list-remove (gettid) owners))
+                (unlock)
+                'RELEASED
+            )
+            (begin
+                (unlock)
+                'FORBIDDEN
+            )
+        )
     )
     this
 )
 
-; (define m (mmutex 3))
-; (exprTest (m'p) 'ACQUIRED)
-; (exprTest (m'v) 'RELEASED)
+(define (run5)
+    (define m (mmutex 3))
+    (exprTest ((m'p)) 'ACQUIRED)
+    (exprTest ((m'v)) 'RELEASED)
+    (define x (mmutex 0))
+    (exprTest ((x'v)) 'FORBIDDEN)
+)

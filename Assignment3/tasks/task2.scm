@@ -1,10 +1,11 @@
 (include "extras/exprTest.scm")
+(include "pretty.lib")
 
-(define (denv # id) ((get'__context) id))
+(define (denv id) ((get'__context) id))
 
-(define listofsymbols '(+ - * / ^))
+(define local-ids (get 'parameters f))
 
-; (println (denv (car listofsymbols)))
+()
 
 ; (define (cache x)
 
@@ -13,9 +14,9 @@
 ; (define (run2)
 ;     (define m 2)
 ;     (define (msquare x) (* m x x))
-;     ; (pp msquare)
+;     ; (pretty msquare)
 ;     (define denv (get '__context msquare))
 ;     (ppTable denv)
 ;     (cache msquare)
-;     ; (pp msquare)
+;     ; (pretty msquare)
 ; )
