@@ -1,5 +1,3 @@
-## include "mylib"
-
 #{
 Some ideas I have:
     No pre-processor statements except for includes allowed.

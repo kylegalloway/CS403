@@ -1,2 +1,17 @@
 # FOR REDWALL! EULALIA!!
 
+### C without types! Because I'm not typist!
+### Implemented in Python3 to make it slow but dynamic!
+
+### Example Files are in redwall/
+
+* Almost all syntax is similar to C.
+* Whitespace is irrelevant.
+* Braces are required in functions, ifs, elses, whiles, and lambdas.
+* For loops are not available.
+* Arrays are constant access.
+
+
+## FAQ:
+###### Why is the name of your language redwall?
+I named my language redwall after the series of children's books by Brian Jacques. I enjoyed them as a child and my son enjoys them now.

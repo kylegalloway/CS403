@@ -7,7 +7,7 @@ def main(filename):
 
 def prettyPrint(tree):
     if(tree != None):
-        # print(tree.ltype)
+        # pritf(tree.ltype + " ", end="")
         if(tree.ltype == "PARSE"):
             printPARSE(tree)
         elif(tree.ltype == "PROGRAM"):
@@ -37,6 +37,7 @@ def prettyPrint(tree):
         elif(tree.ltype == "PARAMLIST"):
             printPARAMLIST(tree)
         elif(tree.ltype == "LASTPARAM"):
+
             printLASTPARAM(tree)
         elif(tree.ltype == "OPTEXPRLIST"):
             printOPTEXPRLIST(tree)
@@ -203,9 +204,9 @@ def prettyPrint(tree):
         elif(tree.ltype == "NOT"):
             printNOT(tree)
         elif(tree.ltype == "END_OF_INPUT"):
-            print("\n")
+            print("\n" + " ", end="")
         else:
-            print("ERROR: "+tree.ltype+" : "+tree.lvalue)
+            print("ERROR: "+tree.ltype+" : "+tree.lvalue + " ", end="")
 
 def printPARSE(tree):
     if(tree.left):
@@ -580,109 +581,109 @@ def printJOIN(tree):
         prettyPrint(tree.right)
 
 def printSTRING(tree):
-    print(tree.lvalue)
+    print(tree.lvalue + " ", end="")
 
 def printINTEGER(tree):
-    print(tree.lvalue)
+    print(tree.lvalue + " ", end="")
 
 def printFUNCTION(tree):
-    print(tree.lvalue)
+    print(tree.lvalue + " ", end="")
 
 def printVAR(tree):
-    print(tree.lvalue)
+    print(tree.lvalue + " ", end="")
 
 def printWHILE(tree):
-    print(tree.lvalue)
+    print(tree.lvalue + " ", end="")
 
 def printIF(tree):
-    print(tree.lvalue)
+    print(tree.lvalue + " ", end="")
 
 def printELSE(tree):
-    print(tree.lvalue)
+    print(tree.lvalue + " ", end="")
 
 def printRETURN(tree):
-    print(tree.lvalue)
+    print(tree.lvalue + " ", end="")
 
 def printINCLUDE(tree):
-    print(tree.lvalue)
+    print(tree.lvalue + " ", end="")
 
 def printID(tree):
-    print(tree.lvalue)
+    print(tree.lvalue + " ", end="")
 
 def printSEMI(tree):
-    print(tree.lvalue)
+    print(tree.lvalue + "\n", end="")
 
 def printCOMMA(tree):
-    print(tree.lvalue)
+    print(tree.lvalue + " ", end="")
 
 def printOPAREN(tree):
-    print(tree.lvalue)
+    print(tree.lvalue, end="")
 
 def printCPAREN(tree):
-    print(tree.lvalue)
+    print(tree.lvalue, end="")
 
 def printOBRACE(tree):
-    print(tree.lvalue)
+    print(tree.lvalue + "\n", end="")
 
 def printCBRACE(tree):
-    print(tree.lvalue)
+    print(tree.lvalue + "\n\n", end="")
 
 def printOBRACKET(tree):
-    print(tree.lvalue)
+    print(tree.lvalue, end="")
 
 def printCBRACKET(tree):
-    print(tree.lvalue)
+    print(tree.lvalue, end="")
 
 def printPLUS(tree):
-    print(tree.lvalue)
+    print(tree.lvalue + " ", end="")
 
 def printMINUS(tree):
-    print(tree.lvalue)
+    print(tree.lvalue + " ", end="")
 
 def printTIMES(tree):
-    print(tree.lvalue)
+    print(tree.lvalue + " ", end="")
 
 def printDIVIDE(tree):
-    print(tree.lvalue)
+    print(tree.lvalue + " ", end="")
 
 def printMODULO(tree):
-    print(tree.lvalue)
+    print(tree.lvalue + " ", end="")
 
 def printEXPONENT(tree):
-    print(tree.lvalue)
+    print(tree.lvalue + " ", end="")
 
 def printAMPERSAND(tree):
-    print(tree.lvalue)
+    print(tree.lvalue + " ", end="")
 
 def printPERIOD(tree):
-    print(tree.lvalue)
+    print(tree.lvalue + " ", end="")
 
 def printBAR(tree):
-    print(tree.lvalue)
+    print(tree.lvalue + " ", end="")
 
 def printGREATEREQUAL(tree):
-    print(tree.lvalue)
+    print(tree.lvalue + " ", end="")
 
 def printGREATER(tree):
-    print(tree.lvalue)
+    print(tree.lvalue + " ", end="")
 
 def printLESSEQUAL(tree):
-    print(tree.lvalue)
+    print(tree.lvalue + " ", end="")
 
 def printLESS(tree):
-    print(tree.lvalue)
+    print(tree.lvalue + " ", end="")
 
 def printDOUBLEEQUAL(tree):
-    print(tree.lvalue)
+    print(tree.lvalue + " ", end="")
 
 def printEQUAL(tree):
-    print(tree.lvalue)
+    print(tree.lvalue + " ", end="")
 
 def printNOTEQUAL(tree):
-    print(tree.lvalue)
+    print(tree.lvalue + " ", end="")
 
 def printNOT(tree):
-    print(tree.lvalue)
+    print(tree.lvalue + " ", end="")
 
 
 import sys

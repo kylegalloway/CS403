@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 from parser import Parser
 
 def main(filename):
@@ -9,7 +7,7 @@ def main(filename):
 
 def prettyPrint(tree):
     if(tree != None):
-        # print(tree.ltype)
+        # printf(tree.ltype + " ")
         if(tree.ltype == "PARSE"):
             printPARSE(tree)
         elif(tree.ltype == "PROGRAM"):
@@ -205,9 +203,9 @@ def prettyPrint(tree):
         elif(tree.ltype == "NOT"):
             printNOT(tree)
         elif(tree.ltype == "END_OF_INPUT"):
-            print("\n")
+            printf("\n" + " ")
         else:
-            print("ERROR: "+tree.ltype+" : "+tree.lvalue)
+            printf("ERROR: "+tree.ltype+" : "+tree.lvalue + " ")
 
 def printPARSE(tree):
     if(tree.left):
@@ -582,109 +580,109 @@ def printJOIN(tree):
         prettyPrint(tree.right)
 
 def printSTRING(tree):
-    print(tree.lvalue)
+    printf(tree.lvalue + " ")
 
 def printINTEGER(tree):
-    print(tree.lvalue)
+    printf(tree.lvalue + " ")
 
 def printFUNCTION(tree):
-    print(tree.lvalue)
+    printf(tree.lvalue + " ")
 
 def printVAR(tree):
-    print(tree.lvalue)
+    printf(tree.lvalue + " ")
 
 def printWHILE(tree):
-    print(tree.lvalue)
+    printf(tree.lvalue + " ")
 
 def printIF(tree):
-    print(tree.lvalue)
+    printf(tree.lvalue + " ")
 
 def printELSE(tree):
-    print(tree.lvalue)
+    printf(tree.lvalue + " ")
 
 def printRETURN(tree):
-    print(tree.lvalue)
+    printf(tree.lvalue + " ")
 
 def printINCLUDE(tree):
-    print(tree.lvalue)
+    printf(tree.lvalue + " ")
 
 def printID(tree):
-    print(tree.lvalue)
+    printf(tree.lvalue + " ")
 
 def printSEMI(tree):
-    print(tree.lvalue)
+    printf(tree.lvalue + "\n" + " ")
 
 def printCOMMA(tree):
-    print(tree.lvalue)
+    printf(tree.lvalue + " ")
 
 def printOPAREN(tree):
-    print(tree.lvalue)
+    printf(tree.lvalue + " ")
 
 def printCPAREN(tree):
-    print(tree.lvalue)
+    printf(tree.lvalue + " ")
 
 def printOBRACE(tree):
-    print(tree.lvalue)
+    printf(tree.lvalue + "\n")
 
 def printCBRACE(tree):
-    print(tree.lvalue)
+    printf(tree.lvalue + "\n")
 
 def printOBRACKET(tree):
-    print(tree.lvalue)
+    printf(tree.lvalue + " ")
 
 def printCBRACKET(tree):
-    print(tree.lvalue)
+    printf(tree.lvalue + " ")
 
 def printPLUS(tree):
-    print(tree.lvalue)
+    printf(tree.lvalue + " ")
 
 def printMINUS(tree):
-    print(tree.lvalue)
+    printf(tree.lvalue + " ")
 
 def printTIMES(tree):
-    print(tree.lvalue)
+    printf(tree.lvalue + " ")
 
 def printDIVIDE(tree):
-    print(tree.lvalue)
+    printf(tree.lvalue + " ")
 
 def printMODULO(tree):
-    print(tree.lvalue)
+    printf(tree.lvalue + " ")
 
 def printEXPONENT(tree):
-    print(tree.lvalue)
+    printf(tree.lvalue + " ")
 
 def printAMPERSAND(tree):
-    print(tree.lvalue)
+    printf(tree.lvalue + " ")
 
 def printPERIOD(tree):
-    print(tree.lvalue)
+    printf(tree.lvalue + " ")
 
 def printBAR(tree):
-    print(tree.lvalue)
+    printf(tree.lvalue + " ")
 
 def printGREATEREQUAL(tree):
-    print(tree.lvalue)
+    printf(tree.lvalue + " ")
 
 def printGREATER(tree):
-    print(tree.lvalue)
+    printf(tree.lvalue + " ")
 
 def printLESSEQUAL(tree):
-    print(tree.lvalue)
+    printf(tree.lvalue + " ")
 
 def printLESS(tree):
-    print(tree.lvalue)
+    printf(tree.lvalue + " ")
 
 def printDOUBLEEQUAL(tree):
-    print(tree.lvalue)
+    printf(tree.lvalue + " ")
 
 def printEQUAL(tree):
-    print(tree.lvalue)
+    printf(tree.lvalue + " ")
 
 def printNOTEQUAL(tree):
-    print(tree.lvalue)
+    printf(tree.lvalue + " ")
 
 def printNOT(tree):
-    print(tree.lvalue)
+    printf(tree.lvalue + " ")
 
 
 import sys

@@ -1,0 +1,392 @@
+func front-ptr(queue)
+{
+    return car(queue);
+}
+func rear-ptr(queue)
+{
+    return cdr(queue);
+}
+func set-front-ptr(queue item)
+{
+    set-car(queue item);
+}
+func set-rear-ptr(queue item)
+{
+    set-cdr(queue item);
+}
+
+func is-empty-queue(queue)
+{
+    return (is-null front-ptr(queue));
+}
+
+func make-queue() { cons(nil, nil); }
+
+func front-queue(queue)
+{
+    if (empty-queue? queue)
+    {
+        error ("FRONT called with an empty queue", queue);
+        car(front-ptr(queue));
+    }
+}
+
+###############################################################################
+## STOPPED HERE
+###############################################################################
+
+
+
+func (insert-queue! queue item)
+    (let ((new-pair (cons item nil)))
+        (cond ((empty-queue? queue)
+               (set-front-ptr! queue new-pair)
+               (set-rear-ptr! queue new-pair)
+               queue
+              )
+              (else
+                (set-cdr! (rear-ptr queue) new-pair)
+                (set-rear-ptr! queue new-pair)
+                queue
+              )
+        )
+    )
+)
+
+func (delete-queue! queue)
+    (cond ((empty-queue? queue)
+            (error "DELETE! called with an empty queue" queue)
+          )
+          (else
+            (set-front-ptr! queue (cdr (front-ptr queue)))
+            queue
+          )
+    )
+)
+
+func (error @) (apply println @) nil)
+
+func (make-wire)
+    (let ((signal-value 0) (action-procedures '()))
+        func (set-my-signal! new-value)
+            (if (not (= signal-value new-value))
+                (begin (set! signal-value new-value)
+                   (call-each action-procedures)
+                )
+                'done
+            )
+        )
+
+        func (accept-action-procedure! proc)
+            (set! action-procedures (cons proc action-procedures))
+            (proc)
+        )
+
+        func (dispatch m)
+            (cond
+                ((eq? m 'get-signal) signal-value)
+                ((eq? m 'set-signal!) set-my-signal!)
+                ((eq? m 'add-action!) accept-action-procedure!)
+                (else (error "Unknown operation -- WIRE" m))
+            )
+        )
+        dispatch
+    )
+)
+
+func (call-each procedures)
+    (if (null? procedures)
+        'done
+        (begin
+            ((car procedures))
+            (call-each (cdr procedures))
+        )
+    )
+)
+
+func (get-signal wire)
+    (wire 'get-signal)
+)
+
+func (set-signal! wire new-value)
+    ((wire 'set-signal!) new-value)
+)
+
+func (add-action! wire action-procedure)
+    ((wire 'add-action!) action-procedure)
+)
+
+func (after-delay delay action)
+    (add-to-agenda! (+ delay (current-time the-agenda))
+                    action
+                    the-agenda
+    )
+)
+
+func (propagate)
+    (if (empty-agenda? the-agenda)
+        'done
+        (let ((first-item (first-agenda-item the-agenda)))
+            (first-item)
+            (remove-first-agenda-item! the-agenda)
+            (propagate)
+        )
+    )
+)
+
+func (make-time-segment time queue)
+    (cons time queue)
+)
+
+func (segment-time s) (car s))
+
+func (segment-queue s) (cdr s))
+
+func (make-agenda) (list 0))
+
+func (empty-agenda? agenda) (null? (segments agenda)))
+
+func (first-agenda-item agenda)
+    (if (empty-agenda? agenda)
+        (error "Agenda is empty -- FIRST-AGENDA-ITEM")
+        (let ((first-seg (first-segment agenda)))
+            (set-current-time! agenda (segment-time first-seg))
+            (front-queue (segment-queue first-seg))
+        )
+    )
+)
+
+func (remove-first-agenda-item! agenda)
+    (let ((q (segment-queue (first-segment agenda))))
+        (delete-queue! q)
+        (if (empty-queue? q)
+            (set-segments! agenda (rest-segments agenda))
+        )
+    )
+)
+
+func (add-to-agenda! time action agenda)
+    func (belongs-before? segments)
+        (or (null? segments)
+            (< time (segment-time (car segments)))
+        )
+    )
+    func (make-new-time-segment time action)
+        (let (( q (make-queue)))
+            (insert-queue! q action)
+            (make-time-segment time q)
+        )
+    )
+    func (add-to-segments! segments)
+        (if (= (segment-time (car segments)) time)
+            (insert-queue! (segment-queue (car segments)) action)
+            (let ((rest (cdr segments)))
+                (if (belongs-before? rest)
+                    (set-cdr! segments
+                              (cons (make-new-time-segment time action)
+                                    (cdr segments)
+                              )
+                    )
+                    (add-to-segments! rest)
+                )
+            )
+        )
+    )
+    (let ((segments (segments agenda)))
+        (if (belongs-before? segments)
+            (if (null? segments)
+                (set-segments! agenda (list (make-new-time-segment time action)))
+                (set-segments! agenda
+                               (cons (make-new-time-segment time action)
+                                     (cdr segments)
+                               )
+                )
+            )
+            (add-to-segments! segments)
+        )
+    )
+)
+
+func (current-time agenda) (car agenda))
+
+func (set-current-time! agenda time) (set-car! agenda time))
+
+func (segments agenda) (cdr agenda))
+
+func (set-segments! agenda segments) (set-cdr! agenda segments))
+
+func (first-segment agenda) (car (segments agenda)))
+
+func (rest-segments agenda) (cdr (segments agenda)))
+
+func (and-gate a1 a2 output)
+    func (and-action-procedure)
+        (let ((new-value
+                (logical-and (get-signal a1) (get-signal a2))))
+             (after-delay and-delay
+                         (lambda ()
+                            (set-signal! output new-value)
+                         )
+             )
+        )
+    )
+    (add-action! a1 and-action-procedure)
+    (add-action! a2 and-action-procedure)
+    'ok
+)
+
+func (logical-and a1 a2)
+    (cond
+        ((and (= a1 1) (= a2 1)) 1)
+        (else 0)
+    )
+)
+
+func (or-gate o1 o2 output)
+    func (or-action-procedure)
+        (let ((new-value
+                (logical-or (get-signal o1) (get-signal o2))))
+             (after-delay or-delay
+                         (lambda ()
+                            (set-signal! output new-value)
+                         )
+             )
+        )
+    )
+    (add-action! o1 or-action-procedure)
+    (add-action! o2 or-action-procedure)
+    'ok
+)
+
+func (logical-or o1 o2)
+    (cond
+        ((= o1 1) 1)
+        ((= o2 1) 1)
+        (else 0)
+    )
+)
+
+func (inverter input output)
+    func (invert-input)
+        (let ((new-value (logical-not (get-signal input))))
+             (after-delay inverter-delay
+                          (lambda ()
+                            (set-signal! output new-value)
+                          )
+             )
+        )
+    )
+    (add-action! input invert-input)
+    'ok
+)
+
+func (logical-not s)
+    (cond ((= s 0) 1)
+          ((= s 1) 0)
+          (else (error "Invalid signal" s))
+    )
+)
+
+func (add1 a b c-in sum c-out)
+    func s (make-wire))
+    func c1 (make-wire))
+    func c2 (make-wire))
+    func w (make-wire))
+    func x (make-wire))
+    func y (make-wire))
+    func z (make-wire))
+
+    ; First half-adder
+    ; (half-adder b c-in s c1)
+    (or-gate b c-in w)
+    (and-gate b c-in c1)
+    (inverter c1 x)
+    (and-gate w x s)
+
+    ; Second half-adder
+    ; (half-adder a s sum c2)
+    (or-gate a s y)
+    (and-gate a s c2)
+    (inverter c2 z)
+    (and-gate y z sum)
+
+
+    (or-gate c1 c2 c-out)
+    'ok
+)
+
+func (add4 X Y O c-out)
+    func c-in (make-wire))
+    func c1 (make-wire))
+    func c2 (make-wire))
+    func c3 (make-wire))
+
+    func x0 (car X))
+    func x1 (cadr X))
+    func x2 (caddr X))
+    func x3 (cadddr X))
+    func y0 (car Y))
+    func y1 (cadr Y))
+    func y2 (caddr Y))
+    func y3 (cadddr Y))
+    func o0 (car O))
+    func o1 (cadr O))
+    func o2 (caddr O))
+    func o3 (cadddr O))
+
+
+    ; add1 definition
+    ; (add1 a b c-in sum c-out)
+    (add1 x3 y3 c-in o3 c1)
+    (add1 x2 y2 c1 o2 c2)
+    (add1 x1 y1 c2 o1 c3)
+    (add1 x0 y0 c3 o0 c-out)
+)
+
+func the-agenda nil)
+func and-delay 0)
+func or-delay 0)
+func inverter-delay 0)
+
+func (run4)
+    (set! the-agenda (make-agenda))
+    (set! and-delay 5)
+    (set! or-delay 3)
+    (set! inverter-delay 1)
+
+    func x0 (make-wire))
+    func x1 (make-wire))
+    func x2 (make-wire))
+    func x3 (make-wire))
+    func y0 (make-wire))
+    func y1 (make-wire))
+    func y2 (make-wire))
+    func y3 (make-wire))
+    func o0 (make-wire))
+    func o1 (make-wire))
+    func o2 (make-wire))
+    func o3 (make-wire))
+    func carry (make-wire))
+    (inspect (add4
+        (list x3 x2 x1 x0)
+        (list y3 y2 y1 y0)
+        (list o3 o2 o1 o0)
+        carry
+        )
+    )
+    (set-signal! x0 0)
+    (set-signal! x1 1)
+    (set-signal! x2 1)
+    (set-signal! x3 1)
+    (propagate)
+    (println "X        = 0"(get-signal x3) (get-signal x2) (get-signal x1) (get-signal x0))
+    (println "Y        = 0"(get-signal y3) (get-signal y2) (get-signal y1) (get-signal y0))
+    (println "Result is: " (get-signal carry) (get-signal o3) (get-signal o2) (get-signal o1) (get-signal o0))
+    (set-signal! y0 0)
+    (set-signal! y1 0)
+    (set-signal! y2 0)
+    (set-signal! y3 0)
+    (propagate)
+    (println "X        = 0"(get-signal x3) (get-signal x2) (get-signal x1) (get-signal x0))
+    (println "Y        = 0"(get-signal y3) (get-signal y2) (get-signal y1) (get-signal y0))
+    (println "Result is: " (get-signal carry) (get-signal o3) (get-signal o2) (get-signal o1) (get-signal o0))
