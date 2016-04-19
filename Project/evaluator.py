@@ -1,4 +1,4 @@
-from parser import Parser
+from parser2 import Parser
 from environment import Environment
 
 def main(filename):
@@ -171,20 +171,25 @@ def evalPROGRAM(tree, env):
     if(tree.right.ltype == "JOIN"):
         evalDEFINITION(tree.left, env)
         evalPROGRAM(tree.right.left, env)
-    else:
+    elif(tree.right == None):
         evalDEFINITION(tree.left, env)
 
-def evalLASTDEF(tree, env):
-    pass
+# def evalLASTDEF(tree, env):
+#     pass
 
-def evalVARDEFINITION(tree, env):
-    pass
+# def evalVARDEFINITION(tree, env):
+#     pass
 
-def evalFUNCDEFINITION(tree, env):
-    pass
+# def evalFUNCDEFINITION(tree, env):
+#     pass
 
 def evalDEFINITION(tree, env):
-    pass
+    if(tree.left.ltype == "VARDEF"):
+        evalVARDEF(tree.left, env)
+    elif(tree.left.ltype == "FUNCDEF"):
+        evalFUNCDEF(tree.left, env)
+    elif(tree.left.ltype == "IDDEF"):
+        evalIDDEF(tree.left, env)
 
 def evalVARDEF(tree, env):
     pass
@@ -195,107 +200,113 @@ def evalFUNCDEF(tree, env):
 def evalIDDEF(tree, env):
     pass
 
-def evalARRAYACCESS(tree, env):
-    pass
+# def evalARRAYACCESS(tree, env):
+#     pass
 
-def evalLONEID(tree, env):
-    pass
+# def evalLONEID(tree, env):
+#     pass
 
 def evalOPTPARAMLIST(tree, env):
     pass
 
-def evalEMPTYOPTPARAMLIST(tree, env):
-    pass
+# def evalEMPTYOPTPARAMLIST(tree, env):
+#     pass
 
 def evalPARAMLIST(tree, env):
     pass
 
-def evalLASTPARAM(tree, env):
-    pass
+# def evalLASTPARAM(tree, env):
+#     pass
 
 def evalOPTEXPRLIST(tree, env):
     pass
 
-def evalEMPTYOPTEXPRLIST(tree, env):
-    pass
+# def evalEMPTYOPTEXPRLIST(tree, env):
+#     pass
 
 def evalEXPRLIST(tree, env):
     pass
 
-def evalLASTEXPR(tree, env):
-    pass
+# def evalLASTEXPR(tree, env):
+#     pass
 
 def evalEXPR(tree, env):
     pass
 
-def evalSINGLEPRIMARY(tree, env):
+# def evalSINGLEPRIMARY(tree, env):
+#     pass
+
+def evalPRIMARY(tree, env):
     pass
 
-def evalIDPRIMARY(tree, env):
+# def evalIDPRIMARY(tree, env):
+#     pass
+
+# def evalSTRINGPRIMARY(tree, env):
+#     pass
+
+# def evalINTEGERPRIMARY(tree, env):
+#     pass
+
+# def evalNOTPRIMARY(tree, env):
+#     pass
+
+# def evalEXPRPRIMARY(tree, env):
+#     pass
+
+# def evalLAMBDAPRIMARY(tree, env):
+#     pass
+
+# def evalFUNCDEFPRIMARY(tree, env):
+#     pass
+
+# def evalEXPRLISTPRIMARY(tree, env):
+#     pass
+
+def OPERATOR(tree, env):
     pass
 
-def evalSTRINGPRIMARY(tree, env):
-    pass
+# def evalEQUALOPERATOR(tree, env):
+#     pass
 
-def evalINTEGERPRIMARY(tree, env):
-    pass
+# def evalNOTEQUALOPERATOR(tree, env):
+#     pass
 
-def evalNOTPRIMARY(tree, env):
-    pass
+# def evalGREATEROPERATOR(tree, env):
+#     pass
 
-def evalEXPRPRIMARY(tree, env):
-    pass
+# def evalLESSOPERATOR(tree, env):
+#     pass
 
-def evalLAMBDAPRIMARY(tree, env):
-    pass
+# def evalGREATEREQUALOPERATOR(tree, env):
+#     pass
 
-def evalFUNCDEFPRIMARY(tree, env):
-    pass
+# def evalLESSEQUALOPERATOR(tree, env):
+#     pass
 
-def evalEXPRLISTPRIMARY(tree, env):
-    pass
+# def evalPLUSOPERATOR(tree, env):
+#     pass
 
-def evalEQUALOPERATOR(tree, env):
-    pass
+# def evalMINUSOPERATOR(tree, env):
+#     pass
 
-def evalNOTEQUALOPERATOR(tree, env):
-    pass
+# def evalMULTIPLYOPERATOR(tree, env):
+#     pass
 
-def evalGREATEROPERATOR(tree, env):
-    pass
+# def evalDIVIDEOPERATOR(tree, env):
+#     pass
 
-def evalLESSOPERATOR(tree, env):
-    pass
+# def evalPOWEROPERATOR(tree, env):
+#     pass
 
-def evalGREATEREQUALOPERATOR(tree, env):
-    pass
+# def evalANDOPERATOR(tree, env):
+#     pass
 
-def evalLESSEQUALOPERATOR(tree, env):
-    pass
+# def evalOROPERATOR(tree, env):
+#     pass
 
-def evalPLUSOPERATOR(tree, env):
-    pass
-
-def evalMINUSOPERATOR(tree, env):
-    pass
-
-def evalMULTIPLYOPERATOR(tree, env):
-    pass
-
-def evalDIVIDEOPERATOR(tree, env):
-    pass
-
-def evalPOWEROPERATOR(tree, env):
-    pass
-
-def evalANDOPERATOR(tree, env):
-    pass
-
-def evalOROPERATOR(tree, env):
-    pass
-
-def evalASSIGNOPERATOR(tree, env):
-    pass
+# def evalASSIGNOPERATOR(tree, env):
+#     pass
 
 def evalBLOCK(tree, env):
     pass
@@ -303,32 +314,35 @@ def evalBLOCK(tree, env):
 def evalOPTSTATEMENTLIST(tree, env):
     pass
 
-def evalEMPTYOPTSTATEMENTLIST(tree, env):
-    pass
+# def evalEMPTYOPTSTATEMENTLIST(tree, env):
+#     pass
 
 def evalSTATEMENTLIST(tree, env):
     pass
 
-def evalLASTSTATEMENT(tree, env):
+# def evalLASTSTATEMENT(tree, env):
+#     pass
+
+def evalSTATEMENT(tree, env):
     pass
 
-def evalVARDEFSTATEMENT(tree, env):
-    pass
+# def evalVARDEFSTATEMENT(tree, env):
+#     pass
 
-def evalFUNCDEFSTATEMENT(tree, env):
-    pass
+# def evalFUNCDEFSTATEMENT(tree, env):
+#     pass
 
-def evalEXPRSTATEMENT(tree, env):
-    pass
+# def evalEXPRSTATEMENT(tree, env):
+#     pass
 
-def evalWHILELOOPSTATEMENT(tree, env):
-    pass
+# def evalWHILELOOPSTATEMENT(tree, env):
+#     pass
 
-def evalIFSTATEMENTSTATEMENT(tree, env):
-    pass
+# def evalIFSTATEMENTSTATEMENT(tree, env):
+#     pass
 
-def evalRETURNSTATEMENT(tree, env):
-    pass
+# def evalRETURNSTATEMENT(tree, env):
+#     pass
 
 def evalWHILELOOP(tree, env):
     pass
@@ -339,14 +353,14 @@ def evalIFSTATEMENT(tree, env):
 def evalOPTELSESTATEMENT(tree, env):
     pass
 
-def evalEMPTYOPTELSESTATEMENT(tree, env):
-    pass
+# def evalEMPTYOPTELSESTATEMENT(tree, env):
+#     pass
 
 def evalELSESTATEMENT(tree, env):
     pass
 
-def evalELSEIFSTATEMENT(tree, env):
-    pass
+# def evalELSEIFSTATEMENT(tree, env):
+#     pass
 
 def evalLAMBDA(tree, env):
     pass
