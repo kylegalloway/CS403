@@ -1,5 +1,3 @@
-include
-"mylib"
 func
 isBig
 (

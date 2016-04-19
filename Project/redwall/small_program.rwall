@@ -1,2 +1,2 @@
-include "mylib"
+## include "mylib"
 func isBig(x) { return 5; }

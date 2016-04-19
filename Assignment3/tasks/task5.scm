@@ -63,9 +63,73 @@
 )
 
 (define (run5)
-    (define m (mmutex 3))
-    (exprTest ((m'p)) 'ACQUIRED)
-    (exprTest ((m'v)) 'RELEASED)
+    (define y (mmutex 3))
+    (exprTest ((y'p)) 'ACQUIRED)
+    (exprTest ((y'v)) 'RELEASED)
+
     (define x (mmutex 0))
     (exprTest ((x'v)) 'FORBIDDEN)
+
+    (define m (mmutex 3))
+    (define t1
+        (thread
+            (begin
+                (println "Thread 1 " ((m'p)))
+                (println "Thread 1 Started")
+                (sleep 1)
+                (println "Thread 1 " ((m'v)))
+                (println "Thread 1 " ((m'v)))
+                (println "Thread 1 " ((m'v)))
+                (println "Thread 1 Finished")
+            )
+        )
+    )
+    (define t2
+        (thread
+            (begin
+                (println "Thread 2 " ((m'p)))
+                (println "Thread 2 Started")
+                (sleep 1)
+                (println "Thread 2 " ((m'v)))
+                (println "Thread 2 Finished")
+            )
+        )
+    )
+    (define t3
+        (thread
+            (begin
+                (println "Thread 3 " ((m'p)))
+                (println "Thread 3 " ((m'p)))
+                (println "Thread 3 Started")
+                (sleep 1)
+                (println "Thread 3 " ((m'v)))
+                (println "Thread 3 " ((m'v)))
+                (println "Thread 3 Finished")
+            )
+        )
+    )
+    (define t4
+        (thread
+            (begin
+                (println "Thread 4 " ((m'p)))
+                (println "Thread 4 Started")
+                (sleep 1)
+                (println "Thread 4 " ((m'v)))
+                (println "Thread 4 Finished")
+            )
+        )
+    )
+    (define t5
+        (thread
+            (begin
+                (println "Thread 5 " ((m'p))) (println "Thread 5 " ((m'p)))
+                (println "Thread 5 Started") (sleep 1) (println "Thread 5 " ((m'v))) (println "Thread 5 " ((m'v))) (println "Thread 5 " ((m'v)))
+            )
+        )
+    )
+    (tjoin t1)
+    (tjoin t2)
+    (tjoin t3)
+    (tjoin t4)
+    (tjoin t5)
 )

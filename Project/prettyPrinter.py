@@ -10,14 +10,6 @@ def prettyPrint(tree):
         # print(tree.ltype)
         if(tree.ltype == "PARSE"):
             printPARSE(tree)
-        elif(tree.ltype == "INCLUDEFILE"):
-            printINCLUDEFILE(tree)
-        elif(tree.ltype == "FILE"):
-            printFILE(tree)
-        elif(tree.ltype == "EMPTYFILE"):
-            printEMPTYFILE(tree)
-        elif(tree.ltype == "INCLUSION"):
-            printINCLUSION(tree)
         elif(tree.ltype == "PROGRAM"):
             printPROGRAM(tree)
         elif(tree.ltype == "LASTDEF"):
@@ -216,30 +208,6 @@ def prettyPrint(tree):
             print("ERROR: "+tree.ltype+" : "+tree.lvalue)
 
 def printPARSE(tree):
-    if(tree.left):
-        prettyPrint(tree.left)
-    if(tree.right):
-        prettyPrint(tree.right)
-
-def printINCLUDEFILE(tree):
-    if(tree.left):
-        prettyPrint(tree.left)
-    if(tree.right):
-        prettyPrint(tree.right)
-
-def printFILE(tree):
-    if(tree.left):
-        prettyPrint(tree.left)
-    if(tree.right):
-        prettyPrint(tree.right)
-
-def printEMPTYFILE(tree):
-    if(tree.left):
-        prettyPrint(tree.left)
-    if(tree.right):
-        prettyPrint(tree.right)
-
-def printINCLUSION(tree):
     if(tree.left):
         prettyPrint(tree.left)
     if(tree.right):

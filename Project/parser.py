@@ -15,7 +15,7 @@ class Parser():
     def parse(self):
         # print("In parse")
         self.advance()
-        root = self.k_file()
+        root = self.program()
         eof = self.match("END_OF_INPUT")
         return self.cons("PARSE", root, eof)
         # print("Done")
@@ -36,7 +36,7 @@ class Parser():
         if(self.check(t)):
             # print("Token: "+str(self.pending))
             return self.advance()
-        self.fatal("Syntax Error. Expected "+str(t)+" , Received "+str(self.pending), self.lexer.lineNumber)
+        self.fatal("Syntax Error. Expected "+str(t)+" , Received "+str(self.pending.lvalue), self.lexer.lineNumber)
 
     def cons(self, value, left, right):
         # return ConsCell(value, ConsCell(left, ConsCell(right, None)))
@@ -46,29 +46,6 @@ class Parser():
 # =============================================================================
 #   GRAMMAR PORTION OF THE PARSING CLASS
 # =============================================================================
-
-
-    # file : EMPTY
-    #      | inclusion file
-    #      | program
-    def k_file(self):
-        # print("In k_file")
-        if (self.inclusionPending()):
-            i = self.inclusion()
-            f = self.k_file()
-            return self.cons("INCLUDEFILE", i, self.cons("JOIN", f, None))
-        elif (self.programPending()):
-            p = self.program()
-            return self.cons("FILE", p, None)
-        else:
-            return self.cons("EMPTYFILE", None, None)
-
-    # inclusion : INCLUDE STRING
-    def inclusion(self):
-        # print("In inclusion")
-        i = self.match("INCLUDE")
-        s = self.match("STRING")
-        return self.cons("INCLUSION", i, self.cons("JOIN", s, None))
 
     # program : definition
     #         | definition program
@@ -398,10 +375,6 @@ class Parser():
 # =============================================================================
 #   Pending Statements
 # =============================================================================
-
-    def inclusionPending(self):
-        # print("In inclusionPending")
-        return self.check("INCLUDE")
 
     def programPending(self):
         # print("In programPending")

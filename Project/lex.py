@@ -66,7 +66,7 @@ class Lexer():
                 self.pushbackCharacter()
                 return Lexeme("NOT", "!")
 
-        def lexMinus(self.ch):
+        def lexMinus(self, ch):
             buff = "" + ch
             ch = self.getCharacter()
             if (not(isdigit(ch))):
@@ -131,7 +131,6 @@ class Lexer():
         if (buff == "if"): return Lexeme("IF", "if")
         if (buff == "else"): return Lexeme("ELSE", "else")
         if (buff == "return"): return Lexeme("RETURN", "return")
-        if (buff == "include"): return Lexeme("INCLUDE", "include")
 
         return Lexeme("ID", buff)
 

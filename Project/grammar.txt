@@ -1,7 +1,3 @@
-file : EMPTY
-     | inclusion file
-     | program
-
 program : definition
         | definition program
 

@@ -15,7 +15,7 @@ class Recognizer():
     def parse(self):
         # print("In parse")
         self.advance()
-        self.k_file()
+        self.program()
         self.match("END_OF_INPUT")
         # print("Done")
 
@@ -36,28 +36,6 @@ class Recognizer():
             # print("Token: "+str(self.pending))
             return self.advance()
         self.fatal("Syntax Error. Expected "+str(t)+" , Received "+str(self.pending), self.lexer.lineNumber)
-
-    # file : EMPTY
-    #      | include file
-    #      | program
-    def k_file(self):
-        # print("In k_file")
-        if (self.includePending()):
-            self.include()
-            self.k_file()
-        elif (self.programPending()):
-            self.program()
-
-    # include : INCLUDE STRING
-    def include(self):
-        # print("In include")
-        self.match("INCLUDE")
-        self.match("STRING")
-
-    def includePending(self):
-        # print("In includePending")
-        return self.check("INCLUDE")
-
 
     # program : definition
     #         | definition program

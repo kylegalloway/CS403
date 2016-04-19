@@ -11,176 +11,168 @@ def evaluate(tree, env):
     # print(tree.ltype)
     if(tree.ltype == "PARSE"):
         return evalPARSE(tree, env)
-    elif(tree.ltype == "INCLUDEFILE"):
-        return evalINCLUDEFILE(tree, env)
-    elif(tree.ltype == "FILE"):
-        return evalFILE(tree, env)
-    elif(tree.ltype == "EMPTYFILE"):
-        return evalEMPTYFILE(tree, env)
-    elif(tree.ltype == "INCLUSION"):
-        return evalINCLUSION(tree, env)
-    elif(tree.ltype == "PROGRAM"):
-        return evalPROGRAM(tree, env)
-    elif(tree.ltype == "LASTDEF"):
-        return evalLASTDEF(tree, env)
-    elif(tree.ltype == "VARDEFINITION"):
-        return evalVARDEFINITION(tree, env)
-    elif(tree.ltype == "FUNCDEFINITION"):
-        return evalFUNCDEFINITION(tree, env)
-    elif(tree.ltype == "DEFINITION"):
-        return evalDEFINITION(tree, env)
-    elif(tree.ltype == "VARDEF"):
-        return evalVARDEF(tree, env)
-    elif(tree.ltype == "FUNCDEF"):
-        return evalFUNCDEF(tree, env)
-    elif(tree.ltype == "IDDEF"):
-        return evalIDDEF(tree, env)
-    elif(tree.ltype == "ARRAYACCESS"):
-        return evalARRAYACCESS(tree, env)
-    elif(tree.ltype == "LONEID"):
-        return evalID(tree, env)
-    elif(tree.ltype == "OPTPARAMLIST"):
-        return evalOPTPARAMLIST(tree, env)
-    elif(tree.ltype == "EMPTYOPTPARAMLIST"):
-        return evalEMPTYOPTPARAMLIST(tree, env)
-    elif(tree.ltype == "PARAMLIST"):
-        return evalPARAMLIST(tree, env)
-    elif(tree.ltype == "LASTPARAM"):
-        return evalLASTPARAM(tree, env)
-    elif(tree.ltype == "OPTEXPRLIST"):
-        return evalOPTEXPRLIST(tree, env)
-    elif(tree.ltype == "EMPTYOPTEXPRLIST"):
-        return evalEMPTYOPTEXPRLIST(tree, env)
-    elif(tree.ltype == "EXPRLIST"):
-        return evalEXPRLIST(tree, env)
-    elif(tree.ltype == "LASTEXPR"):
-        return evalLASTEXPR(tree, env)
-    elif(tree.ltype == "EXPR"):
-        return evalEXPR(tree, env)
-    elif(tree.ltype == "SINGLEPRIMARY"):
-        return evalSINGLEPRIMARY(tree, env)
-    elif(tree.ltype == "IDPRIMARY"):
-        return evalIDPRIMARY(tree, env)
-    elif(tree.ltype == "STRINGPRIMARY"):
-        return evalSTRINGPRIMARY(tree, env)
-    elif(tree.ltype == "INTEGERPRIMARY"):
-        return evalINTEGERPRIMARY(tree, env)
-    elif(tree.ltype == "NOTPRIMARY"):
-        return evalNOTPRIMARY(tree, env)
-    elif(tree.ltype == "EXPRPRIMARY"):
-        return evalEXPRPRIMARY(tree, env)
-    elif(tree.ltype == "LAMBDAPRIMARY"):
-        return evalLAMBDAPRIMARY(tree, env)
-    elif(tree.ltype == "FUNCDEFPRIMARY"):
-        return evalFUNCDEFPRIMARY(tree, env)
-    elif(tree.ltype == "EXPRLISTPRIMARY"):
-        return evalEXPRLISTPRIMARY(tree, env)
-    elif(tree.ltype == "EQUALOPERATOR"):
-        return evalEQUALOPERATOR(tree, env)
-    elif(tree.ltype == "NOTEQUALOPERATOR"):
-        return evalNOTEQUALOPERATOR(tree, env)
-    elif(tree.ltype == "GREATEROPERATOR"):
-        return evalGREATEROPERATOR(tree, env)
-    elif(tree.ltype == "LESSOPERATOR"):
-        return evalLESSOPERATOR(tree, env)
-    elif(tree.ltype == "GREATEREQUALOPERATOR"):
-        return evalGREATEREQUALOPERATOR(tree, env)
-    elif(tree.ltype == "LESSEQUALOPERATOR"):
-        return evalLESSEQUALOPERATOR(tree, env)
-    elif(tree.ltype == "PLUSOPERATOR"):
-        return evalPLUSOPERATOR(tree, env)
-    elif(tree.ltype == "MINUSOPERATOR"):
-        return evalMINUSOPERATOR(tree, env)
-    elif(tree.ltype == "MULTIPLYOPERATOR"):
-        return evalMULTIPLYOPERATOR(tree, env)
-    elif(tree.ltype == "DIVIDEOPERATOR"):
-        return evalDIVIDEOPERATOR(tree, env)
-    elif(tree.ltype == "POWEROPERATOR"):
-        return evalPOWEROPERATOR(tree, env)
-    elif(tree.ltype == "ANDOPERATOR"):
-        return evalANDOPERATOR(tree, env)
-    elif(tree.ltype == "OROPERATOR"):
-        return evalOROPERATOR(tree, env)
-    elif(tree.ltype == "ASSIGNOPERATOR"):
-        return evalASSIGNOPERATOR(tree, env)
-    elif(tree.ltype == "BLOCK"):
-        return evalBLOCK(tree, env)
-    elif(tree.ltype == "OPTSTATEMENTLIST"):
-        return evalOPTSTATEMENTLIST(tree, env)
-    elif(tree.ltype == "EMPTYOPTSTATEMENTLIST"):
-        return evalEMPTYOPTSTATEMENTLIST(tree, env)
-    elif(tree.ltype == "STATEMENTLIST"):
-        return evalSTATEMENTLIST(tree, env)
-    elif(tree.ltype == "LASTSTATEMENT"):
-        return evalLASTSTATEMENT(tree, env)
-    elif(tree.ltype == "VARDEFSTATEMENT"):
-        return evalVARDEFSTATEMENT(tree, env)
-    elif(tree.ltype == "FUNCDEFSTATEMENT"):
-        return evalFUNCDEFSTATEMENT(tree, env)
-    elif(tree.ltype == "EXPRSTATEMENT"):
-        return evalEXPRSTATEMENT(tree, env)
-    elif(tree.ltype == "WHILELOOPSTATEMENT"):
-        return evalWHILELOOPSTATEMENT(tree, env)
-    elif(tree.ltype == "IFSTATEMENTSTATEMENT"):
-        return evalIFSTATEMENTSTATEMENT(tree, env)
-    elif(tree.ltype == "RETURNSTATEMENT"):
-        return evalRETURNSTATEMENT(tree, env)
-    elif(tree.ltype == "WHILELOOP"):
-        return evalWHILELOOP(tree, env)
-    elif(tree.ltype == "IFSTATEMENT"):
-        return evalIFSTATEMENT(tree, env)
-    elif(tree.ltype == "OPTELSESTATEMENT"):
-        return evalOPTELSESTATEMENT(tree, env)
-    elif(tree.ltype == "EMPTYOPTELSESTATEMENT"):
-        return evalEMPTYOPTELSESTATEMENT(tree, env)
-    elif(tree.ltype == "ELSESTATEMENT"):
-        return evalELSESTATEMENT(tree, env)
-    elif(tree.ltype == "ELSEIFSTATEMENT"):
-        return evalELSEIFSTATEMENT(tree, env)
-    elif(tree.ltype == "LAMBDA")
-        return evalLAMBDA(tree, env):
-    elif(tree.ltype == "JOIN")
-        return evalJOIN(tree, env):
-    elif(tree.ltype == "STRING"):
-        return evalSTRING(tree,env)
-    elif(tree.ltype == "INTEGER"):
-        return evalINTEGER(tree,env)
-    elif(tree.ltype == "FUNCTION"):
-        return evalFUNCTION(tree,env)
-    elif(tree.ltype == "VAR"):
-        return evalVAR(tree,env)
-    elif(tree.ltype == "WHILE"):
-        return evalWHILE(tree,env)
-    elif(tree.ltype == "IF"):
-        return evalIF(tree,env)
-    elif(tree.ltype == "ELSE"):
-        return evalELSE(tree,env)
-    elif(tree.ltype == "RETURN"):
-        return evalRETURN(tree,env)
-    elif(tree.ltype == "INCLUDE"):
-        return evalINCLUDE(tree,env)
-    elif(tree.ltype == "ID"):
-        return evalID(tree,env)
+    # elif(tree.ltype == "INCLUDEFILE"):
+    #     return evalINCLUDEFILE(tree, env)
+    # elif(tree.ltype == "FILE"):
+    #     return evalFILE(tree, env)
+    # elif(tree.ltype == "EMPTYFILE"):
+    #     return evalEMPTYFILE(tree, env)
+    # elif(tree.ltype == "INCLUSION"):
+    #     return evalINCLUSION(tree, env)
+    # elif(tree.ltype == "PROGRAM"):
+    #     return evalPROGRAM(tree, env)
+    # elif(tree.ltype == "LASTDEF"):
+    #     return evalLASTDEF(tree, env)
+    # elif(tree.ltype == "VARDEFINITION"):
+    #     return evalVARDEFINITION(tree, env)
+    # elif(tree.ltype == "FUNCDEFINITION"):
+    #     return evalFUNCDEFINITION(tree, env)
+    # elif(tree.ltype == "DEFINITION"):
+    #     return evalDEFINITION(tree, env)
+    # elif(tree.ltype == "VARDEF"):
+    #     return evalVARDEF(tree, env)
+    # elif(tree.ltype == "FUNCDEF"):
+    #     return evalFUNCDEF(tree, env)
+    # elif(tree.ltype == "IDDEF"):
+    #     return evalIDDEF(tree, env)
+    # elif(tree.ltype == "ARRAYACCESS"):
+    #     return evalARRAYACCESS(tree, env)
+    # elif(tree.ltype == "LONEID"):
+    #     return evalID(tree, env)
+    # elif(tree.ltype == "OPTPARAMLIST"):
+    #     return evalOPTPARAMLIST(tree, env)
+    # elif(tree.ltype == "EMPTYOPTPARAMLIST"):
+    #     return evalEMPTYOPTPARAMLIST(tree, env)
+    # elif(tree.ltype == "PARAMLIST"):
+    #     return evalPARAMLIST(tree, env)
+    # elif(tree.ltype == "LASTPARAM"):
+    #     return evalLASTPARAM(tree, env)
+    # elif(tree.ltype == "OPTEXPRLIST"):
+    #     return evalOPTEXPRLIST(tree, env)
+    # elif(tree.ltype == "EMPTYOPTEXPRLIST"):
+    #     return evalEMPTYOPTEXPRLIST(tree, env)
+    # elif(tree.ltype == "EXPRLIST"):
+    #     return evalEXPRLIST(tree, env)
+    # elif(tree.ltype == "LASTEXPR"):
+    #     return evalLASTEXPR(tree, env)
+    # elif(tree.ltype == "EXPR"):
+    #     return evalEXPR(tree, env)
+    # elif(tree.ltype == "SINGLEPRIMARY"):
+    #     return evalSINGLEPRIMARY(tree, env)
+    # elif(tree.ltype == "IDPRIMARY"):
+    #     return evalIDPRIMARY(tree, env)
+    # elif(tree.ltype == "STRINGPRIMARY"):
+    #     return evalSTRINGPRIMARY(tree, env)
+    # elif(tree.ltype == "INTEGERPRIMARY"):
+    #     return evalINTEGERPRIMARY(tree, env)
+    # elif(tree.ltype == "NOTPRIMARY"):
+    #     return evalNOTPRIMARY(tree, env)
+    # elif(tree.ltype == "EXPRPRIMARY"):
+    #     return evalEXPRPRIMARY(tree, env)
+    # elif(tree.ltype == "LAMBDAPRIMARY"):
+    #     return evalLAMBDAPRIMARY(tree, env)
+    # elif(tree.ltype == "FUNCDEFPRIMARY"):
+    #     return evalFUNCDEFPRIMARY(tree, env)
+    # elif(tree.ltype == "EXPRLISTPRIMARY"):
+    #     return evalEXPRLISTPRIMARY(tree, env)
+    # elif(tree.ltype == "EQUALOPERATOR"):
+    #     return evalEQUALOPERATOR(tree, env)
+    # elif(tree.ltype == "NOTEQUALOPERATOR"):
+    #     return evalNOTEQUALOPERATOR(tree, env)
+    # elif(tree.ltype == "GREATEROPERATOR"):
+    #     return evalGREATEROPERATOR(tree, env)
+    # elif(tree.ltype == "LESSOPERATOR"):
+    #     return evalLESSOPERATOR(tree, env)
+    # elif(tree.ltype == "GREATEREQUALOPERATOR"):
+    #     return evalGREATEREQUALOPERATOR(tree, env)
+    # elif(tree.ltype == "LESSEQUALOPERATOR"):
+    #     return evalLESSEQUALOPERATOR(tree, env)
+    # elif(tree.ltype == "PLUSOPERATOR"):
+    #     return evalPLUSOPERATOR(tree, env)
+    # elif(tree.ltype == "MINUSOPERATOR"):
+    #     return evalMINUSOPERATOR(tree, env)
+    # elif(tree.ltype == "MULTIPLYOPERATOR"):
+    #     return evalMULTIPLYOPERATOR(tree, env)
+    # elif(tree.ltype == "DIVIDEOPERATOR"):
+    #     return evalDIVIDEOPERATOR(tree, env)
+    # elif(tree.ltype == "POWEROPERATOR"):
+    #     return evalPOWEROPERATOR(tree, env)
+    # elif(tree.ltype == "ANDOPERATOR"):
+    #     return evalANDOPERATOR(tree, env)
+    # elif(tree.ltype == "OROPERATOR"):
+    #     return evalOROPERATOR(tree, env)
+    # elif(tree.ltype == "ASSIGNOPERATOR"):
+    #     return evalASSIGNOPERATOR(tree, env)
+    # elif(tree.ltype == "BLOCK"):
+    #     return evalBLOCK(tree, env)
+    # elif(tree.ltype == "OPTSTATEMENTLIST"):
+    #     return evalOPTSTATEMENTLIST(tree, env)
+    # elif(tree.ltype == "EMPTYOPTSTATEMENTLIST"):
+    #     return evalEMPTYOPTSTATEMENTLIST(tree, env)
+    # elif(tree.ltype == "STATEMENTLIST"):
+    #     return evalSTATEMENTLIST(tree, env)
+    # elif(tree.ltype == "LASTSTATEMENT"):
+    #     return evalLASTSTATEMENT(tree, env)
+    # elif(tree.ltype == "VARDEFSTATEMENT"):
+    #     return evalVARDEFSTATEMENT(tree, env)
+    # elif(tree.ltype == "FUNCDEFSTATEMENT"):
+    #     return evalFUNCDEFSTATEMENT(tree, env)
+    # elif(tree.ltype == "EXPRSTATEMENT"):
+    #     return evalEXPRSTATEMENT(tree, env)
+    # elif(tree.ltype == "WHILELOOPSTATEMENT"):
+    #     return evalWHILELOOPSTATEMENT(tree, env)
+    # elif(tree.ltype == "IFSTATEMENTSTATEMENT"):
+    #     return evalIFSTATEMENTSTATEMENT(tree, env)
+    # elif(tree.ltype == "RETURNSTATEMENT"):
+    #     return evalRETURNSTATEMENT(tree, env)
+    # elif(tree.ltype == "WHILELOOP"):
+    #     return evalWHILELOOP(tree, env)
+    # elif(tree.ltype == "IFSTATEMENT"):
+    #     return evalIFSTATEMENT(tree, env)
+    # elif(tree.ltype == "OPTELSESTATEMENT"):
+    #     return evalOPTELSESTATEMENT(tree, env)
+    # elif(tree.ltype == "EMPTYOPTELSESTATEMENT"):
+    #     return evalEMPTYOPTELSESTATEMENT(tree, env)
+    # elif(tree.ltype == "ELSESTATEMENT"):
+    #     return evalELSESTATEMENT(tree, env)
+    # elif(tree.ltype == "ELSEIFSTATEMENT"):
+    #     return evalELSEIFSTATEMENT(tree, env)
+    # elif(tree.ltype == "LAMBDA")
+    #     return evalLAMBDA(tree, env):
+    # elif(tree.ltype == "JOIN")
+    #     return evalJOIN(tree, env):
+    # elif(tree.ltype == "STRING"):
+    #     return evalSTRING(tree,env)
+    # elif(tree.ltype == "INTEGER"):
+    #     return evalINTEGER(tree,env)
+    # elif(tree.ltype == "FUNCTION"):
+    #     return evalFUNCTION(tree,env)
+    # elif(tree.ltype == "VAR"):
+    #     return evalVAR(tree,env)
+    # elif(tree.ltype == "WHILE"):
+    #     return evalWHILE(tree,env)
+    # elif(tree.ltype == "IF"):
+    #     return evalIF(tree,env)
+    # elif(tree.ltype == "ELSE"):
+    #     return evalELSE(tree,env)
+    # elif(tree.ltype == "RETURN"):
+    #     return evalRETURN(tree,env)
+    # elif(tree.ltype == "INCLUDE"):
+    #     return evalINCLUDE(tree,env)
+    # elif(tree.ltype == "ID"):
+    #     return evalID(tree,env)
     else:
         return "ERROR: "+tree.ltype+" : "+tree.lvalue
 
 def evalPARSE(tree, env):
-    pass
-
-def evalINCLUDEFILE(tree, env):
-    pass
-
-def evalFILE(tree, env):
-    pass
-
-def evalEMPTYFILE(tree, env):
-    pass
-
-def evalINCLUSION(tree, env):
-    pass
+    return evalPROGRAM(tree.left, env)
 
 def evalPROGRAM(tree, env):
-    pass
+    if(tree.right.ltype == "JOIN"):
+        evalDEFINITION(tree.left, env)
+        evalProgram(tree.right.left, env)
+    else:
+        return evalDEFINITION(tree.left, env)
 
 def evalLASTDEF(tree, env):
     pass
