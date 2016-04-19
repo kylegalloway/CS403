@@ -10,7 +10,7 @@ def main(filename):
 def evaluate(tree, env):
     # print(tree.ltype)
     if(tree.ltype == "PARSE"):
-        return evalPARSE(tree, env)
+        evalPARSE(tree, env)
     # elif(tree.ltype == "INCLUDEFILE"):
     #     return evalINCLUDEFILE(tree, env)
     # elif(tree.ltype == "FILE"):
@@ -165,14 +165,14 @@ def evaluate(tree, env):
         return "ERROR: "+tree.ltype+" : "+tree.lvalue
 
 def evalPARSE(tree, env):
-    return evalPROGRAM(tree.left, env)
+    evalPROGRAM(tree.left, env)
 
 def evalPROGRAM(tree, env):
     if(tree.right.ltype == "JOIN"):
         evalDEFINITION(tree.left, env)
-        evalProgram(tree.right.left, env)
+        evalPROGRAM(tree.right.left, env)
     else:
-        return evalDEFINITION(tree.left, env)
+        evalDEFINITION(tree.left, env)
 
 def evalLASTDEF(tree, env):
     pass

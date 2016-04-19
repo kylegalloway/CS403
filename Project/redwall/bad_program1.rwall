@@ -1,0 +1,9 @@
+func
+apply(f, L, size)
+{
+    x = L[0];
+    while (x != L[size])
+    {
+        f(L[x]);
+        x = L[x + 1];
+    }
