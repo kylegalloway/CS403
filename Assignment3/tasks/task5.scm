@@ -4,13 +4,13 @@
     (define number n)
     (define owners '())
 
-    (define (included? x L)
+    (define (included5? x L)
         (if (null? L)
             #f
             (begin
                 (if (== (car L) x)
                     #t
-                    (included? x (cdr L))
+                    (included5? x (cdr L))
                 )
             )
         )
@@ -46,7 +46,7 @@
     )
     (define (v)
         (lock)
-        (if (included? (gettid) owners)
+        (if (included5? (gettid) owners)
             (begin
                 (set! number (+ number 1))
                 (set! owners (list-remove (gettid) owners))

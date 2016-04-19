@@ -1,30 +1,26 @@
 (include "extras/exprTest.scm")
 
+(define (included1? x L)
+    (if (null? L)
+        #f
+        (if (== (car L) x)
+            #t
+            (included1? x (cdr L))
+        )
+    )
+)
+
 (define (level # id)
     (define (env-iter env id count)
-        (define in (included? id (cadr env)))
         (cond
-            ((and (== in #f) (null? (get '__context env))) 'UNDEFINED)
-            ((== in #t) count)
+            ((== env 'nil) 'UNDEFINED)
+            ((included1? id (cadr env)) count)
             (else
-                (set! in (included? id (cadr env)))
                 (env-iter (get'__context env) id (+ count 1))
             )
         )
     )
     (env-iter # id 0)
-)
-
-(define (included? x L)
-    (if (null? L)
-        #f
-        (begin
-            (if (== (car L) x)
-                #t
-                (included? x (cdr L))
-            )
-        )
-    )
 )
 
 ; Tests

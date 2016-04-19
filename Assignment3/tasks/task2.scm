@@ -3,13 +3,13 @@
 
 (define (denv f) (get'__context f))
 
-(define (included? x L)
+(define (included2? x L)
     (if (null? L)
         #f
         (begin
             (if (== (car L) x)
                 #t
-                (included? x (cdr L))
+                (included2? x (cdr L))
             )
         )
     )
@@ -31,13 +31,13 @@
                             (set! local-ids (append (cadr expr) local-ids))
                             (set! local-ids (cons (cadr expr) local-ids))
                         )
-                        (inspect local-ids)
+                        ; (inspect local-ids)
                         (cons 'define (cons (cadr expr) (iter (cddr expr))))
                     )
                     (cons (iter (car expr)) (iter (cdr expr)))
                 )
             )
-            ((included? expr local-ids) expr)
+            ((included2? expr local-ids) expr)
             (else (eval expr (denv f)))
         )
     )
