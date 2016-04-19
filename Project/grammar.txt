@@ -2,8 +2,6 @@ file : EMPTY
      | inclusion file
      | program
 
-inclusion : INCLUDE STRING
-
 program : definition
         | definition program
 
