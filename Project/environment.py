@@ -2,8 +2,8 @@ from lexeme import Lexeme
 
 class Environment():
 
-    def __init(self):
-        self.globalenv = create()
+    def __init__(self):
+        self.globalenv = self.create()
 
     def cons(self, value, left, right):
         return Lexeme(value, value, left, right)
@@ -30,7 +30,7 @@ class Environment():
 
 
     def create(self):
-        return self.extend([], [], None)
+        return self.extend(None, None, None)
 
     def lookup(self, variable, env):
         while (env != None):
@@ -68,4 +68,14 @@ class Environment():
         return self.cons("ENV", variables, self.cons("ENV", values, env))
 
     def __str__(self):
-        print('[%s]' % ', '.join(map(str, self.globalenv)))
+        variables = self.car(self.globalenv)
+        vals = self.cadr(self.globalenv)
+        ret = ""
+        while(variables != None):
+            topvar = self.car(variables)
+            topval = self.car(vals)
+            out = ("[ "+topvar+" ] : [ "+topval+" ]")
+            ret = ret + "\n" + out
+            variables = self.cdr(variables)
+            vals = self.cdr(vals)
+        return ret
