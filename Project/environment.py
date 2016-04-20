@@ -30,7 +30,7 @@ class Environment():
 
 
     def create(self):
-        return self.extend(None, None, None)
+        return self.extend([], [], None)
 
     def lookup(self, variable, env):
         while (env != None):
@@ -46,13 +46,13 @@ class Environment():
         print("variable ",variable," is undefined");
         return None;
 
-    def update(self, variable, env):
+    def update(self, variable, value, env):
         while (env != None):
             variables = self.car(env)
             vals = self.cadr(env)
             while (variables != None):
                 if (self.sameVariable(variable, self.car(variables))):
-                    self.setCar(vals, variable)
+                    self.setCar(vals, value)
                 variables = self.cdr(variables)
                 vals = self.cdr(vals)
             env = self.cdr(self.cdr(env))
@@ -66,3 +66,6 @@ class Environment():
 
     def extend(self, variables, values, env):
         return self.cons("ENV", variables, self.cons("ENV", values, env))
+
+    def __str__(self):
+        print('[%s]' % ', '.join(map(str, self.globalenv)))

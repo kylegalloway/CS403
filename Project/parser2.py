@@ -66,10 +66,6 @@ class Parser():
         elif(self.functionDefinitionPending()):
             f = self.functionDefinition()
             return self.cons("DEFINITION", f, None)
-        elif(self.idDefPending()):
-            i = self.idDef()
-            s = self.match("SEMI")
-            return self.cons("DEFINITION", i, self.cons("JOIN", s, None))
 
     # variableDefinition : VAR ID EQUAL expr SEMI
     def variableDefinition(self):

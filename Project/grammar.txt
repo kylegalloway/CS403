@@ -3,7 +3,6 @@ program : definition
 
 definition : variableDefinition
            | functionDefinition
-           | idDef SEMI
 
 variableDefinition : VAR ID EQUAL expr SEMI
 

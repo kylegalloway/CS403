@@ -5,13 +5,12 @@ def main(filename):
     p = Parser(filename)
     parse_tree = p.parse()
     env = Environment()
-    print(evaluate(parse_tree, env))
+    print(env)
+    # print(evaluate(parse_tree, env))
 
 def evaluate(tree, env):
     # print(tree.ltype)
     if(tree.ltype == "PARSE"):
-        return evalPARSE(tree, env)
-    elif (tree.ltype == "PARSE"):
         return evalPARSE(tree, env)
     elif (tree.ltype == "PROGRAM"):
         return evalPROGRAM(tree, env)
@@ -79,25 +78,24 @@ def evaluate(tree, env):
         return "ERROR: "+tree.ltype+" : "+tree.lvalue
 
 def evalPARSE(tree, env):
-    evalPROGRAM(tree.left, env)
+    return evaluate(tree.left, env)
 
 def evalPROGRAM(tree, env):
-    if(tree.right.ltype == "JOIN"):
-        evalDEFINITION(tree.left, env)
-        evalPROGRAM(tree.right.left, env)
-    elif(tree.right == None):
-        evalDEFINITION(tree.left, env)
+    while(tree.right != None):
+        evaluate(tree.left, env)
+        tree = tree.right.left
+    if(tree.right == None):
+        evaluate(tree.left, env)
 
 def evalDEFINITION(tree, env):
-    if(tree.left.ltype == "VARDEF"):
-        evalVARDEF(tree.left, env)
-    elif(tree.left.ltype == "FUNCDEF"):
-        evalFUNCDEF(tree.left, env)
-    elif(tree.left.ltype == "IDDEF"):
-        evalIDDEF(tree.left, env)
+    if(tree.left != None):
+        evaluate(tree.left, env)
 
 def evalVARDEF(tree, env):
-    pass
+    if(tree.right.left.ltype == "ID"):
+        variable = tree.right.left.lvalue
+        value = evaluate(tree.right.right.right.left, env)
+        return env.insert(variable, value, env)
 
 def evalFUNCDEF(tree, env):
     pass
@@ -118,10 +116,20 @@ def evalEXPRLIST(tree, env):
     pass
 
 def evalEXPR(tree, env):
-    pass
+    if(tree.right != None):
+        # leftprim = evaluate(tree.left, env)
+        # op = evaluate(tree.right.left)
+        # rightprim = evaluate(tree.right.right.left, env)
+        # return (rightprim op leftprim)
+        pass
+    else:
+        evaluate(tree.left, env)
 
 def evalPRIMARY(tree, env):
-    pass
+    if(tree.right != None):
+        pass
+    else:
+        return evaluate(tree.left, env)
 
 def OPERATOR(tree, env):
     pass
@@ -160,7 +168,7 @@ def evalSTRING(tree,env):
     pass
 
 def evalINTEGER(tree,env):
-    pass
+    return tree.lvalue
 
 def evalFUNCTION(tree,env):
     pass
@@ -193,5 +201,5 @@ import sys
 if(len(sys.argv) == 2):
     filename = sys.argv[1]
 else:
-    filename = "redwall/program.rwall"
+    filename = "redwall/simple.rwall"
 main(filename)
