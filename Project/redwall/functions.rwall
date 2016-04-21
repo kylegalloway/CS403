@@ -1,0 +1,17 @@
+func
+apply(f, L, size)
+{
+    var x = L[0];
+    while (x != L[size])
+    {
+        f(L[x]);
+        var x = L[x + 1];
+    }
+}
+
+func double(x)
+{
+    return x * 2;
+}
+
+apply(double, [1, 2, 3], 3);

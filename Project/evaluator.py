@@ -107,47 +107,63 @@ def evalIDDEF(tree, env):
     pass
 
 def evalOPTPARAMLIST(tree, env):
-    pass
+    if(tree.left != None):
+        return evaluate(tree.left, env)
+    return None
 
 def evalPARAMLIST(tree, env):
-    pass
+    if(tree.right == None):
+        return evaluate(tree.left, env)
+    else:
+        pass
 
 def evalOPTEXPRLIST(tree, env):
-    pass
+    if(tree.left != None):
+        return evaluate(tree.left, env)
+    return None
 
 def evalEXPRLIST(tree, env):
-    pass
+    if(tree.right == None):
+        return evaluate(tree.left, env)
+    else:
+        pass
 
 def evalEXPR(tree, env):
-    if(tree.right != None):
-        # leftprim = evaluate(tree.left, env)
-        # op = evaluate(tree.right.left)
-        # rightprim = evaluate(tree.right.right.left, env)
-        # return (rightprim op leftprim)
-        pass
-    else:
+    if(tree.right == None):
         return evaluate(tree.left, env)
+    else:
+        pass
 
 def evalPRIMARY(tree, env):
-    if(tree.right != None):
-        pass
-    else:
+    if(tree.right == None):
         return evaluate(tree.left, env)
+    else:
+        pass
 
 def OPERATOR(tree, env):
-    pass
+    return evaluate(tree.left, env)
 
 def evalBLOCK(tree, env):
-    pass
+    return evaluate(tree.right.left, env)
 
 def evalOPTSTATEMENTLIST(tree, env):
-    pass
+    if(tree.left != None):
+        return evaluate(tree.left, env)
+    return None
 
 def evalSTATEMENTLIST(tree, env):
-    pass
+    if(tree.right == None):
+        return evaluate(tree.left, env)
+    else:
+        pass
 
 def evalSTATEMENT(tree, env):
-    pass
+    if(tree.right == None):
+        return evaluate(tree.left, env)
+    elif(tree.left.ltype == "EXPR"):
+        return evaluate(tree.left, env)
+    elif(tree.left.ltype == "RETURN"):
+        return evaluate(tree.right.left, env)
 
 def evalWHILELOOP(tree, env):
     pass
@@ -156,46 +172,50 @@ def evalIFSTATEMENT(tree, env):
     pass
 
 def evalOPTELSESTATEMENT(tree, env):
-    pass
+    if(tree.left != None):
+        return evaluate(tree.left, env)
+    return None
 
 def evalELSESTATEMENT(tree, env):
     pass
 
 def evalLAMBDA(tree, env):
-    pass
+    variable = Lexeme("ID", " ", None, None)
+    params = tree.right.right.left
+    body = tree.right.right.right.right.left
+    right = Lexeme("JOIN", "JOIN", body, env)
+    close = Lexeme("CLOSURE", "CLOSURE", params, right)
+    return env.insert(variable, close)
 
-def evalJOIN(tree, env):
-    pass
+# def evalJOIN(tree, env):
+#     pass
 
 def evalSTRING(tree,env):
-    pass
+    return tree
 
 def evalINTEGER(tree,env):
     return tree
 
-def evalFUNCTION(tree,env):
-    pass
+# def evalFUNCTION(tree,env):
+#     pass
 
-def evalVAR(tree,env):
-    pass
+# def evalVAR(tree,env):
+#     pass
 
-def evalWHILE(tree,env):
-    pass
+# def evalWHILE(tree,env):
+#     pass
 
-def evalIF(tree,env):
-    pass
+# def evalIF(tree,env):
+#     pass
 
-def evalELSE(tree,env):
-    pass
+# def evalELSE(tree,env):
+#     pass
 
-def evalRETURN(tree,env):
-    pass
+# def evalRETURN(tree,env):
+#     pass
 
-def evalINCLUDE(tree,env):
-    pass
-
-def evalID(tree,env):
-    pass
+# def evalID(tree,env):
+#     pass
 
 
 

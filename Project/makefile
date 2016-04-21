@@ -41,8 +41,10 @@ run-iteration:
 	python3 ./prettyPrinter.py redwall/iteration.rwall
 
 cat-functions:
+	cat redwall/recursion.rwall
 
 run-functions:
+	python3 ./prettyPrinter.py redwall/recursion.rwall
 
 cat-dictionary:
 

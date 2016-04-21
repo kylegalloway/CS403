@@ -120,7 +120,7 @@ class Lexer():
     def lexWord(self, ch):
         buff = "" + ch
         ch = self.getCharacter()
-        while (ch.isalnum() or ch == "_"):
+        while (ch.isalnum() or ch == "_" or ch == "?"):
             buff += ch
             ch = self.getCharacter()
         self.pushbackCharacter()
