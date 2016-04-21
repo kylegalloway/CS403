@@ -1,28 +1,24 @@
 default:
-	python3 ./prettyPrinter.py
+	python3 ./evaluator.py redwall/simple.rwall
 
 cat-error1:
 	cat redwall/bad_program1.rwall
 
 run-error1:
-	python3 ./prettyPrinter.py redwall/bad_program1.rwall
+	python3 ./evaluator.py redwall/bad_program1.rwall
 
 cat-error2:
 	cat redwall/bad_program2.rwall
 
 run-error2:
-	python3 ./prettyPrinter.py redwall/bad_program2.rwall
+	python3 ./evaluator.py redwall/bad_program2.rwall
 cat-error3:
 	cat redwall/bad_program3.rwall
 
 run-error3:
-	python3 ./prettyPrinter.py redwall/bad_program3.rwall
+	python3 ./evaluator.py redwall/bad_program3.rwall
 
-cat-arrays:
-	cat redwall/arrays.rwall
-
-run-arrays:
-	python3 ./prettyPrinter.py redwall/arrays.rwall
+# Everything above works with evaluator. Everything below needs help.
 
 cat-conditionals:
 	cat redwall/conditionals.rwall
@@ -47,6 +43,12 @@ cat-functions:
 
 run-functions:
 	python3 ./prettyPrinter.py redwall/functions.rwall
+
+cat-arrays:
+	cat redwall/arrays.rwall
+
+run-arrays:
+	python3 ./prettyPrinter.py redwall/arrays.rwall
 
 cat-dictionary:
 	cat redwall/functions.rwall
