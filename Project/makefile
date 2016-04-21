@@ -49,8 +49,10 @@ run-functions:
 	python3 ./prettyPrinter.py redwall/functions.rwall
 
 cat-dictionary:
+	cat redwall/functions.rwall
 
 run-dictionary:
+	python3 ./prettyPrinter.py redwall/functions.rwall
 
 cat-problem:
 	cat redwall/test_problem.rwall

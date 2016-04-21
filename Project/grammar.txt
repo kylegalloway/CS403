@@ -10,6 +10,7 @@ functionDefinition : FUNCTION ID OPAREN optParamList CPAREN block
 
 idDef : ID
       | ID OPAREN optExprList CPAREN
+      | ID OPAREN optExprList CPAREN OPAREN optExprList CPAREN
       | ID OBRACKET expr CBRACKET
 
 optParamList : EMPTY
@@ -35,6 +36,9 @@ primary : idDef
         | k_lambda
         | functionDefinition
         | OBRACKET optExprList CBRACKET
+        | NIL
+        | TRUE
+        | FALSE
 
 operator : EQUAL
          | NOTEQUAL

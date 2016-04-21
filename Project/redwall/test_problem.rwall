@@ -1,29 +1,9 @@
-func front_ptr(queue)
-{
-    return car(queue);
-}
-func rear_ptr(queue)
-{
-    return cdr(queue);
-}
-func set_front_ptr(queue, item)
-{
-    set_car(queue, item);
-}
-func set_rear_ptr(queue, item)
-{
-    set_cdr(queue, item);
-}
-
-func empty_queue?(queue)
-{
-    return (null?(front_ptr(queue)));
-}
-
-func make_queue()
-{
-    cons(nil, nil);
-}
+func front_ptr(queue) { return car(queue); }
+func rear_ptr(queue) { return cdr(queue); }
+func set_front_ptr(queue, item) { set_car(queue, item); }
+func set_rear_ptr(queue, item) { set_cdr(queue, item); }
+func empty_queue?(queue) { return (null?(front_ptr(queue))); }
+func make_queue() { cons(nil, nil); }
 
 func front_queue(queue)
 {
@@ -37,7 +17,7 @@ func front_queue(queue)
     }
 }
 
-func insert_queue(queue item)
+func insert_queue(queue, item)
 {
     var new_pair = cons(item, nil);
     if(empty_queue?(queue))
@@ -78,10 +58,7 @@ func apply(f, L, size)
     return "DONE";
 }
 
-func error(L)
-{
-    return apply(println, L, 2);
-}
+func error(L) { return apply(println, L, 2); }
 
 func make_wire()
 {
@@ -150,6 +127,7 @@ func after_delay(delay, action)
 }
 
 func propagate()
+{
     if (empty_agenda? (the_agenda))
     {
         return "DONE";
@@ -158,19 +136,15 @@ func propagate()
     {
         var first_item = first_agenda_item(the_agenda);
         first_item();
-        remove_first-agenda_item(the_agenda);
+        remove_first_agenda_item(the_agenda);
         return propogate();
     }
 }
 
 func make_time_segment(time, queue) { return cons(time, queue); }
-
 func segment_time(s) { return car(s); }
-
 func segment_queue(s) { return cdr(s); }
-
 func make_agenda() { return [0]; }
-
 func empty_agenda?(agenda) { return null?(segments (agenda)); }
 
 func first_agenda_item (agenda)
@@ -230,7 +204,7 @@ func add_to_agenda(time, action, agenda)
                         make_new_time_segment(time, action),
                         cdr(segments)
                         )
-                    )
+                    );
                 return add_to_segments(rest);
             }
         }
@@ -255,190 +229,136 @@ func add_to_agenda(time, action, agenda)
 }
 
 func current_time(agenda) { return car (agenda); }
-
 func set_current_time(agenda, time) { return set_car(agenda, time); }
-
 func segments(agenda) { return cdr(agenda); }
-
 func set_segments(agenda, segments) { return set_cdr(agenda, segments); }
-
 func first_segment(agenda) { return car(segments(agenda)); }
-
 func rest_segments(agenda) { return cdr(segments(agenda)); }
 
-###############################################################################
-## STOPPED HERE
-###############################################################################
-#$
+func and_gate(a1, a2, out)
+{
+    func and_action_procedure()
+    {
+        var new_value = logical_and(get_signal(a1), get_signal(a2));
+        return after_delay(and_delay, lambda(){ set_signal(out, new_value); });
+    }
 
-func (and_gate a1 a2 output)
-    func (and_action_procedure)
-        (let ((new_value
-                (logical_and (get_signal a1) (get_signal a2))))
-             (after_delay and_delay
-                         (lambda ()
-                            (set_signal output new_value)
-                         )
-             )
-        )
-    )
-    (add_action a1 and_action_procedure)
-    (add_action a2 and_action_procedure)
-    'ok
-)
+    add_action(a1, and_action_procedure);
+    add_action(a2, and_action_procedure);
+    return "OK";
+}
 
-func (logical_and a1 a2)
-    (cond
-        ((and (= a1 1) (= a2 1)) 1)
-        (else 0)
-    )
-)
+func logical_and(a1, a2)
+{
+    if(a1 == 1)
+    {
+        if(a2 == 1)
+        {
+            return 1;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    else
+    {
+        return 0;
+    }
+}
 
-func (or_gate o1 o2 output)
-    func (or_action_procedure)
-        (let ((new_value
-                (logical_or (get_signal o1) (get_signal o2))))
-             (after_delay or_delay
-                         (lambda ()
-                            (set_signal output new_value)
-                         )
-             )
-        )
-    )
-    (add_action o1 or_action_procedure)
-    (add_action o2 or_action_procedure)
-    'ok
-)
+func or_gate(o1, o2, out)
+{
+    func or_action_procedure()
+    {
+        var new_value = logical_or(get_signal(o1), get_signal(o2));
+        return after_delay(or_delay, lambda(){ set_signal(out, new_value); });
+    }
 
-func (logical_or o1 o2)
-    (cond
-        ((= o1 1) 1)
-        ((= o2 1) 1)
-        (else 0)
-    )
-)
+    add_action(o1, or_action_procedure);
+    add_action(o2, or_action_procedure);
+    return "OK";
+}
 
-func (inverter input output)
-    func (invert_input)
-        (let ((new_value (logical_not (get_signal input))))
-             (after_delay inverter_delay
-                          (lambda ()
-                            (set_signal output new_value)
-                          )
-             )
-        )
-    )
-    (add_action input invert_input)
-    'ok
-)
+func logical_or(o1, o2)
+{
+    if(o1 == 1)
+    {
+        return 1;
+    }
+    if(o2 == 1)
+    {
+        return 1;
+    }
 
-func (logical_not s)
-    (cond ((= s 0) 1)
-          ((= s 1) 0)
-          (else (error "Invalid signal" s))
-    )
-)
+    return 0;
+}
 
-func (add1 a b c_in sum c_out)
-    func s (make_wire))
-    func c1 (make_wire))
-    func c2 (make_wire))
-    func w (make_wire))
-    func x (make_wire))
-    func y (make_wire))
-    func z (make_wire))
+func inverter (in, out)
+{
+    func invert_input()
+    {
+        var new_value = logical_not(get_signal(in));
+        return after_delay(inverter_delay, lambda(){ set_signal(out, new_value); });
+    }
+    add_action(in, invert_input);
+    return "OK";
+}
 
-    ; First half_adder
-    ; (half_adder b c_in s c1)
-    (or_gate b c_in w)
-    (and_gate b c_in c1)
-    (inverter c1 x)
-    (and_gate w x s)
+func logical_not(s)
+{
+    if(s == 0) { return 1; }
+    if(s == 1) { return 0; }
+    return error("Invalid signal", s);
+}
 
-    ; Second half_adder
-    ; (half_adder a s sum c2)
-    (or_gate a s y)
-    (and_gate a s c2)
-    (inverter c2 z)
-    (and_gate y z sum)
+func half_adder(a, b, s, c)
+{
+    var d = make_wire();
+    var e = make_wire();
+    or_gate(a, b, d);
+    and_gate(a, b, c);
+    inverter(c, e);
+    and_gate(d, e, s);
+    return "OK";
+}
 
+func full_adder(a, b, cin, sum, cout)
+{
+    var s = make_wire();
+    var c1 = make_wire();
+    var c2 = make_wire();
+    half_adder(b, cin, s, c1);
+    half_adder(a, s, sum, c2);
+    or_gate(c1, c2, cout);
+    return "OK";
+}
 
-    (or_gate c1 c2 c_out)
-    'ok
-)
+var the_agenda = nil;
+var and_delay = 0;
+var or_delay = 0;
+var inverter_delay = 0;
 
-func (add4 X Y O c_out)
-    func c_in (make_wire))
-    func c1 (make_wire))
-    func c2 (make_wire))
-    func c3 (make_wire))
+func wiretest()
+{
+    set(the_agenda, make_agenda());
+    set(and_delay, 5);
+    set(or_delay, 3);
+    set(inverter_delay, 1);
 
-    func x0 (car X))
-    func x1 (cadr X))
-    func x2 (caddr X))
-    func x3 (cadddr X))
-    func y0 (car Y))
-    func y1 (cadr Y))
-    func y2 (caddr Y))
-    func y3 (cadddr Y))
-    func o0 (car O))
-    func o1 (cadr O))
-    func o2 (caddr O))
-    func o3 (cadddr O))
-
-
-    ; add1 definition
-    ; (add1 a b c_in sum c_out)
-    (add1 x3 y3 c_in o3 c1)
-    (add1 x2 y2 c1 o2 c2)
-    (add1 x1 y1 c2 o1 c3)
-    (add1 x0 y0 c3 o0 c_out)
-)
-
-func the_agenda nil)
-func and_delay 0)
-func or_delay 0)
-func inverter_delay 0)
-
-func (run4)
-    (set the_agenda (make_agenda))
-    (set and_delay 5)
-    (set or_delay 3)
-    (set inverter_delay 1)
-
-    func x0 (make_wire))
-    func x1 (make_wire))
-    func x2 (make_wire))
-    func x3 (make_wire))
-    func y0 (make_wire))
-    func y1 (make_wire))
-    func y2 (make_wire))
-    func y3 (make_wire))
-    func o0 (make_wire))
-    func o1 (make_wire))
-    func o2 (make_wire))
-    func o3 (make_wire))
-    func carry (make_wire))
-    (inspect (add4
-        (list x3 x2 x1 x0)
-        (list y3 y2 y1 y0)
-        (list o3 o2 o1 o0)
-        carry
-        )
-    )
-    (set_signal x0 0)
-    (set_signal x1 1)
-    (set_signal x2 1)
-    (set_signal x3 1)
-    (propagate)
-    (println "X        = 0"(get_signal x3) (get_signal x2) (get_signal x1) (get_signal x0))
-    (println "Y        = 0"(get_signal y3) (get_signal y2) (get_signal y1) (get_signal y0))
-    (println "Result is: " (get_signal carry) (get_signal o3) (get_signal o2) (get_signal o1) (get_signal o0))
-    (set_signal y0 0)
-    (set_signal y1 0)
-    (set_signal y2 0)
-    (set_signal y3 0)
-    (propagate)
-    (println "X        = 0"(get_signal x3) (get_signal x2) (get_signal x1) (get_signal x0))
-    (println "Y        = 0"(get_signal y3) (get_signal y2) (get_signal y1) (get_signal y0))
-    (println "Result is: " (get_signal carry) (get_signal o3) (get_signal o2) (get_signal o1) (get_signal o0))
+    var x0 = make_wire();
+    var y0 = make_wire();
+    var o0 = make_wire();
+    var carry = make_wire();
+    println(full_adder(x0, y0, 0, o0, carry));
+    set_signal(x0, 1);
+    propagate();
+    println(["X        = 0", get_signal(x0)]);
+    println(["Y        = 0", get_signal(y0)]);
+    println(["Result is: ", get_signal(o0)]);
+    set_signal(y0, 1);
+    propagate();
+    println(["X        = 0", get_signal(x0)]);
+    println(["Y        = 0", get_signal(y0)]);
+    println(["Result is: ", get_signal(o0)]);
+}

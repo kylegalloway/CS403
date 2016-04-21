@@ -1,4 +1,4 @@
-from parser2 import Parser
+from parser import Parser
 from environment import Environment
 from lexeme import Lexeme
 
@@ -74,6 +74,12 @@ def evaluate(tree, env):
         return evalINCLUDE(tree, env)
     elif (tree.ltype == "ID"):
         return evalID(tree, env)
+    elif (tree.ltype == "NIL"):
+        return evalNIL(tree, env)
+    elif (tree.ltype == "TRUE"):
+        return evalTRUE(tree, env)
+    elif (tree.ltype == "FALSE"):
+        return evalFALSE(tree, env)
     else:
         return "ERROR: "+tree.ltype+" : "+tree.lvalue
 
@@ -216,6 +222,16 @@ def evalINTEGER(tree,env):
 
 # def evalID(tree,env):
 #     pass
+
+# def evalNIL(tree, env):
+#     pass
+
+# def evalTRUE(tree, env):
+#     pass
+
+# def evalFALSE(tree, env):
+#     pass
+
 
 
 
