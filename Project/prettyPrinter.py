@@ -26,10 +26,10 @@ def prettyPrint(tree):
             printFUNCDEF(tree)
         elif(tree.ltype == "IDDEF"):
             printIDDEF(tree)
-        # elif(tree.ltype == "ARRAYACCESS"):
-        #     printARRAYACCESS(tree)
-        # elif(tree.ltype == "LONEID"):
-        #     printLONEID(tree)
+        elif(tree.ltype == "ARRAYACCESS"):
+            printARRAYACCESS(tree)
+        elif(tree.ltype == "FUNCCALL"):
+            printLONEID(tree)
         elif(tree.ltype == "OPTPARAMLIST"):
             printOPTPARAMLIST(tree)
         # elif(tree.ltype == "EMPTYOPTPARAMLIST"):
@@ -273,17 +273,17 @@ def printIDDEF(tree):
     if(tree.right):
         prettyPrint(tree.right)
 
-# def printARRAYACCESS(tree):
-#     if(tree.left):
-#         prettyPrint(tree.left)
-#     if(tree.right):
-#         prettyPrint(tree.right)
+def printARRAYACCESS(tree):
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
-# def printLONEID(tree):
-#     if(tree.left):
-#         prettyPrint(tree.left)
-#     if(tree.right):
-#         prettyPrint(tree.right)
+def printFUNCCALL(tree):
+    if(tree.left):
+        prettyPrint(tree.left)
+    if(tree.right):
+        prettyPrint(tree.right)
 
 def printOPTPARAMLIST(tree):
     if(tree.left):

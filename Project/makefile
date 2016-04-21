@@ -12,6 +12,7 @@ cat-error2:
 
 run-error2:
 	python3 ./evaluator.py redwall/bad_program2.rwall
+
 cat-error3:
 	cat redwall/bad_program3.rwall
 

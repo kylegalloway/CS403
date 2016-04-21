@@ -22,6 +22,10 @@ def evaluate(tree, env):
         return evalFUNCDEF(tree, env)
     elif (tree.ltype == "IDDEF"):
         return evalIDDEF(tree, env)
+    elif (tree.ltype == "ARRAYACCESS"):
+        return evalARRAYACCESS(tree, env)
+    elif (tree.ltype == "FUNCCALL"):
+        return evalFUNCCALL(tree, env)
     elif (tree.ltype == "OPTPARAMLIST"):
         return evalOPTPARAMLIST(tree, env)
     elif (tree.ltype == "PARAMLIST"):
@@ -112,6 +116,40 @@ def evalFUNCDEF(tree, env):
 def evalIDDEF(tree, env):
     pass
 
+def evalARRAYACCESS(tree, env):
+    pass
+
+def evalFUNCCALL(tree, env):
+    # Get the args for the function call
+    args = getArgs(tree)
+    # Get the function def from the ID
+    f = getFunction(tree)
+    # Eval the function def to get the entire closure
+    closure = evaluate(f, env)
+
+    # To handle user functions and built-ins
+    if (closure.type == BUILTIN):
+        return evalBuiltin(closure, env, args)
+    # To handle returns
+    if (closure.type == RETURNED):
+        return evalReturn(closure, env, args)
+
+    # This gets the defining environment from the closure
+    denv = getEnv(closure)
+    # This gets the function body from the closure
+    body = getBody(closure)
+    # This gets the formal parameters from the closure
+    params = getParams(closure)
+
+    # This evaluates the arguments in the calling environment
+    eargs = evalArgs(args, env)
+    # This builds the new table and attaches it to the denv
+    xenv = extend(params, eargs, denv)
+
+    # This evaluates the function in the new extended environment
+    return evaluate(body, xenv)
+
+
 def evalOPTPARAMLIST(tree, env):
     if(tree.left != None):
         return evaluate(tree.left, env)
@@ -186,12 +224,11 @@ def evalELSESTATEMENT(tree, env):
     pass
 
 def evalLAMBDA(tree, env):
-    variable = Lexeme("ID", " ", None, None)
     params = tree.right.right.left
     body = tree.right.right.right.right.left
     right = Lexeme("JOIN", "JOIN", body, env)
     close = Lexeme("CLOSURE", "CLOSURE", params, right)
-    return env.insert(variable, close)
+    return close
 
 # def evalJOIN(tree, env):
 #     pass

@@ -99,17 +99,17 @@ class Parser():
             o = self.match("OPAREN")
             e = self.optExprList()
             c = self.match("CPAREN")
-            if(self.check("OPAREN")):
-                o2 = self.match("OPAREN")
-                e2 = self.optExprList()
-                c2 = self.match("CPAREN")
-                return self.cons("IDDEF", i, self.cons("JOIN", o, self.cons("JOIN", e, self.cons("JOIN", c, self.cons("JOIN", o, self.cons("JOIN", e2, self.cons("JOIN", c, None)))))))
-            return self.cons("IDDEF", i, self.cons("JOIN", o, self.cons("JOIN", e, self.cons("JOIN", c, None))))
+            # if(self.check("OPAREN")):
+            #     o2 = self.match("OPAREN")
+            #     e2 = self.optExprList()
+            #     c2 = self.match("CPAREN")
+            #     return self.cons("IDDEF", i, self.cons("JOIN", o, self.cons("JOIN", e, self.cons("JOIN", c, self.cons("JOIN", o, self.cons("JOIN", e2, self.cons("JOIN", c, None)))))))
+            return self.cons("FUNCCALL", i, self.cons("JOIN", o, self.cons("JOIN", e, self.cons("JOIN", c, None))))
         elif (self.check("OBRACKET")):
             o = self.match("OBRACKET")
             e = self.expr()
             c = self.match("CBRACKET")
-            return self.cons("IDDEF", i, self.cons("JOIN", o, self.cons("JOIN", e, self.cons("JOIN", c, None))))
+            return self.cons("ARRAYACCESS", i, self.cons("JOIN", o, self.cons("JOIN", e, self.cons("JOIN", c, None))))
         else:
             return self.cons("IDDEF", i, None)
 
