@@ -1,4 +1,4 @@
-func largest(x,y,z
+func (x,y,z)
 {
     ## Braces are required in all functions, loops, and conditionals.
     if(x > y)
