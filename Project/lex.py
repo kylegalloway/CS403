@@ -131,6 +131,9 @@ class Lexer():
         if (buff == "if"): return Lexeme("IF", "if")
         if (buff == "else"): return Lexeme("ELSE", "else")
         if (buff == "return"): return Lexeme("RETURN", "return")
+        if (buff == "nil"): return Lexeme("NIL", "nil")
+        if (buff == "true"): return Lexeme("TRUE", "true")
+        if (buff == "false"): return Lexeme("FALSE", "false")
 
         return Lexeme("ID", buff)
 

@@ -132,7 +132,7 @@ func call_each(procedures)
     }
 }
 
-func get_signal(wire) { return wire('get_signal); }
+func get_signal(wire) { return wire("'get_signal"); }
 
 func set_signal(wire, new_value)
 {
@@ -149,106 +149,127 @@ func after_delay(delay, action)
     return add_to_agenda((delay + current_time(the_agenda)), action, the_agenda);
 }
 
+func propagate()
+    if (empty_agenda? (the_agenda))
+    {
+        return "DONE";
+    }
+    else
+    {
+        var first_item = first_agenda_item(the_agenda);
+        first_item();
+        remove_first-agenda_item(the_agenda);
+        return propogate();
+    }
+}
+
+func make_time_segment(time, queue) { return cons(time, queue); }
+
+func segment_time(s) { return car(s); }
+
+func segment_queue(s) { return cdr(s); }
+
+func make_agenda() { return [0]; }
+
+func empty_agenda?(agenda) { return null?(segments (agenda)); }
+
+func first_agenda_item (agenda)
+{
+    if (empty_agenda? (agenda))
+    {
+        return error ("Agenda is empty __ FIRST_AGENDA_ITEM", nil);
+
+    }
+    else
+    {
+        var first_seg = first_segment(agenda);
+        set_current_time(agenda, segment_time(first_seg));
+        return front_queue(segment_queue(first_seg));
+    }
+}
+
+func remove_first_agenda_item(agenda)
+{
+    var q = segment_queue(first_segment(agenda));
+    delete_queue(q);
+    if(empty_queue?(q))
+    {
+        return set_segments(agenda, rest_segments(agenda));
+    }
+}
+
+func add_to_agenda(time, action, agenda)
+{
+    func belongs_before?(segments)
+    {
+        if (null?(segments)) { return true; }
+        if (time < segment_time(car(segments))) { return true; }
+    }
+
+    func make_new_time_segment(time, action)
+    {
+        var q = make_queue();
+        insert_queue(q, action);
+        return make_time_segment(time, q);
+    }
+
+    func add_to_segments(segments)
+    {
+        if(segment_time(car(segments)) == time)
+        {
+            return insert_queue(segment_queue(car(segments)), action);
+        }
+        else
+        {
+            var rest = cdr(segments);
+            if (belongs_before?(rest))
+            {
+                set_cdr(
+                    segments,
+                    cons(
+                        make_new_time_segment(time, action),
+                        cdr(segments)
+                        )
+                    )
+                return add_to_segments(rest);
+            }
+        }
+    }
+
+    var segs = segments(agenda);
+    if(belongs_before?(segs))
+    {
+        if(null?(segs))
+        {
+            return set_segments(agenda, [make_new_time_segment(time, action)]);
+        }
+        else
+        {
+            return set_segments(agends, cons(make_new_time_segment(time, action), cdr(segs)));
+        }
+    }
+    else
+    {
+        return add_to_segments(segs);
+    }
+}
+
+func current_time(agenda) { return car (agenda); }
+
+func set_current_time(agenda, time) { return set_car(agenda, time); }
+
+func segments(agenda) { return cdr(agenda); }
+
+func set_segments(agenda, segments) { return set_cdr(agenda, segments); }
+
+func first_segment(agenda) { return car(segments(agenda)); }
+
+func rest_segments(agenda) { return cdr(segments(agenda)); }
+
 ###############################################################################
 ## STOPPED HERE
 ###############################################################################
-
-
-func (propagate)
-    (if (empty_agenda? the_agenda)
-        'done
-        (let ((first_item (first_agenda_item the_agenda)))
-            (first_item)
-            (remove_first_agenda_item the_agenda)
-            (propagate)
-        )
-    )
-)
-
-func (make_time_segment time queue)
-    (cons time queue)
-)
-
-func (segment_time s) (car s))
-
-func (segment_queue s) (cdr s))
-
-func (make_agenda) (list 0))
-
-func (empty_agenda? agenda) (null? (segments agenda)))
-
-func (first_agenda_item agenda)
-    (if (empty_agenda? agenda)
-        (error "Agenda is empty __ FIRST_AGENDA_ITEM")
-        (let ((first_seg (first_segment agenda)))
-            (set_current_time agenda (segment_time first_seg))
-            (front_queue (segment_queue first_seg))
-        )
-    )
-)
-
-func (remove_first_agenda_item agenda)
-    (let ((q (segment_queue (first_segment agenda))))
-        (delete_queue q)
-        (if (empty_queue? q)
-            (set_segments agenda (rest_segments agenda))
-        )
-    )
-)
-
-func (add_to_agenda time action agenda)
-    func (belongs_before? segments)
-        (or (null? segments)
-            (< time (segment_time (car segments)))
-        )
-    )
-    func (make_new_time_segment time action)
-        (let (( q (make_queue)))
-            (insert_queue q action)
-            (make_time_segment time q)
-        )
-    )
-    func (add_to_segments segments)
-        (if (= (segment_time (car segments)) time)
-            (insert_queue (segment_queue (car segments)) action)
-            (let ((rest (cdr segments)))
-                (if (belongs_before? rest)
-                    (set_cdr segments
-                              (cons (make_new_time_segment time action)
-                                    (cdr segments)
-                              )
-                    )
-                    (add_to_segments rest)
-                )
-            )
-        )
-    )
-    (let ((segments (segments agenda)))
-        (if (belongs_before? segments)
-            (if (null? segments)
-                (set_segments agenda (list (make_new_time_segment time action)))
-                (set_segments agenda
-                               (cons (make_new_time_segment time action)
-                                     (cdr segments)
-                               )
-                )
-            )
-            (add_to_segments segments)
-        )
-    )
-)
-
-func (current_time agenda) (car agenda))
-
-func (set_current_time agenda time) (set_car agenda time))
-
-func (segments agenda) (cdr agenda))
-
-func (set_segments agenda segments) (set_cdr agenda segments))
-
-func (first_segment agenda) (car (segments agenda)))
-
-func (rest_segments agenda) (cdr (segments agenda)))
+#$
 
 func (and_gate a1 a2 output)
     func (and_action_procedure)

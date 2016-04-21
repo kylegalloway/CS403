@@ -19,8 +19,10 @@ run-error3:
 	python3 ./prettyPrinter.py redwall/bad_program3.rwall
 
 cat-arrays:
+	cat redwall/arrays.rwall
 
 run-arrays:
+	python3 ./prettyPrinter.py redwall/arrays.rwall
 
 cat-conditionals:
 	cat redwall/conditionals.rwall
@@ -41,10 +43,10 @@ run-iteration:
 	python3 ./prettyPrinter.py redwall/iteration.rwall
 
 cat-functions:
-	cat redwall/recursion.rwall
+	cat redwall/functions.rwall
 
 run-functions:
-	python3 ./prettyPrinter.py redwall/recursion.rwall
+	python3 ./prettyPrinter.py redwall/functions.rwall
 
 cat-dictionary:
 
