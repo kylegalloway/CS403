@@ -1,12 +1,12 @@
 from parser2 import Parser
 from environment import Environment
+from lexeme import Lexeme
 
 def main(filename):
     p = Parser(filename)
     parse_tree = p.parse()
     env = Environment()
-    print(env)
-    # print(evaluate(parse_tree, env))
+    print(evaluate(parse_tree, env))
 
 def evaluate(tree, env):
     # print(tree.ltype)
@@ -88,17 +88,20 @@ def evalPROGRAM(tree, env):
         evaluate(tree.left, env)
 
 def evalDEFINITION(tree, env):
-    if(tree.left != None):
-        evaluate(tree.left, env)
+    evaluate(tree.left, env)
 
 def evalVARDEF(tree, env):
-    if(tree.right.left.ltype == "ID"):
-        variable = tree.right.left.lvalue
-        value = evaluate(tree.right.right.right.left, env)
-        return env.insert(variable, value, env)
+    variable = tree.right.left
+    value = evaluate(tree.right.right.right.left, env)
+    return env.insert(variable, value)
 
 def evalFUNCDEF(tree, env):
-    pass
+    variable = tree.right.left
+    params = tree.right.right.right.left
+    body = tree.right.right.right.right.right.left
+    right = Lexeme("JOIN", "JOIN", body, env)
+    close = Lexeme("CLOSURE", "CLOSURE", params, right)
+    return env.insert(variable, close)
 
 def evalIDDEF(tree, env):
     pass
@@ -123,7 +126,7 @@ def evalEXPR(tree, env):
         # return (rightprim op leftprim)
         pass
     else:
-        evaluate(tree.left, env)
+        return evaluate(tree.left, env)
 
 def evalPRIMARY(tree, env):
     if(tree.right != None):
@@ -168,7 +171,7 @@ def evalSTRING(tree,env):
     pass
 
 def evalINTEGER(tree,env):
-    return tree.lvalue
+    return tree
 
 def evalFUNCTION(tree,env):
     pass

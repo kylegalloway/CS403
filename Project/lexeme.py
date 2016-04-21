@@ -5,6 +5,9 @@ class Lexeme():
         self.left = left
         self.right = right
 
+    # def __eq__(self, other):
+    #     return self.lvalue == other.lvalue
+
     def __str__(self):
         if (self.lvalue == None):
             val = self.ltype

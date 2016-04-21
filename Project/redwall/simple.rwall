@@ -1,1 +1,4 @@
-var x = 1;
+func x()
+{
+    return 1;
+}
