@@ -5,7 +5,7 @@
 
 ### Example Files are in redwall/
 
-* Almost all syntax is similar to C.
+* Almost all syntax is similar to Go.
 * Whitespace is irrelevant.
 * Braces are required in functions, ifs, elses, whiles, and lambdas.
 * For loops are not available.
@@ -15,3 +15,34 @@
 ## FAQ:
 ###### Why is the name of your language redwall?
 I named my language redwall after the series of children's books by Brian Jacques. I enjoyed them as a child and my son enjoys them now.
+
+###### What are the keywords?
+* "func" -- declare a new function
+* "var" -- declare a new variable
+* "while"
+* "if"
+* "else"
+* "return"
+* "lambda"
+* "nil" -- None, Null, Nil
+* "true"
+* "false"
+* "print"
+
+###### What operators are built-in?
+* "+"    PLUS
+* "-"    MINUS
+* "*"    MULTIPLY
+* "/"    DIVIDE
+* "%"    MODULO
+* "^"    POWER
+* "&"    AND
+* "|"    OR
+* ">"    GREATER
+* ">="    GREATEREQUAL
+* "<"    LESS
+* "<="    LESSEQUAL
+* "="    EQUAL
+* "=="    DOUBLEEQUAL
+* "!"    NOT
+* "!="    NOTEQUAL
