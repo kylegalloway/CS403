@@ -291,10 +291,8 @@ def printELSEIFSTATEMENT(tree):
         prettyPrint(tree.right)
 
 def printLAMBDA(tree):
-    if(tree.left):
-        prettyPrint(tree.left)
-    if(tree.right):
-        prettyPrint(tree.right)
+    print(tree.left)
+    prettyPrint(tree.right)
 
 def printJOIN(tree):
     if(tree.left):

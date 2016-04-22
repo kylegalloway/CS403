@@ -1,3 +1,5 @@
+var a = lambda(){ return 1; };
+#$
 func x()
 {
     return 1 + 1;
