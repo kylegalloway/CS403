@@ -90,7 +90,6 @@ class Parser():
 
     # idDef : ID
     #       | ID OPAREN optExprList CPAREN
-    #       | ID OPAREN optExprList CPAREN OPAREN optExprList CPAREN
     #       | ID OBRACKET expr CBRACKET
     def idDef(self):
         # print("In idDef")
@@ -99,11 +98,6 @@ class Parser():
             o = self.match("OPAREN")
             e = self.optExprList()
             c = self.match("CPAREN")
-            # if(self.check("OPAREN")):
-            #     o2 = self.match("OPAREN")
-            #     e2 = self.optExprList()
-            #     c2 = self.match("CPAREN")
-            #     return self.cons("IDDEF", i, self.cons("JOIN", o, self.cons("JOIN", e, self.cons("JOIN", c, self.cons("JOIN", o, self.cons("JOIN", e2, self.cons("JOIN", c, None)))))))
             return self.cons("FUNCCALL", i, self.cons("JOIN", o, self.cons("JOIN", e, self.cons("JOIN", c, None))))
         elif (self.check("OBRACKET")):
             o = self.match("OBRACKET")
@@ -161,7 +155,8 @@ class Parser():
         if(self.operatorPending()):
             o = self.operator()
             e = self.expr()
-            return self.cons("EXPR", p, self.cons("JOIN", o, self.cons("JOIN", e, None)))
+            return self.cons("EXPR", None, self.cons("OPERATOR", o, self.cons("JOIN", p, e)))
+            # return self.cons("EXPR", p, self.cons("JOIN", o, self.cons("JOIN", e, None)))
         return self.cons("EXPR", p, None)
 
     # primary : idDef
@@ -218,7 +213,10 @@ class Parser():
             return self.cons("PRIMARY", f, None)
         elif (self.check("PRINT")):
             f = self.match("PRINT")
-            return self.cons("PRIMARY", f, None)
+            o = self.match("OPAREN")
+            e = self.exprList()
+            c = self.match("CPAREN")
+            return self.cons("PRINT", f, self.cons("JOIN", o, self.cons("JOIN", e, self.cons("JOIN", c, None))))
 
     # operator : EQUAL
     #          | NOTEQUAL
@@ -238,49 +236,49 @@ class Parser():
         # print("In operator")
         if(self.check("EQUAL")):
             op = self.match("EQUAL")
-            return self.cons("OPERATOR", op, None)
+            return self.cons("EQUAL", op, None)
         elif(self.check("NOTEQUAL")):
             op = self.match("NOTEQUAL")
-            return self.cons("OPERATOR", op, None)
+            return self.cons("NOTEQUAL", op, None)
         elif(self.check("GREATER")):
             op = self.match("GREATER")
-            return self.cons("OPERATOR", op, None)
+            return self.cons("GREATER", op, None)
         elif(self.check("LESS")):
             op = self.match("LESS")
-            return self.cons("OPERATOR", op, None)
+            return self.cons("LESS", op, None)
         elif(self.check("GREATEREQUAL")):
             op = self.match("GREATEREQUAL")
-            return self.cons("OPERATOR", op, None)
+            return self.cons("GREATEREQUAL", op, None)
         elif(self.check("LESSEQUAL")):
             op = self.match("LESSEQUAL")
-            return self.cons("OPERATOR", op, None)
+            return self.cons("LESSEQUAL", op, None)
         elif(self.check("PLUS")):
             op = self.match("PLUS")
-            return self.cons("OPERATOR", op, None)
+            return self.cons("PLUS", op, None)
         elif(self.check("MINUS")):
             op = self.match("MINUS")
-            return self.cons("OPERATOR", op, None)
+            return self.cons("MINUS", op, None)
         elif(self.check("MULTIPLY")):
             op = self.match("MULTIPLY")
-            return self.cons("OPERATOR", op, None)
+            return self.cons("MULTIPLY", op, None)
         elif(self.check("DIVIDE")):
             op = self.match("DIVIDE")
-            return self.cons("OPERATOR", op, None)
+            return self.cons("DIVIDE", op, None)
         elif(self.check("POWER")):
             op = self.match("POWER")
-            return self.cons("OPERATOR", op, None)
+            return self.cons("POWER", op, None)
         elif(self.check("AND")):
             op = self.match("AND")
-            return self.cons("OPERATOR", op, None)
+            return self.cons("AND", op, None)
         elif(self.check("OR")):
             op = self.match("OR")
-            return self.cons("OPERATOR", op, None)
+            return self.cons("OR", op, None)
         elif(self.check("ASSIGN")):
             op = self.match("ASSIGN")
-            return self.cons("OPERATOR", op, None)
+            return self.cons("ASSIGN", op, None)
         elif(self.check("DOUBLEEQUAL")):
             op = self.match("DOUBLEEQUAL")
-            return self.cons("OPERATOR", op, None)
+            return self.cons("DOUBLEEQUAL", op, None)
 
     # block : OBRACE optStatementList CBRACE
     def block(self):

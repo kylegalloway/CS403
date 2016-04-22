@@ -2,3 +2,9 @@ func x()
 {
     return 1 + 1;
 }
+
+var z = 1;
+#$
+var a = x();
+var a = print(x());
+var b = print(1," ", 2);

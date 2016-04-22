@@ -56,8 +56,8 @@ class Environment():
             self.environment.right.left.left = value
         return value
 
-    def extend(self, variables, values):
-        return self.cons("ENV", variables, self.cons("JOIN", values, self))
+    def extend(self, variables, values, env):
+        return self.cons("ENV", variables, self.cons("JOIN", values, env))
 
     def __str__(self):
         pass

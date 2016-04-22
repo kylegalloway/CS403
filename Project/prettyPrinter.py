@@ -4,10 +4,11 @@ def main(filename):
     p = Parser(filename)
     parse_tree = p.parse()
     prettyPrint(parse_tree)
+    print()
 
 def prettyPrint(tree):
     if(tree != None):
-        # pritf(tree.ltype + " ", end="")
+        # printf(tree.ltype + " ", end="")
         if(tree.ltype == "PARSE"):
             printPARSE(tree)
         elif(tree.ltype == "PROGRAM"):
@@ -23,7 +24,7 @@ def prettyPrint(tree):
         elif(tree.ltype == "ARRAYACCESS"):
             printARRAYACCESS(tree)
         elif(tree.ltype == "FUNCCALL"):
-            printLONEID(tree)
+            printFUNCCALL(tree)
         elif(tree.ltype == "OPTPARAMLIST"):
             printOPTPARAMLIST(tree)
         elif(tree.ltype == "PARAMLIST"):
@@ -228,10 +229,12 @@ def printPRIMARY(tree):
         prettyPrint(tree.right)
 
 def printOPERATOR(tree):
-    if(tree.left):
-        prettyPrint(tree.left)
-    if(tree.right):
-        prettyPrint(tree.right)
+    l = tree.right.left
+    r = tree.right.right.left
+    op = tree.left.left
+    prettyPrint(l)
+    prettyPrint(op)
+    prettyPrint(r)
 
 def printBLOCK(tree):
     if(tree.left):

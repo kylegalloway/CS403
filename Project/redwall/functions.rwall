@@ -14,4 +14,4 @@ func double(x)
     return x * 2;
 }
 
-apply(double, [1, 2, 3], 3);
+var a = apply(double, [1, 2, 3], 3);

@@ -9,7 +9,7 @@ func front_queue(queue)
 {
     if (empty_queue?(queue))
     {
-        return error("FRONT called with an empty queue", queue);
+        return print("FRONT called with an empty queue", queue);
     }
     else
     {
@@ -38,7 +38,7 @@ func delete_queue(queue)
 {
     if(empty_queue?(queue))
     {
-        return error("DELETE called with an empty queue", queue);
+        return print("DELETE called with an empty queue", queue);
     }
     else
     {
@@ -46,19 +46,6 @@ func delete_queue(queue)
         return queue;
     }
 }
-
-func apply(f, L, size)
-{
-    var x = L[0];
-    while (x = L[size])
-    {
-        f(L[x]);
-        var x = L[x + 1];
-    }
-    return "DONE";
-}
-
-func error(L) { return apply(print, L, 2); }
 
 func make_wire()
 {
@@ -89,7 +76,7 @@ func make_wire()
         if (m == "'get_signal") { return signal_value; }
         else if (m == "'set_signal") { return set_my_signal; }
         else if (m == "'add_action") { return accept_action_procedure; }
-        else { return error("Unknown operation __ WIRE", m); }
+        else { return print("Unknown operation __ WIRE", m); }
     }
 
     return dispatch;
@@ -104,7 +91,8 @@ func call_each(procedures)
     }
     else
     {
-        car(procedures)();
+        c = car(procedures);
+        c();
         return call_each(cdr(procedures));
     }
 }
@@ -113,12 +101,14 @@ func get_signal(wire) { return wire("'get_signal"); }
 
 func set_signal(wire, new_value)
 {
-    return wire("'set_signal")(new_value);
+    w = wire("'set_signal");
+    return w(new_value);
 }
 
 func add_action(wire, action_procedure)
 {
-    return wire("'add_action")(action_procedure);
+    w = wire("'add_action");
+    return w(action_procedure);
 }
 
 func after_delay(delay, action)
@@ -151,7 +141,7 @@ func first_agenda_item (agenda)
 {
     if (empty_agenda? (agenda))
     {
-        return error ("Agenda is empty __ FIRST_AGENDA_ITEM", nil);
+        return print ("Agenda is empty __ FIRST_AGENDA_ITEM", nil);
 
     }
     else
@@ -309,7 +299,7 @@ func logical_not(s)
 {
     if(s == 0) { return 1; }
     if(s == 1) { return 0; }
-    return error("Invalid signal", s);
+    return print("Invalid signal", s);
 }
 
 func half_adder(a, b, s, c)

@@ -21,7 +21,7 @@ class Lexer():
         if (ch == '['): return Lexeme("OBRACKET", "[")
         if (ch == ']'): return Lexeme("CBRACKET", "]")
         if (ch == '+'): return Lexeme("PLUS", "+")
-        if (ch == '*'): return Lexeme("TIMES", "*")
+        if (ch == '*'): return Lexeme("MULTIPLY", "*")
         if (ch == '/'): return Lexeme("DIVIDE", "/")
         if (ch == '%'): return Lexeme("MODULO", "%")
         if (ch == '^'): return Lexeme("EXPONENT", "^")

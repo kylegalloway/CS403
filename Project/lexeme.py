@@ -16,13 +16,13 @@ class Lexeme():
 
         if (self.right != None):
             if (self.left != None):
-                ret = val + " => " + str(self.left) + " : " + str(self.right)
+                ret = val + " => Left: " + str(self.left) + " Right: " + str(self.right)
             else:
-                ret = val + " => None : " + str(self.right)
+                ret = val + " => Left: None Right: " + str(self.right)
         else:
             if (self.left != None):
-                ret = val + " => " + str(self.left)
+                ret = val + " => Left: " + str(self.left)
             else:
-                ret = val + " => None"
+                ret = val + " => Left: None Right: None"
 
         return (ret + "\n")
