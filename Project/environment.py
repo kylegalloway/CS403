@@ -60,5 +60,5 @@ class Environment():
         return self.cons("ENV", variables, self.cons("JOIN", values, env))
 
     def __str__(self):
-        pass
+        return "ENV"
 

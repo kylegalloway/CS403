@@ -24,10 +24,10 @@ class Lexer():
         if (ch == '*'): return Lexeme("MULTIPLY", "*")
         if (ch == '/'): return Lexeme("DIVIDE", "/")
         if (ch == '%'): return Lexeme("MODULO", "%")
-        if (ch == '^'): return Lexeme("EXPONENT", "^")
-        if (ch == '&'): return Lexeme("AMPERSAND", "&")
+        if (ch == '^'): return Lexeme("POWER", "^")
+        if (ch == '&'): return Lexeme("AND", "&")
         if (ch == '.'): return Lexeme("PERIOD", ".")
-        if (ch == '|'): return Lexeme("BAR", "|")
+        if (ch == '|'): return Lexeme("OR", "|")
 
         if (ch == '-'): return self.lexMinus()
         if (ch in ['<', '>', '=', '!']): return self.lexOp(ch)

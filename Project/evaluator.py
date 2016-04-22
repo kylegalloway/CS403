@@ -135,16 +135,17 @@ def evalPROGRAM(tree, env):
         evaluate(tree.left, env)
         tree = tree.right.left
     if(tree.right == None):
-        evaluate(tree.left, env)
+        return evaluate(tree.left, env)
 
 def evalDEFINITION(tree, env):
     # print("In evalDEFINITION")
-    evaluate(tree.left, env)
+    return evaluate(tree.left, env)
 
 def evalVARDEF(tree, env):
     # print("In evalVARDEF")
     variable = tree.right.left
     value = evaluate(tree.right.right.right.left, env)
+    evaluate(tree.right.right.right.left, env)
     return env.insert(variable, value)
 
 def evalFUNCDEF(tree, env):
@@ -168,28 +169,49 @@ def evalFUNCCALL(tree, env):
     # print("In evalFUNCCALL")
     # Get the args for the function call
     args = getArgs(tree)
+    # print("args", end=" : ")
+    # print(args)
     # Get the function def from the ID
     f = getFunction(tree)
+    # print("f", end=" : ")
+    # print(f)
     # Eval the function def to get the entire closure
     closure = evaluate(f, env)
+    # print("closure", end=" : ")
+    # print(closure)
 
     if(closure.ltype != "CLOSURE"):
         return "ERROR: Tried to call "+closure.lvalue+" as function."
 
     # This gets the defining environment from the closure
     denv = getEnv(closure)
+    # print("denv", end=" : ")
+    # print(denv)
     # This gets the function body from the closure
     body = getBody(closure)
+    # print("body", end=" : ")
+    # print(body)
     # This gets the formal parameters from the closure
     params = getParams(closure)
+    # print("params", end=" : ")
+    # print(params)
 
     # This evaluates the arguments in the calling environment
-    eargs = evalOPTEXPRLIST(args, env)
+    eargs = evaluate(args, env)
+    # print("eargs", end=" : ")
+    # print(eargs)
+
+    # This evaluates the params in the calling environment
+    eparams = evaluate(params, env)
+    # print("eparams", end=" : ")
+    # print(eparams)
+
     # This builds the new table and attaches it to the denv
-    xenv = env.extend(params, eargs, denv)
+    xenv = env.extend(eparams, eargs, denv)
+    # print("xenv", end=" : ")
+    # print(xenv)
 
     # This evaluates the function in the new extended environment
-    # ev = es
     return evaluate(body, xenv)
 
 def getArgs(tree):
@@ -306,7 +328,8 @@ def evalSTATEMENTLIST(tree, env):
     # print("In evalSTATEMENTLIST")
     r = None
     if(tree.right == None):
-        return Lexeme("MINSTATEMENTLIST", "MINSTATEMENTLIST", tree.left, None)
+        return evaluate(tree.left, env)
+        # return Lexeme("MINSTATEMENTLIST", "MINSTATEMENTLIST", tree.left, None)
     if(tree.right.right.left != None):
         r = evaluate(tree.right.left, env)
     new = Lexeme("MINSTATEMENTLIST", "MINSTATEMENTLIST", tree.left, r)

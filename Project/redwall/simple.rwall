@@ -4,7 +4,7 @@ func x()
 }
 
 var a = x();
-var c = print(a);
+var z = 2 ^ 16;
 #$
-var z = 1 + 1;
+var c = print(a);
 var b = print(1," ", 2);
