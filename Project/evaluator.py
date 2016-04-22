@@ -282,8 +282,8 @@ def evalPRIMARY(tree, env):
         return evaluate(Lexeme("ARRAY", evaluate(tree.right.left, env), None, None), env)
 
 def evalOPERATOR(tree, env):
-    l = eval(tree.right.left.left.lvalue)
-    r = eval(tree.right.right.left.left.lvalue)
+    l = evaluate(tree.right.left.left.lvalue)
+    r = evaluate(tree.right.right.left.left.lvalue)
     op = tree.left.left
     if (op.ltype == "EQUAL"):
         return (l == r)

@@ -30,3 +30,5 @@ func largest(x,y,z)
         return z;
     }
 }
+
+var a = largest(1, 2, 3);

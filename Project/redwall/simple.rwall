@@ -5,6 +5,6 @@ func x()
 
 var a = x();
 var z = 2 ^ 16;
-#$
-var c = print(a);
+#$ None below works
+var c = print(z);
 var b = print(1," ", 2);

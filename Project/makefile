@@ -52,10 +52,10 @@ run-arrays:
 	python3 ./prettyPrinter.py redwall/arrays.rwall
 
 cat-dictionary:
-	cat redwall/functions.rwall
+	cat redwall/dictionary.rwall
 
 run-dictionary:
-	python3 ./prettyPrinter.py redwall/functions.rwall
+	python3 ./prettyPrinter.py redwall/dictionary.rwall
 
 cat-problem:
 	cat redwall/test_problem.rwall
@@ -65,6 +65,9 @@ run-problem:
 
 clean:
 	rm -rf ./__pycache__
+
+
+# EXTRAS
 
 pretty:
 	python3 ./prettyPrinter.py redwall/simple.rwall
@@ -85,3 +88,36 @@ sanity-check:
 	python3 ./prettyPrinter.py redwall/functions.rwall
 	python3 ./prettyPrinter.py redwall/test_problem.rwall
 	@echo "Still Insane but the prettyPrinter Works...."
+
+finished:
+	@echo "\n\n######################## ERROR 1 ########################\n\n"
+	make cat-error1
+	make run-error1
+	@echo "\n\n######################## ERROR 2 ########################\n\n"
+	make cat-error2
+	make run-error2
+	@echo "\n\n######################## ERROR 3 ########################\n\n"
+	make cat-error3
+	make run-error3
+	@echo "\n\n######################## Arrays ########################\n\n"
+	make cat-arrays
+	make run-arrays
+	@echo "\n\n###################### conditionals ######################\n\n"
+	make cat-conditionals
+	make run-conditionals
+	@echo "\n\n######################## recursion ########################\n\n"
+	make cat-recursion
+	make run-recursion
+	@echo "\n\n######################## iteration ########################\n\n"
+	make cat-iteration
+	make run-iteration
+	@echo "\n\n######################## functions ########################\n\n"
+	make cat-functions
+	make run-functions
+	@echo "\n\n####################### dictionary #######################\n\n"
+	make cat-dictionary
+	make run-dictionary
+	@echo "\n\n######################## problem ########################\n\n"
+	make cat-problem
+	make run-problem
+	make clean
