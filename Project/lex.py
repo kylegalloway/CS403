@@ -135,6 +135,7 @@ class Lexer():
         if (buff == "nil"): return Lexeme("NIL", "nil")
         if (buff == "true"): return Lexeme("TRUE", "true")
         if (buff == "false"): return Lexeme("FALSE", "false")
+        if (buff == "print"): return Lexeme("PRINT", "print")
 
         return Lexeme("ID", buff)
 

@@ -173,6 +173,9 @@ class Parser():
     #         | functionDefinition
     #         | OBRACKET optExprList CBRACKET
     #         | NIL
+    #         | TRUE
+    #         | FALSE
+    #         | PRINT OPAREN exprList CPAREN
     def primary(self):
         # print("In primary")
         if (self.idDefPending()):
@@ -212,6 +215,9 @@ class Parser():
             return self.cons("PRIMARY", t, None)
         elif (self.check("FALSE")):
             f = self.match("FALSE")
+            return self.cons("PRIMARY", f, None)
+        elif (self.check("PRINT")):
+            f = self.match("PRINT")
             return self.cons("PRIMARY", f, None)
 
     # operator : EQUAL
@@ -423,7 +429,7 @@ class Parser():
 
     def primaryPending(self):
         # print("In primaryPending")
-        return self.idDefPending() or self.check("STRING") or self.check("INTEGER") or self.check("NOT") or self.check("OPAREN") or self.k_lambdaPending() or self.functionDefinitionPending() or self.check("OBRACKET") or self.check("NIL") or self.check("TRUE") or self.check("FALSE")
+        return self.idDefPending() or self.check("STRING") or self.check("INTEGER") or self.check("NOT") or self.check("OPAREN") or self.k_lambdaPending() or self.functionDefinitionPending() or self.check("OBRACKET") or self.check("NIL") or self.check("TRUE") or self.check("FALSE") or self.check("PRINT")
 
     def operatorPending(self):
         # print("In operatorPending")

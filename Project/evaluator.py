@@ -84,6 +84,8 @@ def evaluate(tree, env):
         return evalTRUE(tree, env)
     elif (tree.ltype == "FALSE"):
         return evalFALSE(tree, env)
+    elif (tree.ltype == "CLOSURE"):
+        return evalCLOSURE(tree, env)
     else:
         return "ERROR: "+tree.ltype+" : "+tree.lvalue
 
@@ -114,7 +116,7 @@ def evalFUNCDEF(tree, env):
     return env.insert(variable, close)
 
 def evalIDDEF(tree, env):
-    pass
+    return evaluate(tree.left, env)
 
 def evalARRAYACCESS(tree, env):
     pass
@@ -127,12 +129,8 @@ def evalFUNCCALL(tree, env):
     # Eval the function def to get the entire closure
     closure = evaluate(f, env)
 
-    # To handle user functions and built-ins
-    if (closure.type == BUILTIN):
-        return evalBuiltin(closure, env, args)
-    # To handle returns
-    if (closure.type == RETURNED):
-        return evalReturn(closure, env, args)
+    if(closure.ltype != "CLOSURE"):
+        return "ERROR: Tried to call "+closure.lvalue+" as function."
 
     # This gets the defining environment from the closure
     denv = getEnv(closure)
@@ -142,13 +140,27 @@ def evalFUNCCALL(tree, env):
     params = getParams(closure)
 
     # This evaluates the arguments in the calling environment
-    eargs = evalArgs(args, env)
+    eargs = evalOPTEXPRLIST(args, env)
     # This builds the new table and attaches it to the denv
-    xenv = extend(params, eargs, denv)
+    xenv = env.extend(params, eargs, denv)
 
     # This evaluates the function in the new extended environment
     return evaluate(body, xenv)
 
+def getArgs(tree):
+    return tree.right.right.left
+
+def getFunction(tree):
+    return tree.left
+
+def getEnv(tree):
+    return tree.right.right
+
+def getBody(tree):
+    return tree.right.left
+
+def getParams(tree):
+    return tree.left
 
 def evalOPTPARAMLIST(tree, env):
     if(tree.left != None):
@@ -175,8 +187,10 @@ def evalEXPRLIST(tree, env):
 def evalEXPR(tree, env):
     if(tree.right == None):
         return evaluate(tree.left, env)
-    else:
-        pass
+    elif(tree.left == "OPAREN"):
+        return evaluate(tree.right.left, env)
+    elif(tree.left == "OBRACKET"):
+        return Lexeme("ARRAY", evaluate(tree.right.left, env), None, None)
 
 def evalPRIMARY(tree, env):
     if(tree.right == None):
@@ -198,9 +212,17 @@ def evalOPTSTATEMENTLIST(tree, env):
 def evalSTATEMENTLIST(tree, env):
     if(tree.right == None):
         return evaluate(tree.left, env)
-    else:
+    elif(tree.right == "JOIN"):
+        # arr = []
+        # arr.append(evaluate(tree.left, env))
+        # arr.append(evaluate(tree.right.left, env))
+        # return arr
+        pass
         pass
 
+        # arr.append(evaluate(tree.left, env))
+        # arr.append(evaluate(tree.right.left, env))
+        # return arr
 def evalSTATEMENT(tree, env):
     if(tree.right == None):
         return evaluate(tree.left, env)
@@ -257,8 +279,8 @@ def evalINTEGER(tree,env):
 # def evalRETURN(tree,env):
 #     pass
 
-# def evalID(tree,env):
-#     pass
+def evalID(tree,env):
+    return env.lookup(tree)
 
 # def evalNIL(tree, env):
 #     pass
@@ -269,8 +291,11 @@ def evalINTEGER(tree,env):
 # def evalFALSE(tree, env):
 #     pass
 
+# def evalCLOSURE(tree, env):
+#     pass
 
-
+def evalBUILTIN(tree, env):
+    pass
 
 
 import sys

@@ -39,6 +39,7 @@ primary : idDef
         | NIL
         | TRUE
         | FALSE
+        | PRINT OPAREN exprList CPAREN
 
 operator : EQUAL
          | NOTEQUAL

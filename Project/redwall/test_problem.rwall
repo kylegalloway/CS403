@@ -58,7 +58,7 @@ func apply(f, L, size)
     return "DONE";
 }
 
-func error(L) { return apply(println, L, 2); }
+func error(L) { return apply(print, L, 2); }
 
 func make_wire()
 {
@@ -350,15 +350,15 @@ func wiretest()
     var y0 = make_wire();
     var o0 = make_wire();
     var carry = make_wire();
-    println(full_adder(x0, y0, 0, o0, carry));
+    print(full_adder(x0, y0, 0, o0, carry));
     set_signal(x0, 1);
     propagate();
-    println(["X        = 0", get_signal(x0)]);
-    println(["Y        = 0", get_signal(y0)]);
-    println(["Result is: ", get_signal(o0)]);
+    print("X        = 0", get_signal(x0));
+    print("Y        = 0", get_signal(y0));
+    print("Result is: ", get_signal(o0));
     set_signal(y0, 1);
     propagate();
-    println(["X        = 0", get_signal(x0)]);
-    println(["Y        = 0", get_signal(y0)]);
-    println(["Result is: ", get_signal(o0)]);
+    print("X        = 0", get_signal(x0));
+    print("Y        = 0", get_signal(y0));
+    print("Result is: ", get_signal(o0));
 }
