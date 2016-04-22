@@ -3,8 +3,8 @@ func x()
     return 1 + 1;
 }
 
-var z = 1;
-#$
 var a = x();
-var a = print(x());
+var c = print(a);
+#$
+var z = 1 + 1;
 var b = print(1," ", 2);

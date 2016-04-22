@@ -259,9 +259,9 @@ def evalPRIMARY(tree, env):
     elif(tree.left == "OBRACKET"):
         return evaluate(Lexeme("ARRAY", evaluate(tree.right.left, env), None, None), env)
 
-def OPERATOR(tree, env):
-    l = tree.right.left
-    r = tree.right.right.left
+def evalOPERATOR(tree, env):
+    l = eval(tree.right.left.left.lvalue)
+    r = eval(tree.right.right.left.left.lvalue)
     op = tree.left.left
     if (op.ltype == "EQUAL"):
         return (l == r)
@@ -414,10 +414,8 @@ def evalID(tree,env):
 
 def evalPRINT(tree, env):
     # print("In evalPRINT")
-    eargs = evalEXPRLIST(tree.right.right.left, env);
-    if(isinstance(eargs,list)):
-        for i in range(len(eargs)):
-            print(eargs[i], end="")
+    eargs = evaluate(tree.right.right.left, env);
+    print(eargs)
 
 # def evalEQUAL(tree, env):
 #     return tree
