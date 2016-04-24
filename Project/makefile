@@ -25,7 +25,7 @@ cat-conditionals:
 	cat redwall/conditionals.rwall
 
 run-conditionals:
-	python3 ./prettyPrinter.py redwall/conditionals.rwall
+	python3 ./evaluator.py redwall/conditionals.rwall
 
 cat-recursion:
 	cat redwall/recursion.rwall

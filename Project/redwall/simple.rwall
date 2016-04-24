@@ -1,12 +1,13 @@
-var a = lambda(){ return 1; };
-#$
-func x()
+func x(f)
 {
-    return 1 + 1;
+    if(f > 2 ^ 15)
+    {
+        return "BIG";
+    }
 }
 
-var a = x();
 var z = 2 ^ 16;
-#$ None below works
+var a = print(x(z));
 var c = print(z);
+#$ None below works
 var b = print(1," ", 2);
