@@ -172,50 +172,50 @@ def evalARRAYACCESS(tree, env):
     pass
 
 def evalFUNCCALL(tree, env):
-    # print("In evalFUNCCALL")
+    print("In evalFUNCCALL")
     # Get the args for the function call
     args = getArgs(tree)
-    # print("args", end=" : ")
-    # print(args)
+    print("args", end=" : ")
+    print(args)
     # Get the function def from the ID
     f = getFunction(tree)
-    # print("f", end=" : ")
-    # print(f)
+    print("f", end=" : ")
+    print(f)
     # Eval the function def to get the entire closure
     closure = evaluate(f, env)
-    # print("closure", end=" : ")
-    # print(closure)
+    print("closure", end=" : ")
+    print(closure)
 
     if(closure.ltype != "CLOSURE"):
         return "ERROR: Tried to call "+closure.lvalue+" as function."
 
     # This gets the defining environment from the closure
     denv = getEnv(closure)
-    # print("denv", end=" : ")
-    # print(denv)
+    print("denv", end=" : ")
+    print(denv)
     # This gets the function body from the closure
     body = getBody(closure)
-    # print("body", end=" : ")
-    # print(body)
+    print("body", end=" : ")
+    print(body)
     # This gets the formal parameters from the closure
     params = getParams(closure)
-    # print("params", end=" : ")
-    # print(params)
+    print("params", end=" : ")
+    print(params.left.left)
 
     # This evaluates the arguments in the calling environment
     eargs = evaluate(args, env)
-    # print("eargs", end=" : ")
-    # print(eargs)
+    print("eargs", end=" : ")
+    print(eargs)
 
     # This evaluates the params in the calling environment
     eparams = evaluate(params, env)
-    # print("eparams", end=" : ")
-    # print(eparams)
+    print("eparams", end=" : ")
+    print(eparams)
 
     # This builds the new table and attaches it to the denv
     xenv = extend(eparams, eargs, denv)
-    # print("xenv", end=" : ")
-    # print(xenv)
+    print("xenv", end=" : ")
+    print(xenv)
 
     # This evaluates the function in the new extended environment
     return evaluate(body, xenv)
@@ -433,8 +433,6 @@ def evalINTEGER(tree,env):
 
 def evalID(tree,env):
     # print("In evalID")
-    if(type(env) == type(Lexeme())):
-        print(env.ltype)
     return lookup(tree, env)
 
 # def evalNIL(tree, env):
