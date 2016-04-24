@@ -151,6 +151,8 @@ def evalDEFINITION(tree, env):
 def evalVARDEF(tree, env):
     # print("In evalVARDEF")
     variable = tree.right.left
+    # print("TEST")
+    # print(tree.right.right.right.left)
     value = evaluate(tree.right.right.right.left, env)
     return insert(variable, value, env)
 
@@ -208,15 +210,16 @@ def evalFUNCCALL(tree, env):
     print(eargs)
 
     # This evaluates the params in the calling environment
-    eparams = evaluate(params, env)
-    print("eparams", end=" : ")
-    print(eparams)
+    # eparams = evaluate(params, env)
+    # print("eparams", end=" : ")
+    # print(eparams)
 
     # This builds the new table and attaches it to the denv
     xenv = extend(params, eargs, denv)
     print("xenv", end=" : ")
     print(xenv)
 
+    print("CALLFUNCITON")
     # This evaluates the function in the new extended environment
     return evaluate(body, xenv)
 
@@ -292,11 +295,12 @@ def evalPRIMARY(tree, env):
         return evaluate(Lexeme("ARRAY", evaluate(tree.right.left, env), None, None), env)
 
 def evalOPERATOR(tree, env):
-    leftprim = tree.right.left.left
-    rightprim = tree.right.right.left.left
-    while((leftprim.ltype != "INTEGER") and (leftprim.ltype != "STRING")):
-        leftprim = evaluate(tree.right.left.left, env)
-        rightprim = evaluate(tree.right.right.left.left, env)
+    print("TEST")
+    print(lookup(tree.right.left.left,env))
+    leftprim = evaluate(tree.right.left.left, env)
+    rightprim = evaluate(tree.right.right.left, env)
+    # print(leftprim)
+    # print(rightprim)
     l = eval(leftprim.lvalue)
     r = eval(rightprim.lvalue)
     op = tree.left.left
@@ -520,20 +524,25 @@ def evalMINPARAMLIST(tree, env):
 def cons(value, left, right):
     return Lexeme(value, value, left, right)
 
-def create():
+def create(environment=None):
     ids = Lexeme("IDS", "IDS", None, None)
     vals = Lexeme("VALS", "VALS", None, None)
-    return cons("ENV", ids, cons("JOIN", vals, None))
+    return cons("ENV", ids, cons("JOIN", vals, environment))
 
 def lookup(variable, environment):
+
     currEnv = environment
     while(currEnv != None):
         ids = environment.left
         vals = environment.right.left
         if(ids.left != None):
             while(ids != None):
-                if(variable.lvalue == ids.left.lvalue):
-                    return vals.left
+                if(type(variable) == type(Lexeme())):
+                    if(variable.lvalue == ids.left.lvalue):
+                        return vals.left
+                else:
+                    if(variable == ids.left.lvalue):
+                        return vals.left
                 ids = ids.right
                 vals = vals.right
         currEnv = currEnv.right.right
@@ -562,14 +571,17 @@ def insert(variable, value, environment):
         environment.left = Lexeme("IDS", "IDS", variable, environment.left)
         environment.right.left.ltype = "JOIN"
         environment.right.left.lvalue = "JOIN"
-        environment.right.left = Lexeme("VALS", "VALS", value, environment.right.left)
+        environment.right.left = Lexeme("VALS", "VALS", Lexeme("VAL", value), environment.right.left)
     else:
         environment.left.left = variable
         environment.right.left.left = value
     return value
 
 def extend(variables, values, env):
-    return cons("ENV", variables, cons("JOIN", values, env))
+    e = create(env)
+    insert(variables, values, env)
+    return e
+    # return cons("ENV", variables, cons("JOIN", values, env))
 
 #==============================================================================
 

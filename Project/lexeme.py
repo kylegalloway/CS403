@@ -21,7 +21,7 @@ class Lexeme():
 
         if (val == None):
             return "NaN"
-        return (val + "\n")
+        return (str(val) + "\n")
 
         # if (self.right != None):
         #     if (self.left != None):
