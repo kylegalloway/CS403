@@ -213,7 +213,7 @@ def evalFUNCCALL(tree, env):
     print(eparams)
 
     # This builds the new table and attaches it to the denv
-    xenv = extend(eparams, eargs, denv)
+    xenv = extend(params, eargs, denv)
     print("xenv", end=" : ")
     print(xenv)
 
