@@ -154,7 +154,10 @@ def evalFUNCDEF(tree, env):
     body = tree.right.right.right.right.right.left
     right = Lexeme("JOIN", "JOIN", body, env)
     close = Lexeme("CLOSURE", "CLOSURE", params, right)
-    return insert(variable, close, env)
+    ret = insert(variable, close, env)
+    print(env.left.left)
+    print(env.left.right)
+    return ret
 
 def evalIDDEF(tree, env):
     # print("In evalIDDEF")
@@ -166,6 +169,8 @@ def evalARRAYACCESS(tree, env):
 
 def evalFUNCCALL(tree, env):
     # print("In evalFUNCCALL")
+    # print(env.right.left.left)
+    # print(env.right.left.right)
     # Get the args for the function call
     args = getArgs(tree)
     print("args", end=" : ")
@@ -284,6 +289,7 @@ def evalOPERATOR(tree, env):
     l = tree.left
     r = tree.right
     op = tree.lvalue
+    # op = tree.lvalue.left
     new = Lexeme(str(op).strip(), str(op).strip(), l, r)
     return evaluate(new, env)
 
@@ -492,14 +498,17 @@ def update(variable, value, environment):
     print("Variable ",variable.lvalue," is undefined.");
 
 def insert(variable,value,env):
-    # print("INSERT")
+    print("INSERT")
     # print(variable)
     # print(value)
     # if(value.lvalue == "CLOSURE"):
     #     print(value.left.left)
     ids = Lexeme("IDS", "IDS", variable, env.left)
     vals = Lexeme("VALS", "VALS", value, env.right.left)
-    return cons("ENV", ids, cons("JOIN", vals, env))
+    # return cons("ENV", ids, cons("JOIN", vals, env))
+    env = cons("ENV", ids, cons("JOIN", vals, env))
+    print(env.left.left)
+    print(env.left.right)
     return value
 
 def extend(variables, values, env):

@@ -229,9 +229,9 @@ def printPRIMARY(tree):
         prettyPrint(tree.right)
 
 def printOPERATOR(tree):
-    l = tree.right.left
-    r = tree.right.right.left
-    op = tree.left.left
+    l = tree.left
+    r = tree.right.left
+    op = tree.lvalue.left
     prettyPrint(l)
     prettyPrint(op)
     prettyPrint(r)
