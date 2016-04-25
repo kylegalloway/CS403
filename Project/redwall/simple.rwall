@@ -1,4 +1,4 @@
-func x(f)
+func f(x)
 {
     if(f > 100)
     {
@@ -7,7 +7,7 @@ func x(f)
 }
 
 var z = 2 ^ 16;
-var a = print(x(z));
+var a = print(f(z));
 #$ None below works
 var c = print(z);
 var b = print(1," ", 2);

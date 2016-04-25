@@ -1,5 +1,5 @@
 class Lexeme():
-    def __init__(self, t = None, v = None, left = None, right = None):
+    def __init__(self, t = "EMPTY", v = None, left = None, right = None):
         self.ltype = t
         self.lvalue = v
         self.left = left

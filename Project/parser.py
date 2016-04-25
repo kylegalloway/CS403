@@ -155,7 +155,8 @@ class Parser():
         if(self.operatorPending()):
             o = self.operator()
             e = self.expr()
-            return self.cons("EXPR", None, self.cons("OPERATOR", o, self.cons("JOIN", p, e)))
+            return Lexeme("EXPR", "EXPR", Lexeme("OPERATOR", o, p, e))
+            # return self.cons("EXPR", None, self.cons("OPERATOR", o, self.cons("JOIN", p, e)))
             # return self.cons("EXPR", p, self.cons("JOIN", o, self.cons("JOIN", e, None)))
         return self.cons("EXPR", p, None)
 

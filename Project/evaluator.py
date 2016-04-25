@@ -1,5 +1,4 @@
 from parser import Parser
-# from environment import Environment
 from lexeme import Lexeme
 
 def main(filename):
@@ -123,12 +122,6 @@ def evaluate(tree, env):
         return evalASSIGN(tree, env)
     elif (tree.ltype == "DOUBLEEQUAL"):
         return evalDOUBLEEQUAL(tree, env)
-    elif (tree.ltype == "MINSTATEMENTLIST"):
-        return evalMINSTATEMENTLIST(tree, env)
-    elif (tree.ltype == "MINEXPRLIST"):
-        return evalMINEXPRLIST(tree, env)
-    elif (tree.ltype == "MINPARAMLIST"):
-        return evalMINPARAMLIST(tree, env)
     else:
         return "ERROR: "+tree.ltype+" : "+tree.lvalue
 
@@ -151,8 +144,6 @@ def evalDEFINITION(tree, env):
 def evalVARDEF(tree, env):
     # print("In evalVARDEF")
     variable = tree.right.left
-    # print("TEST")
-    # print(tree.right.right.right.left)
     value = evaluate(tree.right.right.right.left, env)
     return insert(variable, value, env)
 
@@ -174,7 +165,7 @@ def evalARRAYACCESS(tree, env):
     pass
 
 def evalFUNCCALL(tree, env):
-    print("In evalFUNCCALL")
+    # print("In evalFUNCCALL")
     # Get the args for the function call
     args = getArgs(tree)
     print("args", end=" : ")
@@ -210,7 +201,7 @@ def evalFUNCCALL(tree, env):
     print(eargs)
 
     # This evaluates the params in the calling environment
-    # eparams = evaluate(params, env)
+    # eparams = evaluate(params.left.left, env)
     # print("eparams", end=" : ")
     # print(eparams)
 
@@ -219,7 +210,7 @@ def evalFUNCCALL(tree, env):
     print("xenv", end=" : ")
     print(xenv)
 
-    print("CALLFUNCITON")
+    # print("CALLFUNCITON")
     # This evaluates the function in the new extended environment
     return evaluate(body, xenv)
 
@@ -249,11 +240,9 @@ def evalPARAMLIST(tree, env):
     r = None
     if(tree.right == None):
         return evaluate(tree.left, env)
-        # return Lexeme("MINPARAMLIST", "MINPARAMLIST", tree.left, None)
     if(tree.right.right.left != None):
         r = evaluate(tree.right.right.left, env)
         new = Lexeme("JOIN", "JOIN", evaluate(tree.left, env), r)
-    # new = Lexeme("MINPARAMLIST", "MINPARAMLIST", tree.left, r)
     return new
 
 def evalOPTEXPRLIST(tree, env):
@@ -267,11 +256,9 @@ def evalEXPRLIST(tree, env):
     r = None
     if(tree.right == None):
         return evaluate(tree.left, env)
-        # return Lexeme("MINEXPRLIST", "MINEXPRLIST", tree.left, None)
     if(tree.right.right.left != None):
         r = evaluate(tree.right.right.left, env)
         new = Lexeme("JOIN", "JOIN", evaluate(tree.left, env), r)
-    # new = Lexeme("MINEXPRLIST", "MINEXPRLIST", tree.left, r)
     return new
 
 def evalEXPR(tree, env):
@@ -280,10 +267,6 @@ def evalEXPR(tree, env):
         return evaluate(tree.left, env)
     else:
         return evaluate(tree.right, env)
-        # l = evaluate(tree.left, env)
-        # op = evaluate(tree.right.left, env)
-        # r = evaluate(tree.right.right.left, env)
-        # op = tree.right.left
 
 def evalPRIMARY(tree, env):
     # print("In evalPRIMARY")
@@ -295,43 +278,12 @@ def evalPRIMARY(tree, env):
         return evaluate(Lexeme("ARRAY", evaluate(tree.right.left, env), None, None), env)
 
 def evalOPERATOR(tree, env):
-    print("TEST")
-    print(lookup(tree.right.left.left,env))
-    leftprim = evaluate(tree.right.left.left, env)
-    rightprim = evaluate(tree.right.right.left, env)
-    # print(leftprim)
-    # print(rightprim)
-    l = eval(leftprim.lvalue)
-    r = eval(rightprim.lvalue)
-    op = tree.left.left
-    if (op.ltype == "EQUAL"):
-        return (l == r)
-    elif (op.ltype == "NOTEQUAL"):
-        return (l != r)
-    elif (op.ltype == "GREATER"):
-        return (l > r)
-    elif (op.ltype == "LESS"):
-        return (l < r)
-    elif (op.ltype == "GREATEREQUAL"):
-        return (l >= r)
-    elif (op.ltype == "LESSEQUAL"):
-        return (l <= r)
-    elif (op.ltype == "PLUS"):
-        return (l + r)
-    elif (op.ltype == "MINUS"):
-        return (l - r)
-    elif (op.ltype == "MULTIPLY"):
-        return (l * r)
-    elif (op.ltype == "DIVIDE"):
-        return (l / r)
-    elif (op.ltype == "POWER"):
-        return (l ** r)
-    elif (op.ltype == "AND"):
-        return (l and r)
-    elif (op.ltype == "OR"):
-        return (l or r)
-    elif (op.ltype == "DOUBLEEQUAL"):
-        return (l == r)
+    # print("In evalOPERATOR")
+    l = tree.left
+    r = tree.right
+    op = tree.lvalue
+    new = Lexeme(str(op).strip(), str(op).strip(), l, r)
+    return evaluate(new, env)
 
 def evalBLOCK(tree, env):
     # print("In evalBLOCK")
@@ -348,11 +300,9 @@ def evalSTATEMENTLIST(tree, env):
     r = None
     if(tree.right == None):
         return evaluate(tree.left, env)
-        # return Lexeme("MINSTATEMENTLIST", "MINSTATEMENTLIST", tree.left, None)
     if(tree.right.right.left != None):
         r = evaluate(tree.right.left, env)
         new = Lexeme("JOIN", "JOIN", evaluate(tree.left, env), r)
-    # new = Lexeme("MINSTATEMENTLIST", "MINSTATEMENTLIST", tree.left, r)
     return new
 
 def evalSTATEMENT(tree, env):
@@ -399,10 +349,6 @@ def evalLAMBDA(tree, env):
     close = Lexeme("CLOSURE", "CLOSURE", params, right)
     return close
 
-# def evalJOIN(tree, env):
-# print("In evalJOIN")
-#     pass
-
 def evalSTRING(tree,env):
     # print("In evalSTRING")
     return tree
@@ -411,111 +357,85 @@ def evalINTEGER(tree,env):
     # print("In evalINTEGER")
     return tree
 
-# def evalFUNCTION(tree,env):
-# print("In evalFUNCTION")
-#     pass
-
-# def evalVAR(tree,env):
-# print("In evalVAR")
-#     pass
-
-# def evalWHILE(tree,env):
-# print("In evalWHILE")
-#     pass
-
-# def evalIF(tree,env):
-# print("In evalIF")
-#     pass
-
-# def evalELSE(tree,env):
-# print("In evalELSE")
-#     pass
-
-# def evalRETURN(tree,env):
-# print("In evalRETURN")
-#     pass
-
 def evalID(tree,env):
     # print("In evalID")
+    # print(tree)
     return lookup(tree, env)
 
-# def evalNIL(tree, env):
-# print("In evalNIL")
-#     pass
+def evalEQUAL(tree, env):
+    l = eval(evaluate(tree.left, env).lvalue)
+    r = eval(evaluate(tree.right, env).lvalue)
+    return (l == r)
 
-# def evalTRUE(tree, env):
-# print("In evalTRUE")
-#     pass
+def evalNOTEQUAL(tree, env):
+    l = eval(evaluate(tree.left, env).lvalue)
+    r = eval(evaluate(tree.right, env).lvalue)
+    return (l != r)
 
-# def evalFALSE(tree, env):
-# print("In evalFALSE")
-#     pass
+def evalGREATER(tree, env):
+    l = eval(evaluate(tree.left, env).lvalue)
+    r = eval(evaluate(tree.right, env).lvalue)
+    return (l > r)
 
-# def evalCLOSURE(tree, env):
-# print("In evalCLOSURE")
-#     pass
+def evalLESS(tree, env):
+    l = eval(evaluate(tree.left, env).lvalue)
+    r = eval(evaluate(tree.right, env).lvalue)
+    return (l < r)
+
+def evalGREATEREQUAL(tree, env):
+    l = eval(evaluate(tree.left, env).lvalue)
+    r = eval(evaluate(tree.right, env).lvalue)
+    return (l >= r)
+
+def evalLESSEQUAL(tree, env):
+    l = eval(evaluate(tree.left, env).lvalue)
+    r = eval(evaluate(tree.right, env).lvalue)
+    return (l <= r)
+
+def evalPLUS(tree, env):
+    l = eval(evaluate(tree.left, env).lvalue)
+    r = eval(evaluate(tree.right, env).lvalue)
+    return (l + r)
+
+def evalMINUS(tree, env):
+    l = eval(evaluate(tree.left, env).lvalue)
+    r = eval(evaluate(tree.right, env).lvalue)
+    return (l - r)
+
+def evalMULTIPLY(tree, env):
+    l = eval(evaluate(tree.left, env).lvalue)
+    r = eval(evaluate(tree.right, env).lvalue)
+    return (l * r)
+
+def evalDIVIDE(tree, env):
+    l = eval(evaluate(tree.left, env).lvalue)
+    r = eval(evaluate(tree.right, env).lvalue)
+    return (l / r)
+
+def evalPOWER(tree, env):
+    l = eval(evaluate(tree.left, env).lvalue)
+    r = eval(evaluate(tree.right, env).lvalue)
+    return (l ** r)
+
+def evalAND(tree, env):
+    l = eval(evaluate(tree.left, env).lvalue)
+    r = eval(evaluate(tree.right, env).lvalue)
+    return (l and r)
+
+def evalOR(tree, env):
+    l = eval(evaluate(tree.left, env).lvalue)
+    r = eval(evaluate(tree.right, env).lvalue)
+    return (l or r)
+
+def evalDOUBLEEQUAL(tree, env):
+    l = eval(evaluate(tree.left, env).lvalue)
+    r = eval(evaluate(tree.right, env).lvalue)
+    return (l == r)
 
 def evalPRINT(tree, env):
     # print("In evalPRINT")
     eargs = evaluate(tree.right.right.left, env);
     print(eargs)
-
-# def evalEQUAL(tree, env):
-#     return tree
-
-# def evalNOTEQUAL(tree, env):
-#     return tree
-
-# def evalGREATER(tree, env):
-#     return tree
-
-# def evalLESS(tree, env):
-#     return tree
-
-# def evalGREATEREQUAL(tree, env):
-#     return tree
-
-# def evalLESSEQUAL(tree, env):
-#     return tree
-
-# def evalPLUS(tree, env):
-#     return tree
-
-# def evalMINUS(tree, env):
-#     return tree
-
-# def evalMULTIPLY(tree, env):
-#     return tree
-
-# def evalDIVIDE(tree, env):
-#     return tree
-
-# def evalPOWER(tree, env):
-#     return tree
-
-# def evalAND(tree, env):
-#     return tree
-
-# def evalOR(tree, env):
-#     return tree
-
-# def evalASSIGN(tree, env):
-#     return tree
-
-# def evalDOUBLEEQUAL(tree, env):
-#     return tree
-
-def evalMINSTATEMENTLIST(tree, env):
-    print("In MINSTATEMENTLIST")
-    return tree
-
-def evalMINEXPRLIST(tree, env):
-    print("In MINEXPRLIST")
-    return tree
-
-def evalMINPARAMLIST(tree, env):
-    print("In MINPARAMLIST")
-    return tree
 
 
 #==============================================================================
@@ -530,12 +450,11 @@ def create(environment=None):
     return cons("ENV", ids, cons("JOIN", vals, environment))
 
 def lookup(variable, environment):
-
     currEnv = environment
     while(currEnv != None):
-        ids = environment.left
-        vals = environment.right.left
-        if(ids.left != None):
+        ids = currEnv.left
+        vals = currEnv.right.left
+        if (ids.left != None):
             while(ids != None):
                 if(type(variable) == type(Lexeme())):
                     if(variable.lvalue == ids.left.lvalue):
@@ -545,14 +464,19 @@ def lookup(variable, environment):
                         return vals.left
                 ids = ids.right
                 vals = vals.right
+        print(currEnv.left)
         currEnv = currEnv.right.right
-    print("Variable ",variable.lvalue," is undefined.");
+    if(type(variable) == type(Lexeme())):
+        print("Variable ",variable.lvalue," is undefined.");
+    else:
+        print("Variable ",variable," is undefined.");
+
 
 def update(variable, value, environment):
     currEnv = environment
     while(currEnv != None):
-        ids = environment.left
-        vals = environment.right.left
+        ids = currEnv.left
+        vals = currEnv.right.left
         if(ids.left != None):
             while(ids != None):
                 if(variable.lvalue == ids.left.lvalue):
@@ -563,18 +487,13 @@ def update(variable, value, environment):
         currEnv = currEnv.right.right
     print("Variable ",variable.lvalue," is undefined.");
 
-
-def insert(variable, value, environment):
-    if(environment.left.left != None):
-        environment.left.ltype = "JOIN"
-        environment.left.lvalue = "JOIN"
-        environment.left = Lexeme("IDS", "IDS", variable, environment.left)
-        environment.right.left.ltype = "JOIN"
-        environment.right.left.lvalue = "JOIN"
-        environment.right.left = Lexeme("VALS", "VALS", Lexeme("VAL", value), environment.right.left)
-    else:
-        environment.left.left = variable
-        environment.right.left.left = value
+def insert(variable,value,env):
+    # print("INSERT")
+    # print(variable)
+    # print(value)
+    ids = Lexeme("IDS", "IDS", variable, env.left)
+    vals = Lexeme("VALS", "VALS", value, env.right.left)
+    return cons("ENV", ids, cons("JOIN", vals, env))
     return value
 
 def extend(variables, values, env):
