@@ -150,6 +150,8 @@ def evalVARDEF(tree, env):
 def evalFUNCDEF(tree, env):
     # print("In evalFUNCDEF")
     variable = tree.right.left
+    print("THIS")
+    print(tree.right.right.right.left)
     params = tree.right.right.right.left
     body = tree.right.right.right.right.right.left
     right = Lexeme("JOIN", "JOIN", body, env)
