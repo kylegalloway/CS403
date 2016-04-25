@@ -150,9 +150,7 @@ def evalVARDEF(tree, env):
 def evalFUNCDEF(tree, env):
     # print("In evalFUNCDEF")
     variable = tree.right.left
-    print("THIS")
-    print(tree.right.right.right.left)
-    params = tree.right.right.right.left
+    params = tree.right.right.right.left.left
     body = tree.right.right.right.right.right.left
     right = Lexeme("JOIN", "JOIN", body, env)
     close = Lexeme("CLOSURE", "CLOSURE", params, right)
@@ -181,8 +179,10 @@ def evalFUNCCALL(tree, env):
     print("closure", end=" : ")
     print(closure)
 
-    if(closure.ltype != "CLOSURE"):
-        return "ERROR: Tried to call "+closure.lvalue+" as function."
+    if(closure == None):
+        return "ERROR: Closure was None"
+    elif(closure.ltype != "CLOSURE"):
+            return "ERROR: Tried to call "+closure+" as function."
 
     # This gets the defining environment from the closure
     denv = getEnv(closure)
@@ -458,6 +458,8 @@ def lookup(variable, environment):
         vals = currEnv.right.left
         if (ids.left != None):
             while(ids != None):
+                print("LOOKUP")
+                print(variable)
                 if(type(variable) == type(Lexeme())):
                     if(variable.lvalue == ids.left.lvalue):
                         return vals.left
@@ -493,6 +495,8 @@ def insert(variable,value,env):
     # print("INSERT")
     # print(variable)
     # print(value)
+    # if(value.lvalue == "CLOSURE"):
+    #     print(value.left.left)
     ids = Lexeme("IDS", "IDS", variable, env.left)
     vals = Lexeme("VALS", "VALS", value, env.right.left)
     return cons("ENV", ids, cons("JOIN", vals, env))
