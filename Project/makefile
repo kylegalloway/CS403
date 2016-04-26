@@ -67,7 +67,7 @@ clean:
 	rm -rf ./__pycache__
 
 
-# EXTRAS
+# EXTRAS ======================================================================
 
 pretty:
 	python3 ./prettyPrinter.py redwall/simple.rwall

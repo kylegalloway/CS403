@@ -5,7 +5,7 @@ def main(filename):
     p = Parser(filename)
     parse_tree = p.parse()
     # E = Environment()
-    E = create()
+    E = create(None)
     # print(evaluate(parse_tree, env))
     evaluate(parse_tree, E)
 
@@ -143,20 +143,21 @@ def evalDEFINITION(tree, env):
 
 def evalVARDEF(tree, env):
     # print("In evalVARDEF")
-    variable = tree.right.left
+    variable = str(tree.right.left.lvalue)
     value = evaluate(tree.right.right.right.left, env)
     return insert(variable, value, env)
 
 def evalFUNCDEF(tree, env):
     # print("In evalFUNCDEF")
-    variable = tree.right.left
+    # print(tree.right.left.lvalue)
+    variable = str(tree.right.left.lvalue)
     params = tree.right.right.right.left.left
     body = tree.right.right.right.right.right.left
     right = Lexeme("JOIN", "JOIN", body, env)
     close = Lexeme("CLOSURE", "CLOSURE", params, right)
     ret = insert(variable, close, env)
-    print(env.left.left)
-    print(env.left.right)
+    # print(env.left.left)
+    # print(env.left.right)
     return ret
 
 def evalIDDEF(tree, env):
@@ -169,18 +170,16 @@ def evalARRAYACCESS(tree, env):
 
 def evalFUNCCALL(tree, env):
     # print("In evalFUNCCALL")
-    # print(env.right.left.left)
-    # print(env.right.left.right)
     # Get the args for the function call
     args = getArgs(tree)
     print("args", end=" : ")
     print(args)
     # Get the function def from the ID
-    f = getFunction(tree)
-    print("f", end=" : ")
-    print(f)
+    funcName = getFunction(tree)
+    print("funcName", end=" : ")
+    print(funcName)
     # Eval the function def to get the entire closure
-    closure = evaluate(f, env)
+    closure = evaluate(funcName, env)
     print("closure", end=" : ")
     print(closure)
 
@@ -368,7 +367,7 @@ def evalINTEGER(tree,env):
 def evalID(tree,env):
     # print("In evalID")
     # print(tree)
-    return lookup(tree, env)
+    return lookup(str(tree.lvalue), env)
 
 def evalEQUAL(tree, env):
     l = eval(evaluate(tree.left, env).lvalue)
@@ -449,73 +448,121 @@ def evalPRINT(tree, env):
 #==============================================================================
 ### Evaluator
 #==============================================================================
-def cons(value, left, right):
-    return Lexeme(value, value, left, right)
+# def cons(value, left, right):
+#     return Lexeme(value, value, left, right)
 
-def create(environment=None):
-    ids = Lexeme("IDS", "IDS", None, None)
-    vals = Lexeme("VALS", "VALS", None, None)
-    return cons("ENV", ids, cons("JOIN", vals, environment))
+# def create(environment=None):
+#     ids = Lexeme("IDS", "IDS", None, None)
+#     vals = Lexeme("VALS", "VALS", None, None)
+#     return cons("ENV", ids, cons("JOIN", vals, environment))
 
-def lookup(variable, environment):
-    currEnv = environment
-    while(currEnv != None):
-        ids = currEnv.left
-        vals = currEnv.right.left
-        if (ids.left != None):
-            while(ids != None):
-                print("LOOKUP")
-                print(variable)
-                if(type(variable) == type(Lexeme())):
-                    if(variable.lvalue == ids.left.lvalue):
-                        return vals.left
-                else:
-                    if(variable == ids.left.lvalue):
-                        return vals.left
-                ids = ids.right
-                vals = vals.right
-        print(currEnv.left)
-        currEnv = currEnv.right.right
-    if(type(variable) == type(Lexeme())):
-        print("Variable ",variable.lvalue," is undefined.");
-    else:
-        print("Variable ",variable," is undefined.");
+# def lookup(variable, environment):
+#     currEnv = environment
+#     while(currEnv != None):
+#         ids = currEnv.left
+#         vals = currEnv.right.left
+#         if (ids.left != None):
+#             while(ids != None):
+#                 # print("LOOKUP")
+#                 # print(variable)
+#                 if(type(variable) == type(Lexeme())):
+#                     if(variable.lvalue == ids.left.lvalue):
+#                         return vals.left
+#                 else:
+#                     if(variable == ids.left.lvalue):
+#                         return vals.left
+#                 ids = ids.right
+#                 vals = vals.right
+#         # print(currEnv.left)
+#         currEnv = currEnv.right.right
+#     if(type(variable) == type(Lexeme())):
+#         print("Variable ",variable.lvalue," is undefined.");
+#     else:
+#         print("Variable ",variable," is undefined.");
 
 
-def update(variable, value, environment):
-    currEnv = environment
-    while(currEnv != None):
-        ids = currEnv.left
-        vals = currEnv.right.left
-        if(ids.left != None):
-            while(ids != None):
-                if(variable.lvalue == ids.left.lvalue):
-                    vals.left = value
-                    return value
-                ids = ids.right
-                vals = vals.right
-        currEnv = currEnv.right.right
-    print("Variable ",variable.lvalue," is undefined.");
+# def update(variable, value, environment):
+#     currEnv = environment
+#     while(currEnv != None):
+#         ids = currEnv.left
+#         vals = currEnv.right.left
+#         if(ids.left != None):
+#             while(ids != None):
+#                 if(variable.lvalue == ids.left.lvalue):
+#                     vals.left = value
+#                     return value
+#                 ids = ids.right
+#                 vals = vals.right
+#         currEnv = currEnv.right.right
+#     print("Variable ",variable.lvalue," is undefined.");
 
-def insert(variable,value,env):
-    print("INSERT")
-    # print(variable)
-    # print(value)
-    # if(value.lvalue == "CLOSURE"):
-    #     print(value.left.left)
-    ids = Lexeme("IDS", "IDS", variable, env.left)
-    vals = Lexeme("VALS", "VALS", value, env.right.left)
-    # return cons("ENV", ids, cons("JOIN", vals, env))
-    env = cons("ENV", ids, cons("JOIN", vals, env))
-    print(env.left.left)
-    print(env.left.right)
-    return value
+# def insert(variable,value,env):
+#     # print("INSERT")
+#     # print(variable)
+#     # print(value)
+#     # if(value.lvalue == "CLOSURE"):
+#     #     print(value.left.left)
+#     ids = Lexeme("IDS", "IDS", variable, env.left)
+#     vals = Lexeme("VALS", "VALS", value, env.right.left)
+#     # return cons("ENV", ids, cons("JOIN", vals, env))
+#     env = cons("ENV", ids, cons("JOIN", vals, env))
+#     # print(env.left.left)
+#     # print(env.left.right)
+#     return value
 
-def extend(variables, values, env):
-    e = create(env)
-    insert(variables, values, env)
-    return e
-    # return cons("ENV", variables, cons("JOIN", values, env))
+# def extend(variables, values, env):
+#     e = create(env)
+#     insert(variables, values, env)
+#     return e
+#     # return cons("ENV", variables, cons("JOIN", values, env))
+
+def create(outerscope):
+    return {'outerscope' : outerscope}
+
+# envCreate can be called with the scope it's being defined in, or nil for the most outerscope. I returns a has table with the value 'outerscope' : nil or the scope it was called with.
+
+def lookup(variable, env):
+    while (env):
+        if (env[variable] != None):
+            return env[variable]
+        env = env['outerscope']
+    print("\n\nUndefined Variable #{variable} found. \n\n")
+    return None
+
+def update(variable, value, env):
+    while (env):
+        if (env[variable] != None):
+            env[variable] = value
+            return value
+        env = env['outerscope']
+    print("\n\nUndefined Variable #{variable} found. \n\n")
+    return None
+
+# checks each envTable for the variable. Usually called with my ID lexeme and passed the sval of the lexeme, so like "a". If the variable is not in that table, it recursively calls the function with that table's outer-scope. If it runs out of scopes without finding the variable, it throws an undefined variable error.
+
+def insert(variable, value, env):
+    env[variable] = value
+
+# envInsert takes a variable (like 'a'), a value (could be anything really. String, int, float, funcdef, etc.) and the envTable. it then adds the variable and value to the table. I don't have to pass mine because of how ruby handles scope, but if you need to, you would return your updated env.
+
+def extend(variables,values,env):
+    varArr = []
+    valArr = []
+    while(variables):
+        if(isinstance(variables, Lexeme):
+            varArr[variables.lvalue] = values.lvalue
+            variables = variables.right.left
+            values = values.right.left
+        else:
+            varArr[variables] = values
+            variables = variables.right.left
+            values = values.right.left
+    temp = create(env)
+    for x in range(len(varArr)):
+        temp[varArr[x]] = valArr[x]
+    return temp
+
+# envExtend takes a list of variables and a list of values. In ruby they'd be arrays like ['a', 'b', 'c'] and [1, 2, 3]. It creates a temp evnTable with the passed in env as the outerscope. It then does a for loop, iterating through the variables, and inserting them into the tampTable with their appropriate value. Ignore the zip thing, it's just ruby syntax. it's just pairing variables[0] with values[0], variables[1] with values[1] and so on. it then returns the temp environment/hash-table.
 
 #==============================================================================
 

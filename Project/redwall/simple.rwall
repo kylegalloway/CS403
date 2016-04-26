@@ -1,6 +1,6 @@
 func f(x)
 {
-    if(f > 100)
+    if(x > 100)
     {
         return "BIG";
     }
