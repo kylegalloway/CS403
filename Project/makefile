@@ -31,13 +31,13 @@ cat-recursion:
 	cat redwall/recursion.rwall
 
 run-recursion:
-	python3 ./prettyPrinter.py redwall/recursion.rwall
+	python3 ./evaluator.py redwall/recursion.rwall
 
 cat-iteration:
 	cat redwall/iteration.rwall
 
 run-iteration:
-	python3 ./prettyPrinter.py redwall/iteration.rwall
+	python3 ./evaluator.py redwall/iteration.rwall
 
 cat-functions:
 	cat redwall/functions.rwall

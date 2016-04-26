@@ -29,7 +29,7 @@ class Lexer():
         if (ch == '.'): return Lexeme("PERIOD", ".")
         if (ch == '|'): return Lexeme("OR", "|")
 
-        if (ch == '-'): return self.lexMinus()
+        if (ch == '-'): return self.lexMinus(ch)
         if (ch in ['<', '>', '=', '!']): return self.lexOp(ch)
         if (ch == '\"'): return self.lexString()
         if (ch == '\''): return self.lexString()
@@ -66,18 +66,18 @@ class Lexer():
                 self.pushbackCharacter()
                 return Lexeme("NOT", "!")
 
-        def lexMinus(self, ch):
-            buff = "" + ch
-            ch = self.getCharacter()
-            if (not(isdigit(ch))):
-                self.pushbackCharacter()
-                return Lexeme("MINUS", "-")
-            else:
-                while (ch.isdigit()):
-                    buff += ch
-                    ch = self.getCharacter()
-                self.pushbackCharacter()
-                return Lexeme("INTEGER", buff)
+    def lexMinus(self, ch):
+        buff = "" + ch
+        ch = self.getCharacter()
+        if (not(ch.isdigit())):
+            self.pushbackCharacter()
+            return Lexeme("MINUS", "-")
+        else:
+            while (ch.isdigit()):
+                buff += ch
+                ch = self.getCharacter()
+            self.pushbackCharacter()
+            return Lexeme("INTEGER", buff)
 
 
     def skipComment(self):

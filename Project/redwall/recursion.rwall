@@ -1,4 +1,12 @@
-func redo(x) { if (x > 0) { return x; } else { return redo(x+1); }}
+## This is a recursive function.
+func redo(x)
+{
+    while(x < 0)
+    {
+        redo(x+1);
+    }
+}
 
-#$
-Nothing else matters
+var a = 1;
+var b = redo(a);
+var c = print(b);

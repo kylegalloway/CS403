@@ -363,7 +363,6 @@ def evalSTATEMENT(tree, env):
     elif(tree.left.ltype == "EXPR"):
         return evaluate(tree.left, env)
     elif(tree.left.ltype == "RETURN"):
-        # print("RETURNED STATEMENT")
         return evaluate(tree.right.left, env)
     elif(tree.left.ltype == "PRINT"):
         return evaluate(tree.left, env)
@@ -430,8 +429,13 @@ def evalEQUAL(tree, env):
     if(not(isinstance(l, int)) and not(isinstance(l, str))):
         l = eval(l.lvalue)
     r = evaluate(tree.right, env)
-    if(not(isinstance(r, int)) and not(isinstance(l, str))):
+    if(not(isinstance(r, int)) and not(isinstance(r, str))):
         r = eval(r.lvalue)
+
+    if(isinstance(l, str) and isinstance(r, int)):
+        r = str(r)
+    elif(isinstance(l, int) and isinstance(r, str)):
+        l = str(l)
     return (l == r)
 
 def evalNOTEQUAL(tree, env):
@@ -439,8 +443,13 @@ def evalNOTEQUAL(tree, env):
     if(not(isinstance(l, int)) and not(isinstance(l, str))):
         l = eval(l.lvalue)
     r = evaluate(tree.right, env)
-    if(not(isinstance(r, int)) and not(isinstance(l, str))):
+    if(not(isinstance(r, int)) and not(isinstance(r, str))):
         r = eval(r.lvalue)
+
+    if(isinstance(l, str) and isinstance(r, int)):
+        r = str(r)
+    elif(isinstance(l, int) and isinstance(r, str)):
+        l = str(l)
     return (l != r)
 
 def evalGREATER(tree, env):
@@ -448,8 +457,13 @@ def evalGREATER(tree, env):
     if(not(isinstance(l, int)) and not(isinstance(l, str))):
         l = eval(l.lvalue)
     r = evaluate(tree.right, env)
-    if(not(isinstance(r, int)) and not(isinstance(l, str))):
+    if(not(isinstance(r, int)) and not(isinstance(r, str))):
         r = eval(r.lvalue)
+
+    if(isinstance(l, str) and isinstance(r, int)):
+        r = str(r)
+    elif(isinstance(l, int) and isinstance(r, str)):
+        l = str(l)
     return (l > r)
 
 def evalLESS(tree, env):
@@ -457,8 +471,13 @@ def evalLESS(tree, env):
     if(not(isinstance(l, int)) and not(isinstance(l, str))):
         l = eval(l.lvalue)
     r = evaluate(tree.right, env)
-    if(not(isinstance(r, int)) and not(isinstance(l, str))):
+    if(not(isinstance(r, int)) and not(isinstance(r, str))):
         r = eval(r.lvalue)
+
+    if(isinstance(l, str) and isinstance(r, int)):
+        r = str(r)
+    elif(isinstance(l, int) and isinstance(r, str)):
+        l = str(l)
     return (l < r)
 
 def evalGREATEREQUAL(tree, env):
@@ -466,8 +485,13 @@ def evalGREATEREQUAL(tree, env):
     if(not(isinstance(l, int)) and not(isinstance(l, str))):
         l = eval(l.lvalue)
     r = evaluate(tree.right, env)
-    if(not(isinstance(r, int)) and not(isinstance(l, str))):
+    if(not(isinstance(r, int)) and not(isinstance(r, str))):
         r = eval(r.lvalue)
+
+    if(isinstance(l, str) and isinstance(r, int)):
+        r = str(r)
+    elif(isinstance(l, int) and isinstance(r, str)):
+        l = str(l)
     return (l >= r)
 
 def evalLESSEQUAL(tree, env):
@@ -475,8 +499,13 @@ def evalLESSEQUAL(tree, env):
     if(not(isinstance(l, int)) and not(isinstance(l, str))):
         l = eval(l.lvalue)
     r = evaluate(tree.right, env)
-    if(not(isinstance(r, int)) and not(isinstance(l, str))):
+    if(not(isinstance(r, int)) and not(isinstance(r, str))):
         r = eval(r.lvalue)
+
+    if(isinstance(l, str) and isinstance(r, int)):
+        r = str(r)
+    elif(isinstance(l, int) and isinstance(r, str)):
+        l = str(l)
     return (l <= r)
 
 def evalPLUS(tree, env):
@@ -484,8 +513,13 @@ def evalPLUS(tree, env):
     if(not(isinstance(l, int)) and not(isinstance(l, str))):
         l = eval(l.lvalue)
     r = evaluate(tree.right, env)
-    if(not(isinstance(r, int)) and not(isinstance(l, str))):
+    if(not(isinstance(r, int)) and not(isinstance(r, str))):
         r = eval(r.lvalue)
+
+    if(isinstance(l, str) and isinstance(r, int)):
+        r = str(r)
+    elif(isinstance(l, int) and isinstance(r, str)):
+        l = str(l)
     return (l + r)
 
 def evalMINUS(tree, env):
@@ -493,8 +527,13 @@ def evalMINUS(tree, env):
     if(not(isinstance(l, int)) and not(isinstance(l, str))):
         l = eval(l.lvalue)
     r = evaluate(tree.right, env)
-    if(not(isinstance(r, int)) and not(isinstance(l, str))):
+    if(not(isinstance(r, int)) and not(isinstance(r, str))):
         r = eval(r.lvalue)
+
+    if(isinstance(l, str) and isinstance(r, int)):
+        r = str(r)
+    elif(isinstance(l, int) and isinstance(r, str)):
+        l = str(l)
     return (l - r)
 
 def evalMULTIPLY(tree, env):
@@ -502,8 +541,13 @@ def evalMULTIPLY(tree, env):
     if(not(isinstance(l, int)) and not(isinstance(l, str))):
         l = eval(l.lvalue)
     r = evaluate(tree.right, env)
-    if(not(isinstance(r, int)) and not(isinstance(l, str))):
+    if(not(isinstance(r, int)) and not(isinstance(r, str))):
         r = eval(r.lvalue)
+
+    if(isinstance(l, str) and isinstance(r, int)):
+        r = str(r)
+    elif(isinstance(l, int) and isinstance(r, str)):
+        l = str(l)
     return (l * r)
 
 def evalDIVIDE(tree, env):
@@ -511,8 +555,13 @@ def evalDIVIDE(tree, env):
     if(not(isinstance(l, int)) and not(isinstance(l, str))):
         l = eval(l.lvalue)
     r = evaluate(tree.right, env)
-    if(not(isinstance(r, int)) and not(isinstance(l, str))):
+    if(not(isinstance(r, int)) and not(isinstance(r, str))):
         r = eval(r.lvalue)
+
+    if(isinstance(l, str) and isinstance(r, int)):
+        r = str(r)
+    elif(isinstance(l, int) and isinstance(r, str)):
+        l = str(l)
     return (l / r)
 
 def evalPOWER(tree, env):
@@ -520,8 +569,13 @@ def evalPOWER(tree, env):
     if(not(isinstance(l, int)) and not(isinstance(l, str))):
         l = eval(l.lvalue)
     r = evaluate(tree.right, env)
-    if(not(isinstance(r, int)) and not(isinstance(l, str))):
+    if(not(isinstance(r, int)) and not(isinstance(r, str))):
         r = eval(r.lvalue)
+
+    if(isinstance(l, str) and isinstance(r, int)):
+        r = str(r)
+    elif(isinstance(l, int) and isinstance(r, str)):
+        l = str(l)
     return (l ** r)
 
 def evalAND(tree, env):
@@ -529,8 +583,13 @@ def evalAND(tree, env):
     if(not(isinstance(l, int)) and not(isinstance(l, str))):
         l = eval(l.lvalue)
     r = evaluate(tree.right, env)
-    if(not(isinstance(r, int)) and not(isinstance(l, str))):
+    if(not(isinstance(r, int)) and not(isinstance(r, str))):
         r = eval(r.lvalue)
+
+    if(isinstance(l, str) and isinstance(r, int)):
+        r = str(r)
+    elif(isinstance(l, int) and isinstance(r, str)):
+        l = str(l)
     return (l and r)
 
 def evalOR(tree, env):
@@ -538,8 +597,13 @@ def evalOR(tree, env):
     if(not(isinstance(l, int)) and not(isinstance(l, str))):
         l = eval(l.lvalue)
     r = evaluate(tree.right, env)
-    if(not(isinstance(r, int)) and not(isinstance(l, str))):
+    if(not(isinstance(r, int)) and not(isinstance(r, str))):
         r = eval(r.lvalue)
+
+    if(isinstance(l, str) and isinstance(r, int)):
+        r = str(r)
+    elif(isinstance(l, int) and isinstance(r, str)):
+        l = str(l)
     return (l or r)
 
 def evalDOUBLEEQUAL(tree, env):
@@ -547,8 +611,13 @@ def evalDOUBLEEQUAL(tree, env):
     if(not(isinstance(l, int)) and not(isinstance(l, str))):
         l = eval(l.lvalue)
     r = evaluate(tree.right, env)
-    if(not(isinstance(r, int)) and not(isinstance(l, str))):
+    if(not(isinstance(r, int)) and not(isinstance(r, str))):
         r = eval(r.lvalue)
+
+    if(isinstance(l, str) and isinstance(r, int)):
+        r = str(r)
+    elif(isinstance(l, int) and isinstance(r, str)):
+        l = str(l)
     return (l == r)
 
 def evalPRINT(tree, env):
