@@ -211,9 +211,12 @@ def evalFUNCCALL(tree, env):
     print("eparams", end=" : ")
     print(eparams)
 
-    eeargs = makeArgList(params)
+    eeargs = makeArgList(eargs)
     print("eeargs", end=" : ")
     print(eeargs)
+
+    if(len(eeargs) != len(eparams)):
+        return "ERROR: Wrong number of arguments."
 
     # This builds the new table and attaches it to the denv
     xenv = extend(eparams, eeargs, denv)
@@ -225,10 +228,28 @@ def evalFUNCCALL(tree, env):
     return evaluate(body, xenv)
 
 def makeParamList(params):
-    pass
+    # print("makeParamList")
+    pArr = []
+    while(params):
+        if(params.ltype == "PARAMLIST"):
+            pArr.append(params.left.lvalue)
+            if(params.right):
+                params = params.right.right.left
+            else:
+                params = params.right
+    return pArr
 
-def makeArgList(params):
-    pass
+def makeArgList(args):
+    # print("makeArgList")
+    print(args)
+    print(args.left.lvalue)
+    print(args.right.left.lvalue)
+    print(args.right.right.lvalue)
+    argArr = []
+    while(args):
+        argArr.append(args.left.lvalue)
+        args = args.right
+    return argArr
 
 
 def getArgs(tree):
@@ -336,18 +357,21 @@ def evalWHILELOOP(tree, env):
     # print("In evalWHILELOOP")
     conditional = tree.right.right.left
     block = tree.right.right.right.right.left
+    x = None
     while(evaluate(conditional, env) == True):
-        evaluate(block, env)
+        x = evaluate(block, env)
+    return x
 
 def evalIFSTATEMENT(tree, env):
     # print("In evalIFSTATEMENT")
     conditional = tree.right.right.left
     block = tree.right.right.right.right.left
     optElse = tree.right.right.right.right.right.left
+    # print(evaluate(conditional, env))
     if(evaluate(conditional, env) == True):
-        evaluate(block, env)
+        return evaluate(block, env)
     else:
-        evaluate(optElse, env)
+        return evaluate(optElse, env)
 
 def evalOPTELSESTATEMENT(tree, env):
     # print("In evalOPTELSESTATEMENT")
@@ -381,73 +405,129 @@ def evalID(tree,env):
     return lookup(str(tree.lvalue), env)
 
 def evalEQUAL(tree, env):
-    l = eval(evaluate(tree.left, env).lvalue)
-    r = eval(evaluate(tree.right, env).lvalue)
+    l = evaluate(tree.left, env)
+    if(not(isinstance(l, int))):
+        l = eval(l.lvalue)
+    r = evaluate(tree.right, env)
+    if(not(isinstance(r, int))):
+        r = eval(r.lvalue)
     return (l == r)
 
 def evalNOTEQUAL(tree, env):
-    l = eval(evaluate(tree.left, env).lvalue)
-    r = eval(evaluate(tree.right, env).lvalue)
+    l = evaluate(tree.left, env)
+    if(not(isinstance(l, int))):
+        l = eval(l.lvalue)
+    r = evaluate(tree.right, env)
+    if(not(isinstance(r, int))):
+        r = eval(r.lvalue)
     return (l != r)
 
 def evalGREATER(tree, env):
-    l = eval(evaluate(tree.left, env).lvalue)
-    r = eval(evaluate(tree.right, env).lvalue)
+    l = evaluate(tree.left, env)
+    if(not(isinstance(l, int))):
+        l = eval(l.lvalue)
+    r = evaluate(tree.right, env)
+    if(not(isinstance(r, int))):
+        r = eval(r.lvalue)
     return (l > r)
 
 def evalLESS(tree, env):
-    l = eval(evaluate(tree.left, env).lvalue)
-    r = eval(evaluate(tree.right, env).lvalue)
+    l = evaluate(tree.left, env)
+    if(not(isinstance(l, int))):
+        l = eval(l.lvalue)
+    r = evaluate(tree.right, env)
+    if(not(isinstance(r, int))):
+        r = eval(r.lvalue)
     return (l < r)
 
 def evalGREATEREQUAL(tree, env):
-    l = eval(evaluate(tree.left, env).lvalue)
-    r = eval(evaluate(tree.right, env).lvalue)
+    l = evaluate(tree.left, env)
+    if(not(isinstance(l, int))):
+        l = eval(l.lvalue)
+    r = evaluate(tree.right, env)
+    if(not(isinstance(r, int))):
+        r = eval(r.lvalue)
     return (l >= r)
 
 def evalLESSEQUAL(tree, env):
-    l = eval(evaluate(tree.left, env).lvalue)
-    r = eval(evaluate(tree.right, env).lvalue)
+    l = evaluate(tree.left, env)
+    if(not(isinstance(l, int))):
+        l = eval(l.lvalue)
+    r = evaluate(tree.right, env)
+    if(not(isinstance(r, int))):
+        r = eval(r.lvalue)
     return (l <= r)
 
 def evalPLUS(tree, env):
-    l = eval(evaluate(tree.left, env).lvalue)
-    r = eval(evaluate(tree.right, env).lvalue)
+    l = evaluate(tree.left, env)
+    if(not(isinstance(l, int))):
+        l = eval(l.lvalue)
+    r = evaluate(tree.right, env)
+    if(not(isinstance(r, int))):
+        r = eval(r.lvalue)
     return (l + r)
 
 def evalMINUS(tree, env):
-    l = eval(evaluate(tree.left, env).lvalue)
-    r = eval(evaluate(tree.right, env).lvalue)
+    l = evaluate(tree.left, env)
+    if(not(isinstance(l, int))):
+        l = eval(l.lvalue)
+    r = evaluate(tree.right, env)
+    if(not(isinstance(r, int))):
+        r = eval(r.lvalue)
     return (l - r)
 
 def evalMULTIPLY(tree, env):
-    l = eval(evaluate(tree.left, env).lvalue)
-    r = eval(evaluate(tree.right, env).lvalue)
+    l = evaluate(tree.left, env)
+    if(not(isinstance(l, int))):
+        l = eval(l.lvalue)
+    r = evaluate(tree.right, env)
+    if(not(isinstance(r, int))):
+        r = eval(r.lvalue)
     return (l * r)
 
 def evalDIVIDE(tree, env):
-    l = eval(evaluate(tree.left, env).lvalue)
-    r = eval(evaluate(tree.right, env).lvalue)
+    l = evaluate(tree.left, env)
+    if(not(isinstance(l, int))):
+        l = eval(l.lvalue)
+    r = evaluate(tree.right, env)
+    if(not(isinstance(r, int))):
+        r = eval(r.lvalue)
     return (l / r)
 
 def evalPOWER(tree, env):
-    l = eval(evaluate(tree.left, env).lvalue)
-    r = eval(evaluate(tree.right, env).lvalue)
+    l = evaluate(tree.left, env)
+    if(not(isinstance(l, int))):
+        l = eval(l.lvalue)
+    r = evaluate(tree.right, env)
+    if(not(isinstance(r, int))):
+        r = eval(r.lvalue)
     return (l ** r)
 
 def evalAND(tree, env):
-    l = eval(evaluate(tree.left, env).lvalue)
-    r = eval(evaluate(tree.right, env).lvalue)
+    l = evaluate(tree.left, env)
+    if(not(isinstance(l, int))):
+        l = eval(l.lvalue)
+    r = evaluate(tree.right, env)
+    if(not(isinstance(r, int))):
+        r = eval(r.lvalue)
     return (l and r)
 
 def evalOR(tree, env):
-    l = eval(evaluate(tree.left, env).lvalue)
-    r = eval(evaluate(tree.right, env).lvalue)
+    l = evaluate(tree.left, env)
+    if(not(isinstance(l, int))):
+        l = eval(l.lvalue)
+    r = evaluate(tree.right, env)
+    if(not(isinstance(r, int))):
+        r = eval(r.lvalue)
     return (l or r)
 
 def evalDOUBLEEQUAL(tree, env):
-    l = eval(evaluate(tree.left, env).lvalue)
-    r = eval(evaluate(tree.right, env).lvalue)
+    l = evaluate(tree.left, env)
+    if(not(isinstance(l, int))):
+        l = eval(l.lvalue)
+    r = evaluate(tree.right, env)
+    if(not(isinstance(r, int))):
+        r = eval(r.lvalue)
     return (l == r)
 
 def evalPRINT(tree, env):
@@ -534,7 +614,7 @@ def create(outerscope):
 
 def lookup(variable, env):
     while (env):
-        if (env[variable] != None):
+        if (variable in env):
             return env[variable]
         env = env['outerscope']
     print("\n\nUndefined Variable #{variable} found. \n\n")

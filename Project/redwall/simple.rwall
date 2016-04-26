@@ -4,10 +4,16 @@ func f(x)
     {
         return "BIG";
     }
+    else
+    {
+        return "SMALL";
+    }
 }
 
 var z = 2 ^ 16;
-var a = print(f(z));
-#$ None below works
 var c = print(z);
-var b = print(1," ", 2);
+var a = print(f(z));
+var y = 2 * 4;
+var c = print(y);
+var a = print(f(y));
+#$ None below works

@@ -31,4 +31,4 @@ func largest(x,y,z)
     }
 }
 
-var a = largest(1, 2, 3);
+var a = print(largest(1, 2, 3));
