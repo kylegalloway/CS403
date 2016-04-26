@@ -19,13 +19,13 @@ cat-error3:
 run-error3:
 	-python3 ./evaluator.py redwall/bad_program3.rwall
 
-# Everything above works with evaluator. Everything below needs help.
-
 cat-conditionals:
 	cat redwall/conditionals.rwall
 
 run-conditionals:
 	python3 ./evaluator.py redwall/conditionals.rwall
+
+# Everything above works with evaluator. Everything below needs help.
 
 cat-recursion:
 	cat redwall/recursion.rwall

@@ -172,16 +172,10 @@ def evalFUNCCALL(tree, env):
     # print("In evalFUNCCALL")
     # Get the args for the function call
     args = getArgs(tree)
-    print("args", end=" : ")
-    print(args)
     # Get the function def from the ID
     funcName = getFunction(tree)
-    print("funcName", end=" : ")
-    print(funcName)
     # Eval the function def to get the entire closure
     closure = evaluate(funcName, env)
-    print("closure", end=" : ")
-    print(closure)
 
     if(closure == None):
         return "ERROR: Closure was None"
@@ -190,40 +184,46 @@ def evalFUNCCALL(tree, env):
 
     # This gets the defining environment from the closure
     denv = getEnv(closure)
-    print("denv", end=" : ")
-    print(denv)
     # This gets the function body from the closure
     body = getBody(closure)
-    print("body", end=" : ")
-    print(body)
     # This gets the formal parameters from the closure
     params = getParams(closure)
-    print("params", end=" : ")
-    print(params.left.left)
 
     # This evaluates the arguments in the calling environment
     eargs = evaluate(args, env)
-    print("eargs", end=" : ")
-    print(eargs)
 
     # This evaluates the params in the calling environment
     eparams = makeParamList(params)
-    print("eparams", end=" : ")
-    print(eparams)
 
-    eeargs = makeArgList(eargs)
-    print("eeargs", end=" : ")
-    print(eeargs)
+    eeargs = makeArgList(eargs, env)
 
     if(len(eeargs) != len(eparams)):
         return "ERROR: Wrong number of arguments."
 
     # This builds the new table and attaches it to the denv
     xenv = extend(eparams, eeargs, denv)
-    print("xenv", end=" : ")
-    print(xenv)
 
-    # print("CALLFUNCITON")
+    # print("CALLFUNCTION")
+    # print("args", end=" : ")
+    # print(args)
+    # print("funcName", end=" : ")
+    # print(funcName)
+    # print("closure", end=" : ")
+    # print(closure)
+    # print("denv", end=" : ")
+    # print(denv)
+    # print("body", end=" : ")
+    # print(body)
+    # print("params", end=" : ")
+    # print(params.left.left)
+    # print("eargs", end=" : ")
+    # print(eargs)
+    # print("eparams", end=" : ")
+    # print(eparams)
+    # print("eeargs", end=" : ")
+    # print(eeargs)
+    # print("xenv", end=" : ")
+    # print(xenv)
     # This evaluates the function in the new extended environment
     return evaluate(body, xenv)
 
@@ -239,16 +239,28 @@ def makeParamList(params):
                 params = params.right
     return pArr
 
-def makeArgList(args):
+def makeArgList(args, env):
     # print("makeArgList")
-    print(args)
-    print(args.left.lvalue)
-    print(args.right.left.lvalue)
-    print(args.right.right.lvalue)
+    # print(args)
+    # print(args.left)
+    # print(args.right.left.lvalue)
+    # print(args.right.right.lvalue)
     argArr = []
     while(args):
-        argArr.append(args.left.lvalue)
-        args = args.right
+        if(isinstance(args, Lexeme)):
+            if(args.ltype == "JOIN"):
+                if(isinstance(args.left, Lexeme)):
+                    argArr.append(args.left.lvalue)
+                else:
+                    argArr.append(args.left)
+            if(args.right):
+                args = args.right
+            else:
+                argArr.append(args.lvalue)
+                break
+        else:
+            argArr.append(args)
+            break
     return argArr
 
 
@@ -336,13 +348,13 @@ def evalOPTSTATEMENTLIST(tree, env):
 
 def evalSTATEMENTLIST(tree, env):
     # print("In evalSTATEMENTLIST")
-    r = None
-    if(tree.right == None):
-        return evaluate(tree.left, env)
-    if(tree.right.right.left != None):
-        r = evaluate(tree.right.left, env)
-        new = Lexeme("JOIN", "JOIN", evaluate(tree.left, env), r)
-    return new
+    while(tree):
+        result = evaluate(tree.left, env)
+        if(tree.right):
+            tree = tree.right.left
+        else:
+            break
+    return result
 
 def evalSTATEMENT(tree, env):
     # print("In evalSTATEMENT")
@@ -351,7 +363,16 @@ def evalSTATEMENT(tree, env):
     elif(tree.left.ltype == "EXPR"):
         return evaluate(tree.left, env)
     elif(tree.left.ltype == "RETURN"):
+        # print("RETURNED STATEMENT")
         return evaluate(tree.right.left, env)
+    elif(tree.left.ltype == "PRINT"):
+        return evaluate(tree.left, env)
+    else:
+        raise("ERROR: BAD STATEMENT")
+
+def evalRETURN(tree, env):
+    print("In evalRETURN")
+    return evaluate(tree)
 
 def evalWHILELOOP(tree, env):
     # print("In evalWHILELOOP")
@@ -406,127 +427,127 @@ def evalID(tree,env):
 
 def evalEQUAL(tree, env):
     l = evaluate(tree.left, env)
-    if(not(isinstance(l, int))):
+    if(not(isinstance(l, int)) and not(isinstance(l, str))):
         l = eval(l.lvalue)
     r = evaluate(tree.right, env)
-    if(not(isinstance(r, int))):
+    if(not(isinstance(r, int)) and not(isinstance(l, str))):
         r = eval(r.lvalue)
     return (l == r)
 
 def evalNOTEQUAL(tree, env):
     l = evaluate(tree.left, env)
-    if(not(isinstance(l, int))):
+    if(not(isinstance(l, int)) and not(isinstance(l, str))):
         l = eval(l.lvalue)
     r = evaluate(tree.right, env)
-    if(not(isinstance(r, int))):
+    if(not(isinstance(r, int)) and not(isinstance(l, str))):
         r = eval(r.lvalue)
     return (l != r)
 
 def evalGREATER(tree, env):
     l = evaluate(tree.left, env)
-    if(not(isinstance(l, int))):
+    if(not(isinstance(l, int)) and not(isinstance(l, str))):
         l = eval(l.lvalue)
     r = evaluate(tree.right, env)
-    if(not(isinstance(r, int))):
+    if(not(isinstance(r, int)) and not(isinstance(l, str))):
         r = eval(r.lvalue)
     return (l > r)
 
 def evalLESS(tree, env):
     l = evaluate(tree.left, env)
-    if(not(isinstance(l, int))):
+    if(not(isinstance(l, int)) and not(isinstance(l, str))):
         l = eval(l.lvalue)
     r = evaluate(tree.right, env)
-    if(not(isinstance(r, int))):
+    if(not(isinstance(r, int)) and not(isinstance(l, str))):
         r = eval(r.lvalue)
     return (l < r)
 
 def evalGREATEREQUAL(tree, env):
     l = evaluate(tree.left, env)
-    if(not(isinstance(l, int))):
+    if(not(isinstance(l, int)) and not(isinstance(l, str))):
         l = eval(l.lvalue)
     r = evaluate(tree.right, env)
-    if(not(isinstance(r, int))):
+    if(not(isinstance(r, int)) and not(isinstance(l, str))):
         r = eval(r.lvalue)
     return (l >= r)
 
 def evalLESSEQUAL(tree, env):
     l = evaluate(tree.left, env)
-    if(not(isinstance(l, int))):
+    if(not(isinstance(l, int)) and not(isinstance(l, str))):
         l = eval(l.lvalue)
     r = evaluate(tree.right, env)
-    if(not(isinstance(r, int))):
+    if(not(isinstance(r, int)) and not(isinstance(l, str))):
         r = eval(r.lvalue)
     return (l <= r)
 
 def evalPLUS(tree, env):
     l = evaluate(tree.left, env)
-    if(not(isinstance(l, int))):
+    if(not(isinstance(l, int)) and not(isinstance(l, str))):
         l = eval(l.lvalue)
     r = evaluate(tree.right, env)
-    if(not(isinstance(r, int))):
+    if(not(isinstance(r, int)) and not(isinstance(l, str))):
         r = eval(r.lvalue)
     return (l + r)
 
 def evalMINUS(tree, env):
     l = evaluate(tree.left, env)
-    if(not(isinstance(l, int))):
+    if(not(isinstance(l, int)) and not(isinstance(l, str))):
         l = eval(l.lvalue)
     r = evaluate(tree.right, env)
-    if(not(isinstance(r, int))):
+    if(not(isinstance(r, int)) and not(isinstance(l, str))):
         r = eval(r.lvalue)
     return (l - r)
 
 def evalMULTIPLY(tree, env):
     l = evaluate(tree.left, env)
-    if(not(isinstance(l, int))):
+    if(not(isinstance(l, int)) and not(isinstance(l, str))):
         l = eval(l.lvalue)
     r = evaluate(tree.right, env)
-    if(not(isinstance(r, int))):
+    if(not(isinstance(r, int)) and not(isinstance(l, str))):
         r = eval(r.lvalue)
     return (l * r)
 
 def evalDIVIDE(tree, env):
     l = evaluate(tree.left, env)
-    if(not(isinstance(l, int))):
+    if(not(isinstance(l, int)) and not(isinstance(l, str))):
         l = eval(l.lvalue)
     r = evaluate(tree.right, env)
-    if(not(isinstance(r, int))):
+    if(not(isinstance(r, int)) and not(isinstance(l, str))):
         r = eval(r.lvalue)
     return (l / r)
 
 def evalPOWER(tree, env):
     l = evaluate(tree.left, env)
-    if(not(isinstance(l, int))):
+    if(not(isinstance(l, int)) and not(isinstance(l, str))):
         l = eval(l.lvalue)
     r = evaluate(tree.right, env)
-    if(not(isinstance(r, int))):
+    if(not(isinstance(r, int)) and not(isinstance(l, str))):
         r = eval(r.lvalue)
     return (l ** r)
 
 def evalAND(tree, env):
     l = evaluate(tree.left, env)
-    if(not(isinstance(l, int))):
+    if(not(isinstance(l, int)) and not(isinstance(l, str))):
         l = eval(l.lvalue)
     r = evaluate(tree.right, env)
-    if(not(isinstance(r, int))):
+    if(not(isinstance(r, int)) and not(isinstance(l, str))):
         r = eval(r.lvalue)
     return (l and r)
 
 def evalOR(tree, env):
     l = evaluate(tree.left, env)
-    if(not(isinstance(l, int))):
+    if(not(isinstance(l, int)) and not(isinstance(l, str))):
         l = eval(l.lvalue)
     r = evaluate(tree.right, env)
-    if(not(isinstance(r, int))):
+    if(not(isinstance(r, int)) and not(isinstance(l, str))):
         r = eval(r.lvalue)
     return (l or r)
 
 def evalDOUBLEEQUAL(tree, env):
     l = evaluate(tree.left, env)
-    if(not(isinstance(l, int))):
+    if(not(isinstance(l, int)) and not(isinstance(l, str))):
         l = eval(l.lvalue)
     r = evaluate(tree.right, env)
-    if(not(isinstance(r, int))):
+    if(not(isinstance(r, int)) and not(isinstance(l, str))):
         r = eval(r.lvalue)
     return (l == r)
 
@@ -539,85 +560,15 @@ def evalPRINT(tree, env):
 #==============================================================================
 ### Evaluator
 #==============================================================================
-# def cons(value, left, right):
-#     return Lexeme(value, value, left, right)
-
-# def create(environment=None):
-#     ids = Lexeme("IDS", "IDS", None, None)
-#     vals = Lexeme("VALS", "VALS", None, None)
-#     return cons("ENV", ids, cons("JOIN", vals, environment))
-
-# def lookup(variable, environment):
-#     currEnv = environment
-#     while(currEnv != None):
-#         ids = currEnv.left
-#         vals = currEnv.right.left
-#         if (ids.left != None):
-#             while(ids != None):
-#                 # print("LOOKUP")
-#                 # print(variable)
-#                 if(type(variable) == type(Lexeme())):
-#                     if(variable.lvalue == ids.left.lvalue):
-#                         return vals.left
-#                 else:
-#                     if(variable == ids.left.lvalue):
-#                         return vals.left
-#                 ids = ids.right
-#                 vals = vals.right
-#         # print(currEnv.left)
-#         currEnv = currEnv.right.right
-#     if(type(variable) == type(Lexeme())):
-#         print("Variable ",variable.lvalue," is undefined.");
-#     else:
-#         print("Variable ",variable," is undefined.");
-
-
-# def update(variable, value, environment):
-#     currEnv = environment
-#     while(currEnv != None):
-#         ids = currEnv.left
-#         vals = currEnv.right.left
-#         if(ids.left != None):
-#             while(ids != None):
-#                 if(variable.lvalue == ids.left.lvalue):
-#                     vals.left = value
-#                     return value
-#                 ids = ids.right
-#                 vals = vals.right
-#         currEnv = currEnv.right.right
-#     print("Variable ",variable.lvalue," is undefined.");
-
-# def insert(variable,value,env):
-#     # print("INSERT")
-#     # print(variable)
-#     # print(value)
-#     # if(value.lvalue == "CLOSURE"):
-#     #     print(value.left.left)
-#     ids = Lexeme("IDS", "IDS", variable, env.left)
-#     vals = Lexeme("VALS", "VALS", value, env.right.left)
-#     # return cons("ENV", ids, cons("JOIN", vals, env))
-#     env = cons("ENV", ids, cons("JOIN", vals, env))
-#     # print(env.left.left)
-#     # print(env.left.right)
-#     return value
-
-# def extend(variables, values, env):
-#     e = create(env)
-#     insert(variables, values, env)
-#     return e
-#     # return cons("ENV", variables, cons("JOIN", values, env))
-
 def create(outerscope):
     return {'outerscope' : outerscope}
-
-# envCreate can be called with the scope it's being defined in, or nil for the most outerscope. I returns a has table with the value 'outerscope' : nil or the scope it was called with.
 
 def lookup(variable, env):
     while (env):
         if (variable in env):
             return env[variable]
         env = env['outerscope']
-    print("\n\nUndefined Variable #{variable} found. \n\n")
+    print("\n\nUndefined Variable '"+variable+"' found. \n\n")
     return None
 
 def update(variable, value, env):
@@ -626,23 +577,17 @@ def update(variable, value, env):
             env[variable] = value
             return value
         env = env['outerscope']
-    print("\n\nUndefined Variable #{variable} found. \n\n")
+    print("\n\nUndefined Variable '"+variable+"' found. \n\n")
     return None
-
-# checks each envTable for the variable. Usually called with my ID lexeme and passed the sval of the lexeme, so like "a". If the variable is not in that table, it recursively calls the function with that table's outer-scope. If it runs out of scopes without finding the variable, it throws an undefined variable error.
 
 def insert(variable, value, env):
     env[variable] = value
-
-# envInsert takes a variable (like 'a'), a value (could be anything really. String, int, float, funcdef, etc.) and the envTable. it then adds the variable and value to the table. I don't have to pass mine because of how ruby handles scope, but if you need to, you would return your updated env.
 
 def extend(variables,values,env):
     temp = create(env)
     for x in range(len(variables)):
         temp[variables[x]] = values[x]
     return temp
-
-# envExtend takes a list of variables and a list of values. In ruby they'd be arrays like ['a', 'b', 'c'] and [1, 2, 3]. It creates a temp evnTable with the passed in env as the outerscope. It then does a for loop, iterating through the variables, and inserting them into the tampTable with their appropriate value. Ignore the zip thing, it's just ruby syntax. it's just pairing variables[0] with values[0], variables[1] with values[1] and so on. it then returns the temp environment/hash-table.
 
 #==============================================================================
 
