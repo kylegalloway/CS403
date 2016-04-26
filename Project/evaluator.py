@@ -207,18 +207,29 @@ def evalFUNCCALL(tree, env):
     print(eargs)
 
     # This evaluates the params in the calling environment
-    # eparams = evaluate(params.left.left, env)
-    # print("eparams", end=" : ")
-    # print(eparams)
+    eparams = makeParamList(params)
+    print("eparams", end=" : ")
+    print(eparams)
+
+    eeargs = makeArgList(params)
+    print("eeargs", end=" : ")
+    print(eeargs)
 
     # This builds the new table and attaches it to the denv
-    xenv = extend(params, eargs, denv)
+    xenv = extend(eparams, eeargs, denv)
     print("xenv", end=" : ")
     print(xenv)
 
     # print("CALLFUNCITON")
     # This evaluates the function in the new extended environment
     return evaluate(body, xenv)
+
+def makeParamList(params):
+    pass
+
+def makeArgList(params):
+    pass
+
 
 def getArgs(tree):
     return tree.right.right.left
@@ -546,20 +557,9 @@ def insert(variable, value, env):
 # envInsert takes a variable (like 'a'), a value (could be anything really. String, int, float, funcdef, etc.) and the envTable. it then adds the variable and value to the table. I don't have to pass mine because of how ruby handles scope, but if you need to, you would return your updated env.
 
 def extend(variables,values,env):
-    varArr = []
-    valArr = []
-    while(variables):
-        if(isinstance(variables, Lexeme):
-            varArr[variables.lvalue] = values.lvalue
-            variables = variables.right.left
-            values = values.right.left
-        else:
-            varArr[variables] = values
-            variables = variables.right.left
-            values = values.right.left
     temp = create(env)
-    for x in range(len(varArr)):
-        temp[varArr[x]] = valArr[x]
+    for x in range(len(variables)):
+        temp[variables[x]] = values[x]
     return temp
 
 # envExtend takes a list of variables and a list of values. In ruby they'd be arrays like ['a', 'b', 'c'] and [1, 2, 3]. It creates a temp evnTable with the passed in env as the outerscope. It then does a for loop, iterating through the variables, and inserting them into the tampTable with their appropriate value. Ignore the zip thing, it's just ruby syntax. it's just pairing variables[0] with values[0], variables[1] with values[1] and so on. it then returns the temp environment/hash-table.
