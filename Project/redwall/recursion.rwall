@@ -12,4 +12,4 @@ func recur(limit, count)
     }
 }
 
-var a = recur(39, 0);
+var a = recur(10, 0);

@@ -1,1 +1,8 @@
 var arr = [];
+var arr2 = [true, 1, "String"];
+var a = append(1, arr);
+var b = append("ME", arr);
+var x = print(arr2[2]);
+var y = print(arr[0]);
+var m = remove(0, arr2);
+var n = print(arr2[1]);

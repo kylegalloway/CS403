@@ -139,6 +139,10 @@ def prettyPrint(tree):
             printFALSE(tree)
         elif(tree.ltype == "PRINT"):
             printPRINT(tree)
+        elif(tree.ltype == "APPEND"):
+            printAPPEND(tree)
+        elif(tree.ltype == "REMOVE"):
+            printREMOVE(tree)
         elif(tree.ltype == "END_OF_INPUT"):
             print("\n" + " ", end="")
         else:
@@ -415,7 +419,16 @@ def printFALSE(tree):
     print(tree.lvalue + " ", end="")
 
 def printPRINT(tree):
-    print(tree.lvalue + " ", end="")
+    print(tree.left.lvalue + " ", end="")
+    prettyPrint(tree.right)
+
+def printAPPEND(tree):
+    print(tree.left.lvalue + " ", end="")
+    prettyPrint(tree.right)
+
+def printREMOVE(tree):
+    print(tree.left.lvalue + " ", end="")
+    prettyPrint(tree.right)
 
 
 import sys

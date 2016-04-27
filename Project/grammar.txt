@@ -39,6 +39,8 @@ primary : idDef
         | TRUE
         | FALSE
         | PRINT OPAREN exprList CPAREN
+        | APPEND OPAREN exprList CPAREN
+        | REMOVE OPAREN exprList CPAREN
 
 operator : EQUAL
          | NOTEQUAL

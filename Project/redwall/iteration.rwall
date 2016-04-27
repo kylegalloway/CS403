@@ -13,6 +13,6 @@ func redo(x, count)
     }
 }
 
-var a = -34;
+var a = -10;
 var b = redo(a, 0);
 var c = print(b);

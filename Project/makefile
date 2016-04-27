@@ -43,7 +43,7 @@ cat-functions:
 	cat redwall/functions.rwall
 
 run-functions:
-	python3 ./prettyPrinter.py redwall/functions.rwall
+	python3 ./evaluator.py redwall/functions.rwall
 
 cat-arrays:
 	cat redwall/arrays.rwall

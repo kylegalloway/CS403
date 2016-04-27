@@ -172,9 +172,10 @@ def evalFUNCCALL(tree, env):
     args = getArgs(tree)
     # Get the function def from the ID
     funcName = getFunction(tree)
+    # print(funcName)
     # Eval the function def to get the entire closure
     closure = evaluate(funcName, env)
-    print(type(closure))
+    # print(type(closure))
 
     if(closure == None):
         raise "ERROR: Closure was None"
@@ -215,14 +216,16 @@ def evalFUNCCALL(tree, env):
     # print(body)
     # print("params", end=" : ")
     # print(params.left.left)
-    # print("eargs", end=" : ")
-    # print(eargs)
+    print("eargs", end=" : ")
+    print(eargs)
+    print(type(eargs))
+    print(eargs)
     # print("eparams", end=" : ")
     # print(eparams)
-    # print("eeargs", end=" : ")
-    # print(eeargs)
+    print("eeargs", end=" : ")
+    print(eeargs)
     # print("xenv", end=" : ")
-    # print(xenv)
+    print(xenv)
     # This evaluates the function in the new extended environment
     return evaluate(body, xenv)
 
@@ -241,9 +244,13 @@ def makeParamList(params):
 def makeArgList(args, env):
     # print("makeArgList")
     argArr = []
+    # While args != None
     while(args):
+        # If args is of type Lexeme
         if(isinstance(args, Lexeme)):
+            # If args tag is JOIN
             if(args.ltype == "JOIN"):
+                # If args.left is of type Lexeme
                 if(isinstance(args.left, Lexeme)):
                     argArr.append(args.left.lvalue)
                 else:
@@ -420,26 +427,23 @@ def evalID(tree,env):
     return lookup(str(tree.lvalue), env)
 
 def evalEQUAL(tree, env):
+    # l = eval(evaluate(tree.left, env).lvalue)
+    # r = eval(evaluate(tree.right, env).lvalue)
     return (l == r)
 
 def evalNOTEQUAL(tree, env):
+    # l = eval(evaluate(tree.left, env).lvalue)
+    # r = eval(evaluate(tree.right, env).lvalue)
     return (l != r)
 
 def evalGREATER(tree, env):
-    l = evaluate(tree.left, env)
-    if(not(isinstance(l, int)) and not(isinstance(l, str))):
-        l = eval(l.lvalue)
-    r = evaluate(tree.right, env)
-    if(not(isinstance(r, int)) and not(isinstance(r, str))):
-        r = eval(r.lvalue)
-
-    if(isinstance(l, str) and isinstance(r, int)):
-        l = int(l)
-    elif(isinstance(l, int) and isinstance(r, str)):
-        r = int(r)
+    # l = eval(evaluate(tree.left, env).lvalue)
+    # r = eval(evaluate(tree.right, env).lvalue)
     return (l > r)
 
 def evalLESS(tree, env):
+    # l = eval(evaluate(tree.left, env).lvalue)
+    # r = eval(evaluate(tree.right, env).lvalue)
     l = evaluate(tree.left, env)
     if(not(isinstance(l, int)) and not(isinstance(l, str))):
         l = eval(l.lvalue)
@@ -454,6 +458,8 @@ def evalLESS(tree, env):
     return (l < r)
 
 def evalGREATEREQUAL(tree, env):
+    # l = eval(evaluate(tree.left, env).lvalue)
+    # r = eval(evaluate(tree.right, env).lvalue)
     l = evaluate(tree.left, env)
     if(not(isinstance(l, int)) and not(isinstance(l, str))):
         l = eval(l.lvalue)
@@ -468,6 +474,8 @@ def evalGREATEREQUAL(tree, env):
     return (l >= r)
 
 def evalLESSEQUAL(tree, env):
+    # l = eval(evaluate(tree.left, env).lvalue)
+    # r = eval(evaluate(tree.right, env).lvalue)
     l = evaluate(tree.left, env)
     if(not(isinstance(l, int)) and not(isinstance(l, str))):
         l = eval(l.lvalue)
@@ -482,6 +490,8 @@ def evalLESSEQUAL(tree, env):
     return (l <= r)
 
 def evalPLUS(tree, env):
+    # l = eval(evaluate(tree.left, env).lvalue)
+    # r = eval(evaluate(tree.right, env).lvalue)
     l = evaluate(tree.left, env)
     if(not(isinstance(l, int)) and not(isinstance(l, str))):
         l = eval(l.lvalue)
@@ -496,6 +506,8 @@ def evalPLUS(tree, env):
     return (l + r)
 
 def evalMINUS(tree, env):
+    # l = eval(evaluate(tree.left, env).lvalue)
+    # r = eval(evaluate(tree.right, env).lvalue)
     l = evaluate(tree.left, env)
     if(not(isinstance(l, int)) and not(isinstance(l, str))):
         l = eval(l.lvalue)
@@ -510,6 +522,8 @@ def evalMINUS(tree, env):
     return (l - r)
 
 def evalMULTIPLY(tree, env):
+    # l = eval(evaluate(tree.left, env).lvalue)
+    # r = eval(evaluate(tree.right, env).lvalue)
     l = evaluate(tree.left, env)
     if(not(isinstance(l, int)) and not(isinstance(l, str))):
         l = eval(l.lvalue)
@@ -524,6 +538,8 @@ def evalMULTIPLY(tree, env):
     return (l * r)
 
 def evalDIVIDE(tree, env):
+    # l = eval(evaluate(tree.left, env).lvalue)
+    # r = eval(evaluate(tree.right, env).lvalue)
     l = evaluate(tree.left, env)
     if(not(isinstance(l, int)) and not(isinstance(l, str))):
         l = eval(l.lvalue)
@@ -538,6 +554,8 @@ def evalDIVIDE(tree, env):
     return (l / r)
 
 def evalPOWER(tree, env):
+    # l = eval(evaluate(tree.left, env).lvalue)
+    # r = eval(evaluate(tree.right, env).lvalue)
     l = evaluate(tree.left, env)
     if(not(isinstance(l, int)) and not(isinstance(l, str))):
         l = eval(l.lvalue)
@@ -552,6 +570,8 @@ def evalPOWER(tree, env):
     return (l ** r)
 
 def evalAND(tree, env):
+    # l = eval(evaluate(tree.left, env).lvalue)
+    # r = eval(evaluate(tree.right, env).lvalue)
     l = evaluate(tree.left, env)
     if(not(isinstance(l, int)) and not(isinstance(l, str))):
         l = eval(l.lvalue)
@@ -566,6 +586,8 @@ def evalAND(tree, env):
     return (l and r)
 
 def evalOR(tree, env):
+    # l = eval(evaluate(tree.left, env).lvalue)
+    # r = eval(evaluate(tree.right, env).lvalue)
     l = evaluate(tree.left, env)
     if(not(isinstance(l, int)) and not(isinstance(l, str))):
         l = eval(l.lvalue)
@@ -580,6 +602,8 @@ def evalOR(tree, env):
     return (l or r)
 
 def evalDOUBLEEQUAL(tree, env):
+    # l = eval(evaluate(tree.left, env).lvalue)
+    # r = eval(evaluate(tree.right, env).lvalue)
     l = evaluate(tree.left, env)
     if(not(isinstance(l, int)) and not(isinstance(l, str))):
         l = eval(l.lvalue)

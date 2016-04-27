@@ -1,20 +1,9 @@
-func max(x, y)
+func cube(x)
 {
     ##print(1);
-    if(x > y)
-    {
-        return x;
-    }
-    else
-    {
-        return y;
-    }
+    return x ^ 3;
 }
 
-var m = 2 * 4;
-var n = 2 ^ 16;
-var c = print(m);
-var d = print(n);
-##var a = f(m, n);
-var a = print(f(m, n));
+var x = cube(9 * 7 * 2);
+var y = print(x);
 #$ None below works
