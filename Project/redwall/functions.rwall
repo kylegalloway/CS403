@@ -1,12 +1,7 @@
 func
-apply(f, L, size)
+run(f, i)
 {
-    var x = L[0];
-    while (x != L[size])
-    {
-        f(L[x]);
-        var x = L[x + 1];
-    }
+    f(i);
 }
 
 func double(x)
@@ -14,4 +9,4 @@ func double(x)
     return x * 2;
 }
 
-var a = apply(double, [1, 2, 3], 3);
+var a = run(double, 3);

@@ -352,3 +352,5 @@ func wiretest()
     print("Y        = 0", get_signal(y0));
     print("Result is: ", get_signal(o0));
 }
+
+var run = wiretest();

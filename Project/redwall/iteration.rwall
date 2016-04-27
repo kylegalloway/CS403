@@ -1,16 +1,18 @@
 ## This is an iterative function.
 func redo(x, count)
 {
-    if (x > 0)
+    if (x >= 0)
     {
+
         return count;
     }
     else
     {
+        print (count);
         return redo(x+1,count+1);
     }
 }
 
-var a = -1000;
+var a = -34;
 var b = redo(a, 0);
 var c = print(b);

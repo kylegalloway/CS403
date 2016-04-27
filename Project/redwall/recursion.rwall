@@ -1,12 +1,15 @@
 ## This is a recursive function.
-func redo(x)
+func recur(limit, count)
 {
-    while(x < 0)
+    if(count < limit)
     {
-        redo(x+1);
+        print(count);
+        return recur(limit, count + 1);
+    }
+    else
+    {
+        print("DONE!");
     }
 }
 
-var a = 1;
-var b = redo(a);
-var c = print(b);
+var a = recur(39, 0);

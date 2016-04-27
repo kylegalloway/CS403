@@ -1,5 +1,6 @@
 from parser import Parser
 from lexeme import Lexeme
+from collections import OrderedDict
 
 def main(filename):
     p = Parser(filename)
@@ -123,7 +124,7 @@ def evaluate(tree, env):
     elif (tree.ltype == "DOUBLEEQUAL"):
         return evalDOUBLEEQUAL(tree, env)
     else:
-        return "ERROR: "+tree.ltype+" : "+tree.lvalue
+        raise "ERROR: "+tree.ltype+" : "+tree.lvalue
 
 def evalPARSE(tree, env):
     # print("In evalPARSE")
@@ -149,15 +150,12 @@ def evalVARDEF(tree, env):
 
 def evalFUNCDEF(tree, env):
     # print("In evalFUNCDEF")
-    # print(tree.right.left.lvalue)
     variable = str(tree.right.left.lvalue)
     params = tree.right.right.right.left.left
     body = tree.right.right.right.right.right.left
     right = Lexeme("JOIN", "JOIN", body, env)
     close = Lexeme("CLOSURE", "CLOSURE", params, right)
     ret = insert(variable, close, env)
-    # print(env.left.left)
-    # print(env.left.right)
     return ret
 
 def evalIDDEF(tree, env):
@@ -176,11 +174,12 @@ def evalFUNCCALL(tree, env):
     funcName = getFunction(tree)
     # Eval the function def to get the entire closure
     closure = evaluate(funcName, env)
+    print(type(closure))
 
     if(closure == None):
-        return "ERROR: Closure was None"
+        raise "ERROR: Closure was None"
     elif(closure.ltype != "CLOSURE"):
-            return "ERROR: Tried to call "+closure+" as function."
+            raise "ERROR: Tried to call "+closure+" as function."
 
     # This gets the defining environment from the closure
     denv = getEnv(closure)
@@ -198,7 +197,7 @@ def evalFUNCCALL(tree, env):
     eeargs = makeArgList(eargs, env)
 
     if(len(eeargs) != len(eparams)):
-        return "ERROR: Wrong number of arguments."
+        raise "ERROR: Wrong number of arguments."
 
     # This builds the new table and attaches it to the denv
     xenv = extend(eparams, eeargs, denv)
@@ -241,10 +240,6 @@ def makeParamList(params):
 
 def makeArgList(args, env):
     # print("makeArgList")
-    # print(args)
-    # print(args.left)
-    # print(args.right.left.lvalue)
-    # print(args.right.right.lvalue)
     argArr = []
     while(args):
         if(isinstance(args, Lexeme)):
@@ -374,7 +369,7 @@ def evalRETURN(tree, env):
     return evaluate(tree)
 
 def evalWHILELOOP(tree, env):
-    # print("In evalWHILELOOP")
+    print("In evalWHILELOOP")
     conditional = tree.right.right.left
     block = tree.right.right.right.right.left
     x = None
@@ -425,31 +420,9 @@ def evalID(tree,env):
     return lookup(str(tree.lvalue), env)
 
 def evalEQUAL(tree, env):
-    l = evaluate(tree.left, env)
-    if(not(isinstance(l, int)) and not(isinstance(l, str))):
-        l = eval(l.lvalue)
-    r = evaluate(tree.right, env)
-    if(not(isinstance(r, int)) and not(isinstance(r, str))):
-        r = eval(r.lvalue)
-
-    if(isinstance(l, str) and isinstance(r, int)):
-        r = str(r)
-    elif(isinstance(l, int) and isinstance(r, str)):
-        l = str(l)
     return (l == r)
 
 def evalNOTEQUAL(tree, env):
-    l = evaluate(tree.left, env)
-    if(not(isinstance(l, int)) and not(isinstance(l, str))):
-        l = eval(l.lvalue)
-    r = evaluate(tree.right, env)
-    if(not(isinstance(r, int)) and not(isinstance(r, str))):
-        r = eval(r.lvalue)
-
-    if(isinstance(l, str) and isinstance(r, int)):
-        r = str(r)
-    elif(isinstance(l, int) and isinstance(r, str)):
-        l = str(l)
     return (l != r)
 
 def evalGREATER(tree, env):
@@ -461,9 +434,9 @@ def evalGREATER(tree, env):
         r = eval(r.lvalue)
 
     if(isinstance(l, str) and isinstance(r, int)):
-        r = str(r)
+        l = int(l)
     elif(isinstance(l, int) and isinstance(r, str)):
-        l = str(l)
+        r = int(r)
     return (l > r)
 
 def evalLESS(tree, env):
@@ -475,9 +448,9 @@ def evalLESS(tree, env):
         r = eval(r.lvalue)
 
     if(isinstance(l, str) and isinstance(r, int)):
-        r = str(r)
+        l = int(l)
     elif(isinstance(l, int) and isinstance(r, str)):
-        l = str(l)
+        r = int(r)
     return (l < r)
 
 def evalGREATEREQUAL(tree, env):
@@ -489,9 +462,9 @@ def evalGREATEREQUAL(tree, env):
         r = eval(r.lvalue)
 
     if(isinstance(l, str) and isinstance(r, int)):
-        r = str(r)
+        l = int(l)
     elif(isinstance(l, int) and isinstance(r, str)):
-        l = str(l)
+        r = int(r)
     return (l >= r)
 
 def evalLESSEQUAL(tree, env):
@@ -503,9 +476,9 @@ def evalLESSEQUAL(tree, env):
         r = eval(r.lvalue)
 
     if(isinstance(l, str) and isinstance(r, int)):
-        r = str(r)
+        l = int(l)
     elif(isinstance(l, int) and isinstance(r, str)):
-        l = str(l)
+        r = int(r)
     return (l <= r)
 
 def evalPLUS(tree, env):
@@ -517,9 +490,9 @@ def evalPLUS(tree, env):
         r = eval(r.lvalue)
 
     if(isinstance(l, str) and isinstance(r, int)):
-        r = str(r)
+        l = int(l)
     elif(isinstance(l, int) and isinstance(r, str)):
-        l = str(l)
+        r = int(r)
     return (l + r)
 
 def evalMINUS(tree, env):
@@ -531,9 +504,9 @@ def evalMINUS(tree, env):
         r = eval(r.lvalue)
 
     if(isinstance(l, str) and isinstance(r, int)):
-        r = str(r)
+        l = int(l)
     elif(isinstance(l, int) and isinstance(r, str)):
-        l = str(l)
+        r = int(r)
     return (l - r)
 
 def evalMULTIPLY(tree, env):
@@ -545,9 +518,9 @@ def evalMULTIPLY(tree, env):
         r = eval(r.lvalue)
 
     if(isinstance(l, str) and isinstance(r, int)):
-        r = str(r)
+        l = int(l)
     elif(isinstance(l, int) and isinstance(r, str)):
-        l = str(l)
+        r = int(r)
     return (l * r)
 
 def evalDIVIDE(tree, env):
@@ -559,9 +532,9 @@ def evalDIVIDE(tree, env):
         r = eval(r.lvalue)
 
     if(isinstance(l, str) and isinstance(r, int)):
-        r = str(r)
+        l = int(l)
     elif(isinstance(l, int) and isinstance(r, str)):
-        l = str(l)
+        r = int(r)
     return (l / r)
 
 def evalPOWER(tree, env):
@@ -573,9 +546,9 @@ def evalPOWER(tree, env):
         r = eval(r.lvalue)
 
     if(isinstance(l, str) and isinstance(r, int)):
-        r = str(r)
+        l = int(l)
     elif(isinstance(l, int) and isinstance(r, str)):
-        l = str(l)
+        r = int(r)
     return (l ** r)
 
 def evalAND(tree, env):
@@ -587,9 +560,9 @@ def evalAND(tree, env):
         r = eval(r.lvalue)
 
     if(isinstance(l, str) and isinstance(r, int)):
-        r = str(r)
+        l = int(l)
     elif(isinstance(l, int) and isinstance(r, str)):
-        l = str(l)
+        r = int(r)
     return (l and r)
 
 def evalOR(tree, env):
@@ -601,9 +574,9 @@ def evalOR(tree, env):
         r = eval(r.lvalue)
 
     if(isinstance(l, str) and isinstance(r, int)):
-        r = str(r)
+        l = int(l)
     elif(isinstance(l, int) and isinstance(r, str)):
-        l = str(l)
+        r = int(r)
     return (l or r)
 
 def evalDOUBLEEQUAL(tree, env):
@@ -615,9 +588,9 @@ def evalDOUBLEEQUAL(tree, env):
         r = eval(r.lvalue)
 
     if(isinstance(l, str) and isinstance(r, int)):
-        r = str(r)
+        l = int(l)
     elif(isinstance(l, int) and isinstance(r, str)):
-        l = str(l)
+        r = int(r)
     return (l == r)
 
 def evalPRINT(tree, env):
@@ -625,12 +598,17 @@ def evalPRINT(tree, env):
     eargs = evaluate(tree.right.right.left, env);
     print(eargs)
 
+def evalNIL(tree, env):
+    return None
+
 
 #==============================================================================
 ### Evaluator
 #==============================================================================
 def create(outerscope):
-    return {'outerscope' : outerscope}
+    t = OrderedDict()
+    t['outerscope'] = outerscope
+    return t
 
 def lookup(variable, env):
     while (env):

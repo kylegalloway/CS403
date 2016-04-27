@@ -25,8 +25,6 @@ cat-conditionals:
 run-conditionals:
 	python3 ./evaluator.py redwall/conditionals.rwall
 
-# Everything above works with evaluator. Everything below needs help.
-
 cat-recursion:
 	cat redwall/recursion.rwall
 
@@ -38,6 +36,8 @@ cat-iteration:
 
 run-iteration:
 	python3 ./evaluator.py redwall/iteration.rwall
+
+# Everything above works with evaluator. Everything below needs help.
 
 cat-functions:
 	cat redwall/functions.rwall
@@ -87,7 +87,7 @@ sanity-check:
 	python3 ./prettyPrinter.py redwall/arrays.rwall
 	python3 ./prettyPrinter.py redwall/functions.rwall
 	python3 ./prettyPrinter.py redwall/test_problem.rwall
-	@echo "Still Insane but the prettyPrinter Works...."
+	@echo "Still Insane in the Membrane but the prettyPrinter Works...."
 
 finished:
 	@echo "\n\n######################## ERROR 1 ########################\n\n"
