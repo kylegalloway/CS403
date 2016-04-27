@@ -36,8 +36,7 @@ primary : idDef
         | functionDefinition
         | OBRACKET optExprList CBRACKET
         | NIL
-        | TRUE
-        | FALSE
+        | BOOLEAN
         | PRINT OPAREN exprList CPAREN
         | APPEND OPAREN exprList CPAREN
         | REMOVE OPAREN exprList CPAREN

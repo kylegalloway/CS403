@@ -85,10 +85,8 @@ def evaluate(tree, env):
         return evalID(tree, env)
     elif (tree.ltype == "NIL"):
         return evalNIL(tree, env)
-    elif (tree.ltype == "TRUE"):
-        return evalTRUE(tree, env)
-    elif (tree.ltype == "FALSE"):
-        return evalFALSE(tree, env)
+    elif (tree.ltype == "BOOLEAN"):
+        return evalBOOLEAN(tree, env)
     elif (tree.ltype == "PRINT"):
         return evalPRINT(tree, env)
     elif (tree.ltype == "CLOSURE"):
@@ -124,7 +122,7 @@ def evaluate(tree, env):
     elif (tree.ltype == "DOUBLEEQUAL"):
         return evalDOUBLEEQUAL(tree, env)
     else:
-        raise "ERROR: "+tree.ltype+" : "+tree.lvalue
+        raise Exception("ERROR: "+tree.ltype+" : "+tree.lvalue)
 
 def evalPARSE(tree, env):
     # print("In evalPARSE")
@@ -178,9 +176,9 @@ def evalFUNCCALL(tree, env):
     # print(type(closure))
 
     if(closure == None):
-        raise "ERROR: Closure was None"
+        raise Exception("ERROR: Closure was None")
     elif(closure.ltype != "CLOSURE"):
-            raise "ERROR: Tried to call "+closure+" as function."
+            raise Exception("ERROR: Tried to call "+str(closure)+" as function.")
 
     # This gets the defining environment from the closure
     denv = getEnv(closure)
@@ -198,7 +196,7 @@ def evalFUNCCALL(tree, env):
     eeargs = makeArgList(eargs, env)
 
     if(len(eeargs) != len(eparams)):
-        raise "ERROR: Wrong number of arguments."
+        raise Exception("ERROR: Wrong number of arguments.")
 
     # This builds the new table and attaches it to the denv
     xenv = extend(eparams, eeargs, denv)
@@ -216,16 +214,16 @@ def evalFUNCCALL(tree, env):
     # print(body)
     # print("params", end=" : ")
     # print(params.left.left)
-    print("eargs", end=" : ")
-    print(eargs)
-    print(type(eargs))
-    print(eargs)
+    # print("eargs", end=" : ")
+    # print(eargs)
+    # print(type(eargs))
+    # print(eargs.ltype)
     # print("eparams", end=" : ")
     # print(eparams)
-    print("eeargs", end=" : ")
-    print(eeargs)
+    # print("eeargs", end=" : ")
+    # print(eeargs)
     # print("xenv", end=" : ")
-    print(xenv)
+    # print(xenv)
     # This evaluates the function in the new extended environment
     return evaluate(body, xenv)
 
@@ -244,25 +242,9 @@ def makeParamList(params):
 def makeArgList(args, env):
     # print("makeArgList")
     argArr = []
-    # While args != None
     while(args):
-        # If args is of type Lexeme
-        if(isinstance(args, Lexeme)):
-            # If args tag is JOIN
-            if(args.ltype == "JOIN"):
-                # If args.left is of type Lexeme
-                if(isinstance(args.left, Lexeme)):
-                    argArr.append(args.left.lvalue)
-                else:
-                    argArr.append(args.left)
-            if(args.right):
-                args = args.right
-            else:
-                argArr.append(args.lvalue)
-                break
-        else:
-            argArr.append(args)
-            break
+        argArr.append(args)
+        args = args.right
     return argArr
 
 
@@ -427,195 +409,130 @@ def evalID(tree,env):
     return lookup(str(tree.lvalue), env)
 
 def evalEQUAL(tree, env):
-    # l = eval(evaluate(tree.left, env).lvalue)
-    # r = eval(evaluate(tree.right, env).lvalue)
-    return (l == r)
+    l = evaluate(tree.left, env)
+    r = evaluate(tree.right, env)
+    if((l.ltype == "INTEGER") and (r.ltype == "INTEGER")):
+        return Lexeme("BOOLEAN", (l.lvalue == r.lvalue))
+    elif((l.ltype == "STRING") and (r.ltype == "STRING")):
+        return Lexeme("BOOLEAN", (l.lvalue == r.lvalue))
+    else:
+        raise Exception("ERROR: Can't equate: "+str(l)+" and "+str(r))
 
 def evalNOTEQUAL(tree, env):
-    # l = eval(evaluate(tree.left, env).lvalue)
-    # r = eval(evaluate(tree.right, env).lvalue)
-    return (l != r)
+    l = evaluate(tree.left, env)
+    r = evaluate(tree.right, env)
+    if((l.ltype == "INTEGER") and (r.ltype == "INTEGER")):
+        return Lexeme("BOOLEAN", (l.lvalue != r.lvalue))
+    elif((l.ltype == "STRING") and (r.ltype == "STRING")):
+        return Lexeme("BOOLEAN", (l.lvalue != r.lvalue))
+    else:
+        raise Exception("ERROR: Can't equate: "+str(l)+" and "+str(r))
 
 def evalGREATER(tree, env):
-    # l = eval(evaluate(tree.left, env).lvalue)
-    # r = eval(evaluate(tree.right, env).lvalue)
-    return (l > r)
+    l = evaluate(tree.left, env)
+    r = evaluate(tree.right, env)
+    if((l.ltype == "INTEGER") and (r.ltype == "INTEGER")):
+        return Lexeme("BOOLEAN", (l.lvalue > r.lvalue))
+    elif((l.ltype == "STRING") and (r.ltype == "STRING")):
+        return Lexeme("BOOLEAN", (l.lvalue > r.lvalue))
+    else:
+        raise Exception("ERROR: Can't equate: "+str(l)+" and "+str(r))
 
 def evalLESS(tree, env):
-    # l = eval(evaluate(tree.left, env).lvalue)
-    # r = eval(evaluate(tree.right, env).lvalue)
     l = evaluate(tree.left, env)
-    if(not(isinstance(l, int)) and not(isinstance(l, str))):
-        l = eval(l.lvalue)
     r = evaluate(tree.right, env)
-    if(not(isinstance(r, int)) and not(isinstance(r, str))):
-        r = eval(r.lvalue)
-
-    if(isinstance(l, str) and isinstance(r, int)):
-        l = int(l)
-    elif(isinstance(l, int) and isinstance(r, str)):
-        r = int(r)
-    return (l < r)
+    if((l.ltype == "INTEGER") and (r.ltype == "INTEGER")):
+        return Lexeme("BOOLEAN", (l.lvalue < r.lvalue))
+    elif((l.ltype == "STRING") and (r.ltype == "STRING")):
+        return Lexeme("BOOLEAN", (l.lvalue < r.lvalue))
+    else:
+        raise Exception("ERROR: Can't equate: "+str(l)+" and "+str(r))
 
 def evalGREATEREQUAL(tree, env):
-    # l = eval(evaluate(tree.left, env).lvalue)
-    # r = eval(evaluate(tree.right, env).lvalue)
     l = evaluate(tree.left, env)
-    if(not(isinstance(l, int)) and not(isinstance(l, str))):
-        l = eval(l.lvalue)
     r = evaluate(tree.right, env)
-    if(not(isinstance(r, int)) and not(isinstance(r, str))):
-        r = eval(r.lvalue)
-
-    if(isinstance(l, str) and isinstance(r, int)):
-        l = int(l)
-    elif(isinstance(l, int) and isinstance(r, str)):
-        r = int(r)
-    return (l >= r)
+    if((l.ltype == "INTEGER") and (r.ltype == "INTEGER")):
+        return Lexeme("BOOLEAN", (l.lvalue >= r.lvalue))
+    elif((l.ltype == "STRING") and (r.ltype == "STRING")):
+        return Lexeme("BOOLEAN", (l.lvalue >= r.lvalue))
+    else:
+        raise Exception("ERROR: Can't equate: "+str(l)+" and "+str(r))
 
 def evalLESSEQUAL(tree, env):
-    # l = eval(evaluate(tree.left, env).lvalue)
-    # r = eval(evaluate(tree.right, env).lvalue)
     l = evaluate(tree.left, env)
-    if(not(isinstance(l, int)) and not(isinstance(l, str))):
-        l = eval(l.lvalue)
     r = evaluate(tree.right, env)
-    if(not(isinstance(r, int)) and not(isinstance(r, str))):
-        r = eval(r.lvalue)
-
-    if(isinstance(l, str) and isinstance(r, int)):
-        l = int(l)
-    elif(isinstance(l, int) and isinstance(r, str)):
-        r = int(r)
-    return (l <= r)
+    if((l.ltype == "INTEGER") and (r.ltype == "INTEGER")):
+        return Lexeme("BOOLEAN", (l.lvalue <= r.lvalue))
+    elif((l.ltype == "STRING") and (r.ltype == "STRING")):
+        return Lexeme("BOOLEAN", (l.lvalue <= r.lvalue))
+    else:
+        raise Exception("ERROR: Can't equate: "+str(l)+" and "+str(r))
 
 def evalPLUS(tree, env):
-    # l = eval(evaluate(tree.left, env).lvalue)
-    # r = eval(evaluate(tree.right, env).lvalue)
     l = evaluate(tree.left, env)
-    if(not(isinstance(l, int)) and not(isinstance(l, str))):
-        l = eval(l.lvalue)
     r = evaluate(tree.right, env)
-    if(not(isinstance(r, int)) and not(isinstance(r, str))):
-        r = eval(r.lvalue)
-
-    if(isinstance(l, str) and isinstance(r, int)):
-        l = int(l)
-    elif(isinstance(l, int) and isinstance(r, str)):
-        r = int(r)
-    return (l + r)
+    if((l.ltype == "INTEGER") and (r.ltype == "INTEGER")):
+        return Lexeme("INTEGER", (int(l.lvalue) + int(r.lvalue)))
+    else:
+        raise Exception("ERROR: Can't add: "+str(l)+" and "+str(r))
 
 def evalMINUS(tree, env):
-    # l = eval(evaluate(tree.left, env).lvalue)
-    # r = eval(evaluate(tree.right, env).lvalue)
     l = evaluate(tree.left, env)
-    if(not(isinstance(l, int)) and not(isinstance(l, str))):
-        l = eval(l.lvalue)
     r = evaluate(tree.right, env)
-    if(not(isinstance(r, int)) and not(isinstance(r, str))):
-        r = eval(r.lvalue)
-
-    if(isinstance(l, str) and isinstance(r, int)):
-        l = int(l)
-    elif(isinstance(l, int) and isinstance(r, str)):
-        r = int(r)
-    return (l - r)
+    if((l.ltype == "INTEGER") and (r.ltype == "INTEGER")):
+        return Lexeme("INTEGER", (int(l.lvalue) - int(r.lvalue)))
+    else:
+        raise Exception("ERROR: Can't subtract: "+str(l)+" and "+str(r))
 
 def evalMULTIPLY(tree, env):
-    # l = eval(evaluate(tree.left, env).lvalue)
-    # r = eval(evaluate(tree.right, env).lvalue)
     l = evaluate(tree.left, env)
-    if(not(isinstance(l, int)) and not(isinstance(l, str))):
-        l = eval(l.lvalue)
     r = evaluate(tree.right, env)
-    if(not(isinstance(r, int)) and not(isinstance(r, str))):
-        r = eval(r.lvalue)
-
-    if(isinstance(l, str) and isinstance(r, int)):
-        l = int(l)
-    elif(isinstance(l, int) and isinstance(r, str)):
-        r = int(r)
-    return (l * r)
+    if((l.ltype == "INTEGER") and (r.ltype == "INTEGER")):
+        return Lexeme("INTEGER", (int(l.lvalue) * int(r.lvalue)))
+    else:
+        raise Exception("ERROR: Can't multiply: "+str(l)+" and "+str(r))
 
 def evalDIVIDE(tree, env):
-    # l = eval(evaluate(tree.left, env).lvalue)
-    # r = eval(evaluate(tree.right, env).lvalue)
     l = evaluate(tree.left, env)
-    if(not(isinstance(l, int)) and not(isinstance(l, str))):
-        l = eval(l.lvalue)
     r = evaluate(tree.right, env)
-    if(not(isinstance(r, int)) and not(isinstance(r, str))):
-        r = eval(r.lvalue)
-
-    if(isinstance(l, str) and isinstance(r, int)):
-        l = int(l)
-    elif(isinstance(l, int) and isinstance(r, str)):
-        r = int(r)
-    return (l / r)
+    if((l.ltype == "INTEGER") and (r.ltype == "INTEGER")):
+        return Lexeme("INTEGER", (int(l.lvalue) / int(r.lvalue)))
+    else:
+        raise Exception("ERROR: Can't divide: "+str(l)+" and "+str(r))
 
 def evalPOWER(tree, env):
-    # l = eval(evaluate(tree.left, env).lvalue)
-    # r = eval(evaluate(tree.right, env).lvalue)
     l = evaluate(tree.left, env)
-    if(not(isinstance(l, int)) and not(isinstance(l, str))):
-        l = eval(l.lvalue)
     r = evaluate(tree.right, env)
-    if(not(isinstance(r, int)) and not(isinstance(r, str))):
-        r = eval(r.lvalue)
-
-    if(isinstance(l, str) and isinstance(r, int)):
-        l = int(l)
-    elif(isinstance(l, int) and isinstance(r, str)):
-        r = int(r)
-    return (l ** r)
+    if((l.ltype == "INTEGER") and (r.ltype == "INTEGER")):
+        return Lexeme("INTEGER", (int(l.lvalue) ** int(r.lvalue)))
+    else:
+        raise Exception("ERROR: Can't raise("+str(l)+" to "+str(r)+" power.")
 
 def evalAND(tree, env):
-    # l = eval(evaluate(tree.left, env).lvalue)
-    # r = eval(evaluate(tree.right, env).lvalue)
     l = evaluate(tree.left, env)
-    if(not(isinstance(l, int)) and not(isinstance(l, str))):
-        l = eval(l.lvalue)
     r = evaluate(tree.right, env)
-    if(not(isinstance(r, int)) and not(isinstance(r, str))):
-        r = eval(r.lvalue)
-
-    if(isinstance(l, str) and isinstance(r, int)):
-        l = int(l)
-    elif(isinstance(l, int) and isinstance(r, str)):
-        r = int(r)
-    return (l and r)
+    if((l.ltype == "INTEGER") and (r.ltype == "INTEGER")):
+        return Lexeme("INTEGER", (int(l.lvalue) and int(r.lvalue)))
+    else:
+        raise Exception("ERROR: Can't and: "+str(l)+" and "+str(r))
 
 def evalOR(tree, env):
-    # l = eval(evaluate(tree.left, env).lvalue)
-    # r = eval(evaluate(tree.right, env).lvalue)
     l = evaluate(tree.left, env)
-    if(not(isinstance(l, int)) and not(isinstance(l, str))):
-        l = eval(l.lvalue)
     r = evaluate(tree.right, env)
-    if(not(isinstance(r, int)) and not(isinstance(r, str))):
-        r = eval(r.lvalue)
-
-    if(isinstance(l, str) and isinstance(r, int)):
-        l = int(l)
-    elif(isinstance(l, int) and isinstance(r, str)):
-        r = int(r)
-    return (l or r)
+    if((l.ltype == "INTEGER") and (r.ltype == "INTEGER")):
+        return Lexeme("INTEGER", (int(l.lvalue)or int(r.lvalue)))
+    else:
+        raise Exception("ERROR: Can't or: "+str(l)+" or "+str(r))
 
 def evalDOUBLEEQUAL(tree, env):
-    # l = eval(evaluate(tree.left, env).lvalue)
-    # r = eval(evaluate(tree.right, env).lvalue)
     l = evaluate(tree.left, env)
-    if(not(isinstance(l, int)) and not(isinstance(l, str))):
-        l = eval(l.lvalue)
     r = evaluate(tree.right, env)
-    if(not(isinstance(r, int)) and not(isinstance(r, str))):
-        r = eval(r.lvalue)
-
-    if(isinstance(l, str) and isinstance(r, int)):
-        l = int(l)
-    elif(isinstance(l, int) and isinstance(r, str)):
-        r = int(r)
-    return (l == r)
+    if((l.ltype == "INTEGER") and (r.ltype == "INTEGER")):
+        return Lexeme("BOOLEAN", (l.lvalue == r.lvalue))
+    elif((l.ltype == "STRING") and (r.ltype == "STRING")):
+        return Lexeme("BOOLEAN", (l.lvalue == r.lvalue))
+    else:
+        raise Exception("ERROR: Can't equate: "+str(l)+" and "+str(r))
 
 def evalPRINT(tree, env):
     # print("In evalPRINT")
@@ -639,7 +556,7 @@ def lookup(variable, env):
         if (variable in env):
             return env[variable]
         env = env['outerscope']
-    print("\n\nUndefined Variable '"+variable+"' found. \n\n")
+    print("\n\nUndefined Variable '"+str(variable)+"' found. \n\n")
     return None
 
 def update(variable, value, env):
@@ -648,7 +565,7 @@ def update(variable, value, env):
             env[variable] = value
             return value
         env = env['outerscope']
-    print("\n\nUndefined Variable '"+variable+"' found. \n\n")
+    print("\n\nUndefined Variable '"+str(variable)+"' found. \n\n")
     return None
 
 def insert(variable, value, env):

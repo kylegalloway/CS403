@@ -167,8 +167,7 @@ class Parser():
     #         | functionDefinition
     #         | OBRACKET optExprList CBRACKET
     #         | NIL
-    #         | TRUE
-    #         | FALSE
+    #         | BOOLEAN
     #         | PRINT OPAREN exprList CPAREN
     #         | APPEND OPAREN exprList CPAREN
     #         | REMOVE OPAREN exprList CPAREN
@@ -206,12 +205,9 @@ class Parser():
         elif (self.check("NIL")):
             n = self.match("NIL")
             return self.cons("PRIMARY", n, None)
-        elif (self.check("TRUE")):
-            t = self.match("TRUE")
-            return self.cons("PRIMARY", t, None)
-        elif (self.check("FALSE")):
-            f = self.match("FALSE")
-            return self.cons("PRIMARY", f, None)
+        elif (self.check("BOOLEAN")):
+            b = self.match("BOOLEAN")
+            return self.cons("PRIMARY", b, None)
         elif (self.check("PRINT")):
             f = self.match("PRINT")
             o = self.match("OPAREN")
@@ -440,7 +436,7 @@ class Parser():
 
     def primaryPending(self):
         # print("In primaryPending")
-        return self.idDefPending() or self.check("STRING") or self.check("INTEGER") or self.check("NOT") or self.check("OPAREN") or self.k_lambdaPending() or self.functionDefinitionPending() or self.check("OBRACKET") or self.check("NIL") or self.check("TRUE") or self.check("FALSE") or self.check("PRINT") or self.check("APPEND") or self.check("REMOVE")
+        return self.idDefPending() or self.check("STRING") or self.check("INTEGER") or self.check("NOT") or self.check("OPAREN") or self.k_lambdaPending() or self.functionDefinitionPending() or self.check("OBRACKET") or self.check("NIL") or self.check("BOOLEAN") or self.check("PRINT") or self.check("APPEND") or self.check("REMOVE")
 
     def operatorPending(self):
         # print("In operatorPending")
