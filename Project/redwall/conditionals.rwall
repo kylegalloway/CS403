@@ -1,17 +1,45 @@
-func max(x, y)
+#{
+Here is a function
+with if/else
+#}
+func largest(x,y,z)
 {
-    ##print(1);
+    ## Braces are required in all functions, loops, and conditionals.
     if(x > y)
     {
-        return x;
+        if(x > z)
+        {
+            return x;
+        }
+        else
+        {
+            return z;
+        }
+    }
+    else if (y > x)
+    {
+        if(y > z)
+        {
+            return y;
+        }
+        else
+        {
+            return z;
+        }
     }
     else
     {
-        return y;
+        if(y > z)
+        {
+            return y;
+        }
+        else
+        {
+            return z;
+        }
     }
 }
 
-var m = 2 * 4;
-var n = 2 ^ 16;
-var a1 = print("MAX is: ");
-var a = print(max(m, n));
+var a = print(largest(1, 2, 3));
+var b = print(largest(3, 2, 1));
+var c = print(largest(2, 3, 1));
