@@ -144,7 +144,9 @@ def evalVARDEF(tree, env):
     # print("In evalVARDEF")
     variable = str(tree.right.left.lvalue)
     value = evaluate(tree.right.right.right.left, env)
-    return insert(variable, value, env)
+    ret = insert(variable, value, env)
+    # print(ret)
+    return ret
 
 def evalFUNCDEF(tree, env):
     # print("In evalFUNCDEF")
@@ -170,10 +172,16 @@ def evalFUNCCALL(tree, env):
     args = getArgs(tree)
     # Get the function def from the ID
     funcName = getFunction(tree)
-    # print(funcName)
     # Eval the function def to get the entire closure
     closure = evaluate(funcName, env)
-    # print(type(closure))
+
+    # print("args", end=" : ")
+    # print(args)
+    # print("funcName", end=" : ")
+    # print(funcName)
+    # print("closure", end=" : ")
+    # print(closure)
+    # print(lookup("f",env))
 
     if(closure == None):
         raise Exception("ERROR: Closure was None")
@@ -243,8 +251,12 @@ def makeArgList(args, env):
     # print("makeArgList")
     argArr = []
     while(args):
-        argArr.append(args)
-        args = args.right
+        if(args.ltype != "JOIN"):
+            argArr.append(args)
+            args = args.right
+        else:
+            argArr.append(args.left)
+            args = args.right
     return argArr
 
 
@@ -415,6 +427,10 @@ def evalEQUAL(tree, env):
         return Lexeme("BOOLEAN", (l.lvalue == r.lvalue))
     elif((l.ltype == "STRING") and (r.ltype == "STRING")):
         return Lexeme("BOOLEAN", (l.lvalue == r.lvalue))
+    elif((l.ltype == "INTEGER") and (r.ltype == "STRING")):
+        return Lexeme("BOOLEAN", (int(l.lvalue) == r.lvalue))
+    elif((l.ltype == "STRING") and (r.ltype == "INTEGER")):
+        return Lexeme("BOOLEAN", (l.lvalue == int(r.lvalue)))
     else:
         raise Exception("ERROR: Can't equate: "+str(l)+" and "+str(r))
 
@@ -422,9 +438,27 @@ def evalNOTEQUAL(tree, env):
     l = evaluate(tree.left, env)
     r = evaluate(tree.right, env)
     if((l.ltype == "INTEGER") and (r.ltype == "INTEGER")):
-        return Lexeme("BOOLEAN", (l.lvalue != r.lvalue))
+        return Lexeme("BOOLEAN", (int(l.lvalue) != int(r.lvalue)))
     elif((l.ltype == "STRING") and (r.ltype == "STRING")):
         return Lexeme("BOOLEAN", (l.lvalue != r.lvalue))
+    elif((l.ltype == "INTEGER") and (r.ltype == "STRING")):
+        return Lexeme("BOOLEAN", (int(l.lvalue) != int(r.lvalue)))
+    elif((l.ltype == "STRING") and (r.ltype == "INTEGER")):
+        return Lexeme("BOOLEAN", (int(l.lvalue) != int(r.lvalue)))
+    else:
+        raise Exception("ERROR: Can't equate: "+str(l)+" and "+str(r))
+
+def evalDOUBLEEQUAL(tree, env):
+    l = evaluate(tree.left, env)
+    r = evaluate(tree.right, env)
+    if((l.ltype == "INTEGER") and (r.ltype == "INTEGER")):
+        return Lexeme("BOOLEAN", (int(l.lvalue) == int(r.lvalue)))
+    elif((l.ltype == "STRING") and (r.ltype == "STRING")):
+        return Lexeme("BOOLEAN", (l.lvalue == r.lvalue))
+    elif((l.ltype == "INTEGER") and (r.ltype == "STRING")):
+        return Lexeme("BOOLEAN", (int(l.lvalue) == int(r.lvalue)))
+    elif((l.ltype == "STRING") and (r.ltype == "INTEGER")):
+        return Lexeme("BOOLEAN", (int(l.lvalue) == int(r.lvalue)))
     else:
         raise Exception("ERROR: Can't equate: "+str(l)+" and "+str(r))
 
@@ -432,9 +466,13 @@ def evalGREATER(tree, env):
     l = evaluate(tree.left, env)
     r = evaluate(tree.right, env)
     if((l.ltype == "INTEGER") and (r.ltype == "INTEGER")):
-        return Lexeme("BOOLEAN", (l.lvalue > r.lvalue))
+        return Lexeme("BOOLEAN", (int(l.lvalue) > int(r.lvalue)))
     elif((l.ltype == "STRING") and (r.ltype == "STRING")):
         return Lexeme("BOOLEAN", (l.lvalue > r.lvalue))
+    elif((l.ltype == "INTEGER") and (r.ltype == "STRING")):
+        return Lexeme("BOOLEAN", (int(l.lvalue) > int(r.lvalue)))
+    elif((l.ltype == "STRING") and (r.ltype == "INTEGER")):
+        return Lexeme("BOOLEAN", (int(l.lvalue) > int(r.lvalue)))
     else:
         raise Exception("ERROR: Can't equate: "+str(l)+" and "+str(r))
 
@@ -442,9 +480,13 @@ def evalLESS(tree, env):
     l = evaluate(tree.left, env)
     r = evaluate(tree.right, env)
     if((l.ltype == "INTEGER") and (r.ltype == "INTEGER")):
-        return Lexeme("BOOLEAN", (l.lvalue < r.lvalue))
+        return Lexeme("BOOLEAN", (int(l.lvalue) < int(r.lvalue)))
     elif((l.ltype == "STRING") and (r.ltype == "STRING")):
         return Lexeme("BOOLEAN", (l.lvalue < r.lvalue))
+    elif((l.ltype == "INTEGER") and (r.ltype == "STRING")):
+        return Lexeme("BOOLEAN", (int(l.lvalue) < int(r.lvalue)))
+    elif((l.ltype == "STRING") and (r.ltype == "INTEGER")):
+        return Lexeme("BOOLEAN", (int(l.lvalue) < int(r.lvalue)))
     else:
         raise Exception("ERROR: Can't equate: "+str(l)+" and "+str(r))
 
@@ -452,9 +494,13 @@ def evalGREATEREQUAL(tree, env):
     l = evaluate(tree.left, env)
     r = evaluate(tree.right, env)
     if((l.ltype == "INTEGER") and (r.ltype == "INTEGER")):
-        return Lexeme("BOOLEAN", (l.lvalue >= r.lvalue))
+        return Lexeme("BOOLEAN", (int(l.lvalue) >= int(r.lvalue)))
     elif((l.ltype == "STRING") and (r.ltype == "STRING")):
         return Lexeme("BOOLEAN", (l.lvalue >= r.lvalue))
+    elif((l.ltype == "INTEGER") and (r.ltype == "STRING")):
+        return Lexeme("BOOLEAN", (int(l.lvalue) >= int(r.lvalue)))
+    elif((l.ltype == "STRING") and (r.ltype == "INTEGER")):
+        return Lexeme("BOOLEAN", (int(l.lvalue) >= int(r.lvalue)))
     else:
         raise Exception("ERROR: Can't equate: "+str(l)+" and "+str(r))
 
@@ -462,9 +508,13 @@ def evalLESSEQUAL(tree, env):
     l = evaluate(tree.left, env)
     r = evaluate(tree.right, env)
     if((l.ltype == "INTEGER") and (r.ltype == "INTEGER")):
-        return Lexeme("BOOLEAN", (l.lvalue <= r.lvalue))
+        return Lexeme("BOOLEAN", (int(l.lvalue) <= int(r.lvalue)))
     elif((l.ltype == "STRING") and (r.ltype == "STRING")):
         return Lexeme("BOOLEAN", (l.lvalue <= r.lvalue))
+    elif((l.ltype == "INTEGER") and (r.ltype == "STRING")):
+        return Lexeme("BOOLEAN", (int(l.lvalue) <= int(r.lvalue)))
+    elif((l.ltype == "STRING") and (r.ltype == "INTEGER")):
+        return Lexeme("BOOLEAN", (int(l.lvalue) <= int(r.lvalue)))
     else:
         raise Exception("ERROR: Can't equate: "+str(l)+" and "+str(r))
 
@@ -523,16 +573,6 @@ def evalOR(tree, env):
         return Lexeme("INTEGER", (int(l.lvalue)or int(r.lvalue)))
     else:
         raise Exception("ERROR: Can't or: "+str(l)+" or "+str(r))
-
-def evalDOUBLEEQUAL(tree, env):
-    l = evaluate(tree.left, env)
-    r = evaluate(tree.right, env)
-    if((l.ltype == "INTEGER") and (r.ltype == "INTEGER")):
-        return Lexeme("BOOLEAN", (l.lvalue == r.lvalue))
-    elif((l.ltype == "STRING") and (r.ltype == "STRING")):
-        return Lexeme("BOOLEAN", (l.lvalue == r.lvalue))
-    else:
-        raise Exception("ERROR: Can't equate: "+str(l)+" and "+str(r))
 
 def evalPRINT(tree, env):
     # print("In evalPRINT")

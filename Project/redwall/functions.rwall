@@ -9,4 +9,12 @@ func double(x)
     return x * 2;
 }
 
+func square(x)
+{
+    return x * x;
+}
+
 var a = run(double, 3);
+var b = print(a);
+var c = run(square, 3);
+var d = print(c);
