@@ -121,8 +121,16 @@ def evaluate(tree, env):
         return evalASSIGN(tree, env)
     elif (tree.ltype == "DOUBLEEQUAL"):
         return evalDOUBLEEQUAL(tree, env)
+    elif (tree.ltype == "ARRAY"):
+        return evalARRAY(tree, env)
+    elif (tree.ltype == "APPEND"):
+        return evalAPPEND(tree, env)
+    elif (tree.ltype == "REMOVE"):
+        return evalREMOVE(tree, env)
+    elif (tree.ltype == "SET"):
+        return evalSET(tree, env)
     else:
-        raise Exception("ERROR: "+tree.ltype+" : "+tree.lvalue)
+        raise Exception("ERROR: "+str(tree.ltype)+" : "+str(tree.lvalue))
 
 def evalPARSE(tree, env):
     # print("In evalPARSE")
@@ -164,7 +172,9 @@ def evalIDDEF(tree, env):
 
 def evalARRAYACCESS(tree, env):
     # print("In evalARRAYACCESS")
-    pass
+    arr = lookup(tree.left.lvalue, env)
+    place = eval(evaluate(tree.right.right.left, env).lvalue)
+    return arr.lvalue[place]
 
 def evalFUNCCALL(tree, env):
     # print("In evalFUNCCALL")
@@ -177,8 +187,8 @@ def evalFUNCCALL(tree, env):
 
     # print("args", end=" : ")
     # print(args)
-    # print("funcName", end=" : ")
-    # print(funcName)
+    print("funcName", end=" : ")
+    print(funcName)
     # print("closure", end=" : ")
     # print(closure)
     # print(lookup("f",env))
@@ -251,8 +261,11 @@ def makeArgList(args, env):
     # print("makeArgList")
     argArr = []
     while(args):
-        print("{}".format(args))
-        if(args.ltype != "JOIN"):
+        # print("{}".format(args.ltype))
+        if(args.ltype == "CLOSURE"):
+            argArr.append(args)
+            break
+        elif(args.ltype != "JOIN"):
             argArr.append(args)
             args = args.right
         else:
@@ -317,12 +330,18 @@ def evalEXPR(tree, env):
 
 def evalPRIMARY(tree, env):
     # print("In evalPRIMARY")
+    # print(tree.left)
     if(tree.right == None):
         return evaluate(tree.left, env)
-    elif(tree.left == "OPAREN"):
+    elif(tree.left.ltype == "OPAREN"):
         return evaluate(tree.right.left, env)
-    elif(tree.left == "OBRACKET"):
-        return evaluate(Lexeme("ARRAY", evaluate(tree.right.left, env), None, None), env)
+    elif(tree.left.ltype == "OBRACKET"):
+        # print("MADE AN ARRAY")
+        elements = evaluate(tree.right.left, env)
+        # print(elements.ltype)
+        arr = makeArgList(elements, env)
+        # print(arr)
+        return evaluate(Lexeme("ARRAY", arr, None, None), env)
 
 def evalOPERATOR(tree, env):
     # print("In evalOPERATOR")
@@ -414,6 +433,14 @@ def evalSTRING(tree,env):
 
 def evalINTEGER(tree,env):
     # print("In evalINTEGER")
+    return tree
+
+def evalARRAY(tree,env):
+    # print("In evalARRAY")
+    return tree
+
+def evalBOOLEAN(tree,env):
+    # print("In evalBOOLEAN")
     return tree
 
 def evalID(tree,env):
@@ -583,6 +610,34 @@ def evalPRINT(tree, env):
 
 def evalNIL(tree, env):
     return None
+
+def evalAPPEND(tree, env):
+    # print("In evalAPPEND")
+    value = eval(tree.right.right.left.left.left.left.lvalue)
+    arr = evaluate(tree.right.right.left.right.right.left.left.left.left.left, env)
+    if(isinstance(value, str)):
+        new = Lexeme("STRING", value)
+    elif(isinstance(value, int)):
+        new = Lexeme("INTEGER", value)
+    arr.lvalue.append(new)
+
+def evalREMOVE(tree, env):
+    # print("In evalREMOVE")
+    index = eval(tree.right.right.left.left.left.left.lvalue)
+    arr = evaluate(tree.right.right.left.right.right.left.left.left.left.left, env)
+    arr.lvalue.pop(index)
+
+def evalSET(tree, env):
+    # print("In evalREMOVE")
+    index = eval(tree.right.right.left.right.right.left.right.right.left.left.left.left.lvalue)
+    value = eval(tree.right.right.left.left.left.left.lvalue)
+    arr = evaluate(tree.right.right.left.right.right.left.left.left.left.left, env)
+    if(isinstance(value, str)):
+        new = Lexeme("STRING", value)
+    elif(isinstance(value, int)):
+        new = Lexeme("INTEGER", value)
+    arr.lvalue[index] = value
+
 
 
 #==============================================================================

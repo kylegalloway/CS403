@@ -138,6 +138,7 @@ class Lexer():
         if (buff == "print"): return Lexeme("PRINT", "print")
         if (buff == "append"): return Lexeme("APPEND", "append")
         if (buff == "remove"): return Lexeme("REMOVE", "remove")
+        if (buff == "set"): return Lexeme("SET", "set")
 
         return Lexeme("ID", buff)
 

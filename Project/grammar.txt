@@ -40,6 +40,7 @@ primary : idDef
         | PRINT OPAREN exprList CPAREN
         | APPEND OPAREN exprList CPAREN
         | REMOVE OPAREN exprList CPAREN
+        | SET OPAREN exprList CPAREN
 
 operator : EQUAL
          | NOTEQUAL

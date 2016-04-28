@@ -1,8 +1,16 @@
+func two()
+{
+    return "CALLED FUNCTION TWO";
+}
+var arr = [two];
+var f = arr[0];
+var call = print(f());
 var arr = [];
 var arr2 = [true, 1, "String"];
 var a = append(1, arr);
 var b = append("ME", arr);
-var x = print(arr2[2]);
-var y = print(arr[0]);
+var x = print(arr[0]);
+var y = print(arr[1]);
+var z = print(arr2[2]);
 var m = remove(0, arr2);
 var n = print(arr2[1]);

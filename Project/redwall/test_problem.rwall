@@ -1,3 +1,9 @@
+func car(list){ return list[0]; }
+func car(list){ return list[1]; }
+func set_car(list, item){ set(item, list, 0);}
+func set_car(list, item){ set(item, list, 1);}
+func cons(i1, i2){ return [i1, i2]; }
+
 func front_ptr(queue) { return car(queue); }
 func rear_ptr(queue) { return cdr(queue); }
 func set_front_ptr(queue, item) { set_car(queue, item); }
@@ -101,13 +107,13 @@ func get_signal(wire) { return wire("'get_signal"); }
 
 func set_signal(wire, new_value)
 {
-    w = wire("'set_signal");
+    var w = wire("'set_signal");
     return w(new_value);
 }
 
 func add_action(wire, action_procedure)
 {
-    w = wire("'add_action");
+    var w = wire("'add_action");
     return w(action_procedure);
 }
 
