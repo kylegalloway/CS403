@@ -56,7 +56,7 @@ func make_wire()
     {
         if(signal_value != new_value)
         {
-            set(signal_value, new_value);
+            var signal_value = new_value;
             return call_each(action_procedures);
         }
         else
@@ -67,7 +67,7 @@ func make_wire()
 
     func accept_action_procedure(proc)
     {
-        set(action_procedures, cons(proc, action_procedures));
+        var action_procedures = cons(proc, action_procedures);
         return proc();
     }
 
@@ -331,10 +331,10 @@ var inverter_delay = 0;
 
 func wiretest()
 {
-    set(the_agenda, make_agenda());
-    set(and_delay, 5);
-    set(or_delay, 3);
-    set(inverter_delay, 1);
+    var the_agenda = make_agenda();
+    var and_delay = 5;
+    var or_delay = 3;
+    var inverter_delay = 1;
 
     var x0 = make_wire();
     var y0 = make_wire();

@@ -1,7 +1,7 @@
 ## This is a recursive function.
 func recur(limit, count)
 {
-    if(count < limit)
+    if(count <= limit)
     {
         print(count);
         return recur(limit, count + 1);

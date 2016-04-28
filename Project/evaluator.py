@@ -251,6 +251,7 @@ def makeArgList(args, env):
     # print("makeArgList")
     argArr = []
     while(args):
+        print("{}".format(args))
         if(args.ltype != "JOIN"):
             argArr.append(args)
             args = args.right
@@ -366,15 +367,15 @@ def evalSTATEMENT(tree, env):
         raise("ERROR: BAD STATEMENT")
 
 def evalRETURN(tree, env):
-    print("In evalRETURN")
+    # print("In evalRETURN")
     return evaluate(tree)
 
 def evalWHILELOOP(tree, env):
-    print("In evalWHILELOOP")
+    # print("In evalWHILELOOP")
     conditional = tree.right.right.left
     block = tree.right.right.right.right.left
     x = None
-    while(evaluate(conditional, env) == True):
+    while((evaluate(conditional, env)).lvalue == True):
         x = evaluate(block, env)
     return x
 
@@ -384,7 +385,7 @@ def evalIFSTATEMENT(tree, env):
     block = tree.right.right.right.right.left
     optElse = tree.right.right.right.right.right.left
     # print(evaluate(conditional, env))
-    if(evaluate(conditional, env) == True):
+    if((evaluate(conditional, env)).lvalue == True):
         return evaluate(block, env)
     else:
         return evaluate(optElse, env)
@@ -465,6 +466,7 @@ def evalDOUBLEEQUAL(tree, env):
 def evalGREATER(tree, env):
     l = evaluate(tree.left, env)
     r = evaluate(tree.right, env)
+    # print("{0} greater {1}?".format(l, r))
     if((l.ltype == "INTEGER") and (r.ltype == "INTEGER")):
         return Lexeme("BOOLEAN", (int(l.lvalue) > int(r.lvalue)))
     elif((l.ltype == "STRING") and (r.ltype == "STRING")):

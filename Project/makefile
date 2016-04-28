@@ -38,13 +38,13 @@ run-conditionals:
 run-functions:
 	python3 ./evaluator.py redwall/functions.rwall
 
-# Everything above works with evaluator. Everything below needs help.
-
 run-recursion:
 	python3 ./evaluator.py redwall/recursion.rwall
 
 run-iteration:
 	python3 ./evaluator.py redwall/iteration.rwall
+
+# Everything above works with evaluator. Everything below needs arrays.
 
 run-arrays:
 	python3 ./prettyPrinter.py redwall/arrays.rwall
