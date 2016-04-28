@@ -28,21 +28,23 @@ I named my language redwall after the series of children's books by Brian Jacque
 * "true"
 * "false"
 * "print"
+* "append" -- Only for arrays
+* "remove" -- Only for arrays
 
 ###### What operators are built-in?
-* "+"    PLUS
-* "-"    MINUS
-* "*"    MULTIPLY
-* "/"    DIVIDE
-* "%"    MODULO
-* "^"    POWER
-* "&"    AND
-* "|"    OR
-* ">"    GREATER
-* ">="    GREATEREQUAL
-* "<"    LESS
-* "<="    LESSEQUAL
-* "="    EQUAL
-* "=="    DOUBLEEQUAL
-* "!"    NOT
-* "!="    NOTEQUAL
+* PLUS : "+"
+* MINUS : "-"
+* MULTIPLY : "*"
+* DIVIDE : "/"
+* MODULO : "%"
+* POWER : "^"
+* AND : "&"
+* OR : "|"
+* GREATER : ">"
+* GREATEREQUAL : ">="
+* LESS : "<"
+* LESSEQUAL : "<="
+* EQUAL : "="
+* DOUBLEEQUAL : "=="
+* NOT : "!"
+* NOTEQUAL : "!="
