@@ -178,8 +178,13 @@ def evalIDDEF(tree, env):
 def evalARRAYACCESS(tree, env):
     # print("In evalARRAYACCESS")
     arr = lookup(tree.left.lvalue, env)
-    place = eval(evaluate(tree.right.right.left, env).lvalue)
-    return arr.lvalue[place]
+    place = evaluate(tree.right.right.left, env)
+    if(isinstance(place.lvalue, str)):
+        p = eval(place.lvalue)
+    else:
+        p = place.lvalue
+
+    return arr.lvalue[p]
 
 def evalFUNCCALL(tree, env):
     # print("In evalFUNCCALL")
@@ -469,6 +474,13 @@ def evalEQUAL(tree, env):
         return Lexeme("BOOLEAN", (int(l.lvalue) == r.lvalue))
     elif((l.ltype == "STRING") and (r.ltype == "INTEGER")):
         return Lexeme("BOOLEAN", (l.lvalue == int(r.lvalue)))
+    elif(l.ltype == "NIL"):
+        if(r.ltype == "NIL"):
+            return Lexeme("BOOLEAN", True)
+        else:
+            return Lexeme("BOOLEAN", False)
+    elif(r.ltype == "NIL"):
+        return Lexeme("BOOLEAN", False)
     else:
         raise Exception("ERROR: Can't equate: "+str(l)+" and "+str(r))
 
@@ -483,6 +495,13 @@ def evalNOTEQUAL(tree, env):
         return Lexeme("BOOLEAN", (int(l.lvalue) != int(r.lvalue)))
     elif((l.ltype == "STRING") and (r.ltype == "INTEGER")):
         return Lexeme("BOOLEAN", (int(l.lvalue) != int(r.lvalue)))
+    elif(l.ltype == "NIL"):
+        if(r.ltype != "NIL"):
+            return Lexeme("BOOLEAN", True)
+        else:
+            return Lexeme("BOOLEAN", False)
+    elif(r.ltype == "NIL"):
+        return Lexeme("BOOLEAN", True)
     else:
         raise Exception("ERROR: Can't equate: "+str(l)+" and "+str(r))
 
@@ -497,6 +516,13 @@ def evalDOUBLEEQUAL(tree, env):
         return Lexeme("BOOLEAN", (int(l.lvalue) == int(r.lvalue)))
     elif((l.ltype == "STRING") and (r.ltype == "INTEGER")):
         return Lexeme("BOOLEAN", (int(l.lvalue) == int(r.lvalue)))
+    elif(l.ltype == "NIL"):
+        if(r.ltype == "NIL"):
+            return Lexeme("BOOLEAN", True)
+        else:
+            return Lexeme("BOOLEAN", False)
+    elif(r.ltype == "NIL"):
+        return Lexeme("BOOLEAN", False)
     else:
         raise Exception("ERROR: Can't equate: "+str(l)+" and "+str(r))
 
@@ -619,45 +645,57 @@ def evalPRINT(tree, env):
     print(eargs)
 
 def evalNIL(tree, env):
-    return None
+    return tree
 
 def evalAPPEND(tree, env):
     # print("In evalAPPEND")
-    value = eval(tree.right.right.left.left.left.left.lvalue)
+    value = evaluate(tree.right.right.left.left.left.left, env)
+    v = eval(value.lvalue)
     arr = evaluate(tree.right.right.left.right.right.left.left.left.left.left, env)
-    if(isinstance(value, str)):
-        new = Lexeme("STRING", value)
-    elif(isinstance(value, int)):
-        new = Lexeme("INTEGER", value)
+    if(isinstance(v, str)):
+        new = Lexeme("STRING", v)
+    elif(isinstance(v, int)):
+        new = Lexeme("INTEGER", v)
     arr.lvalue.append(new)
 
 def evalINSERT(tree, env):
     # print("In evalINSERT")
-    index = eval(tree.right.right.left.right.right.left.right.right.left.left.left.left.lvalue)
-    value = eval(tree.right.right.left.left.left.left.lvalue)
+    index = evaluate(tree.right.right.left.right.right.left.right.right.left.left.left.left, env)
+    value = evaluate(tree.right.right.left.left.left.left, env)
+    i = eval(index.lvalue)
+    v = eval(value.lvalue)
     arr = evaluate(tree.right.right.left.right.right.left.left.left.left.left, env)
-    if(isinstance(value, str)):
-        new = Lexeme("STRING", value)
-    elif(isinstance(value, int)):
-        new = Lexeme("INTEGER", value)
-    arr.lvalue.insert(index, value)
+    if(isinstance(v, str)):
+        new = Lexeme("STRING", v)
+    elif(isinstance(v, int)):
+        new = Lexeme("INTEGER", v)
+    arr.lvalue.insert(i, v)
 
 def evalREMOVE(tree, env):
     # print("In evalREMOVE")
-    index = eval(tree.right.right.left.left.left.left.lvalue)
+    index = evaluate(tree.right.right.left.left.left.left, env)
+    i = eval(index.lvalue)
     arr = evaluate(tree.right.right.left.right.right.left.left.left.left.left, env)
-    arr.lvalue.pop(index)
+    arr.lvalue.pop(i)
 
 def evalSET(tree, env):
     # print("In evalREMOVE")
-    index = eval(tree.right.right.left.right.right.left.right.right.left.left.left.left.lvalue)
-    value = eval(tree.right.right.left.left.left.left.lvalue)
+    index = evaluate(tree.right.right.left.right.right.left.right.right.left.left.left.left, env)
+    if(isinstance(index.lvalue, str)):
+        i = eval(index.lvalue)
+    else:
+        i = index.lvalue
+    value = evaluate(tree.right.right.left.left.left.left, env)
+    if(isinstance(value.lvalue, str)):
+        v = eval(value.lvalue)
+    else:
+        v = value.lvalue
     arr = evaluate(tree.right.right.left.right.right.left.left.left.left.left, env)
-    if(isinstance(value, str)):
-        new = Lexeme("STRING", value)
-    elif(isinstance(value, int)):
-        new = Lexeme("INTEGER", value)
-    arr.lvalue[index] = value
+    if(isinstance(v, str)):
+        new = Lexeme("STRING", v)
+    elif(isinstance(v, int)):
+        new = Lexeme("INTEGER", v)
+    arr.lvalue[i] = v
 
 def evalLENGTH(tree, env):
     # print("In evalLENGTH")

@@ -233,7 +233,7 @@ func add_to_agenda(time, action, agenda)
         }
     }
 
-    var segs = segments(agenda);
+    var segs = get_segments(agenda);
     if(belongs_before?(segs))
     {
         if(null?(segs))
@@ -253,10 +253,10 @@ func add_to_agenda(time, action, agenda)
 
 func current_time(agenda) { return car (agenda); }
 func set_current_time(agenda, time) { return set_car(agenda, time); }
-func segments(agenda) { return cdr(agenda); }
+func get_segments(agenda) { return cdr(agenda); }
 func set_segments(agenda, segments) { return set_cdr(agenda, segments); }
-func first_segment(agenda) { return car(segments(agenda)); }
-func rest_segments(agenda) { return cdr(segments(agenda)); }
+func first_segment(agenda) { return car(get_segments(agenda)); }
+func rest_segments(agenda) { return cdr(get_segments(agenda)); }
 
 func and_gate(a1, a2, out)
 {

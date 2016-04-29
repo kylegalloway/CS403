@@ -54,8 +54,9 @@ func TreeTest()
         var i = 0;
         while(i < length(arguments))
         {
-            set(arguments[i], intArray, i);
-            i = i + 1;
+            print(i);
+            append(arguments[i], intArray);
+            var i = i + 1;
         }
 
         var intArray = bubbleSort(intArray);
