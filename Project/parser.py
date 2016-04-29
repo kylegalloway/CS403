@@ -222,6 +222,12 @@ class Parser():
             e = self.exprList()
             c = self.match("CPAREN")
             return self.cons("APPEND", f, self.cons("JOIN", o, self.cons("JOIN", e, self.cons("JOIN", c, None))))
+        elif (self.check("INSERT")):
+            f = self.match("INSERT")
+            o = self.match("OPAREN")
+            e = self.exprList()
+            c = self.match("CPAREN")
+            return self.cons("INSERT", f, self.cons("JOIN", o, self.cons("JOIN", e, self.cons("JOIN", c, None))))
         elif (self.check("REMOVE")):
             f = self.match("REMOVE")
             o = self.match("OPAREN")
@@ -450,7 +456,7 @@ class Parser():
 
     def primaryPending(self):
         # print("In primaryPending")
-        return self.idDefPending() or self.check("STRING") or self.check("INTEGER") or self.check("NOT") or self.check("OPAREN") or self.k_lambdaPending() or self.functionDefinitionPending() or self.check("OBRACKET") or self.check("NIL") or self.check("BOOLEAN") or self.check("PRINT") or self.check("APPEND") or self.check("REMOVE") or self.check("SET") or self.check("LENGTH")
+        return self.idDefPending() or self.check("STRING") or self.check("INTEGER") or self.check("NOT") or self.check("OPAREN") or self.k_lambdaPending() or self.functionDefinitionPending() or self.check("OBRACKET") or self.check("NIL") or self.check("BOOLEAN") or self.check("PRINT") or self.check("APPEND") or self.check("INSERT") or self.check("REMOVE") or self.check("SET") or self.check("LENGTH")
 
     def operatorPending(self):
         # print("In operatorPending")

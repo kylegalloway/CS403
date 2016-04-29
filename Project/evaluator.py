@@ -125,6 +125,8 @@ def evaluate(tree, env):
         return evalARRAY(tree, env)
     elif (tree.ltype == "APPEND"):
         return evalAPPEND(tree, env)
+    elif (tree.ltype == "INSERT"):
+        return evalINSERT(tree, env)
     elif (tree.ltype == "REMOVE"):
         return evalREMOVE(tree, env)
     elif (tree.ltype == "SET"):
@@ -629,6 +631,17 @@ def evalAPPEND(tree, env):
         new = Lexeme("INTEGER", value)
     arr.lvalue.append(new)
 
+def evalINSERT(tree, env):
+    # print("In evalINSERT")
+    index = eval(tree.right.right.left.right.right.left.right.right.left.left.left.left.lvalue)
+    value = eval(tree.right.right.left.left.left.left.lvalue)
+    arr = evaluate(tree.right.right.left.right.right.left.left.left.left.left, env)
+    if(isinstance(value, str)):
+        new = Lexeme("STRING", value)
+    elif(isinstance(value, int)):
+        new = Lexeme("INTEGER", value)
+    arr.lvalue.insert(index, value)
+
 def evalREMOVE(tree, env):
     # print("In evalREMOVE")
     index = eval(tree.right.right.left.left.left.left.lvalue)
@@ -647,7 +660,7 @@ def evalSET(tree, env):
     arr.lvalue[index] = value
 
 def evalLENGTH(tree, env):
-    # print("In evalREMOVE")
+    # print("In evalLENGTH")
     arr = evaluate(tree.right.right.left.left.left.left.left, env).lvalue
     return Lexeme("INTEGER", len(arr))
 

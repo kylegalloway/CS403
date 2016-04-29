@@ -39,6 +39,7 @@ primary : idDef
         | BOOLEAN
         | PRINT OPAREN exprList CPAREN
         | APPEND OPAREN exprList CPAREN
+        | INSERT OPAREN exprList CPAREN
         | REMOVE OPAREN exprList CPAREN
         | SET OPAREN exprList CPAREN
         | LENGTH OPAREN exprList CPAREN

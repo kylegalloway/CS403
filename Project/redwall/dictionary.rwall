@@ -1,2 +1,95 @@
-## For MossFlower!
-var a = 1;
+func Node()
+{
+    var key = nil;
+    var right = nil;
+    var left = nil;
+
+    func this(msg, p)
+    {
+        if (m == "get_key") { return key; }
+        else if (m == "get_right") { return right; }
+        else if (m == "get_left") { return left; }
+        else if (m == "set_key") { key = p; }
+        else if (m == "set_right") { right = p; }
+        else if (m == "set_left") { left = p; }
+        else { print("Unknown operation __ NODE", m); return nil; }
+    }
+
+    return this;
+}
+
+func Tree(arr)
+{
+    var root = formLocalRoot(arr, 0, length(arr) - 1);
+    func formLocalRoot(array, fromIndex, toIndex)
+    {
+        if(fromIndex>toIndex) {
+            return nil;
+        }
+        var middleIndex = (fromIndex+toIndex) / 2;
+        var localRoot = Node;
+        localRoot("set_key", array[middleIndex]);
+        localRoot("set_right", formLocalRoot(array,(middleIndex + 1),toIndex));
+        localRoot("set_left", formLocalRoot(array,fromIndex,(middleIndex - 1)));
+        return localRoot;
+    }
+
+    func this(msg, p)
+    {
+        if (m == "get_root") { return root; }
+        else if (m == "set_root") { root = p; }
+        else if (m == "formLocalRoot") { return formLocalRoot; }
+        else { print("Unknown operation __ NODE", m); return nil; }
+    }
+
+    return this;
+
+}
+
+func TreeTest()
+{
+    func main(arguments)
+    {
+        var intArray = [];
+        var i = 0;
+        while(i < length(arguments))
+        {
+            set(arguments[i], intArray, i);
+            i = i + 1;
+        }
+
+        var intArray = bubbleSort(intArray);
+        var tree = Tree(intArray);
+        print(tree("get_root"));
+    }
+
+    return main;
+}
+
+func bubbleSort(a)
+{
+    var i = 0;
+    var j = 1;
+    while(i < length(a))
+    {
+        while(j < (length(a) - i))
+        {
+            if(a[j - 1] > a[j])
+            {
+                swap(a, (j - 1), j);
+            }
+            j = j + 1;
+        }
+        i = i + 1;
+    }
+}
+func swap(a, i, j)
+{
+    var temp = a[i];
+    set(a[j], a, i);
+    set(temp, a, j);
+}
+
+var a = [13, -3, -77, 49, -11, 235, 0, -54, -43];
+var f = TreeTest();
+var m = f(a);
