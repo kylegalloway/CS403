@@ -44,13 +44,13 @@ run-recursion:
 run-iteration:
 	python3 ./evaluator.py redwall/iteration.rwall
 
-# Everything above works with evaluator. Everything below needs arrays.
-
 run-arrays:
 	python3 ./evaluator.py redwall/arrays.rwall
 
+# Everything above works with evaluator. Everything below needs fixes.
+
 run-dictionary:
-	python3 ./prettyPrinter.py redwall/dictionary.rwall
+	python3 ./evaluator.py redwall/dictionary.rwall
 
 run-problem:
 	python3 ./evaluator.py redwall/test_problem.rwall

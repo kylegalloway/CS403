@@ -1,21 +1,39 @@
-func car(list){ return list[0]; }
-func car(list){ return list[1]; }
-func set_car(list, item){ set(item, list, 0);}
-func set_car(list, item){ set(item, list, 1);}
+func car(list)
+{
+    if (length(list) > 0) { return list[0]; }
+    else { return nil; }
+}
+func cdr(list)
+{
+    if (length(list) > 1) { return list[1]; }
+    else { return nil; }
+}
+func set_car(list, item)
+{
+    if(length(list) > 0) { set(item, list, 0); }
+    else { print("ERROR: SET_CAR, LIST NOT LONG ENOUGH");}
+}
+func set_car(list, item)
+{
+    if(length(list) > 1) { set(item, list, 1); }
+    else { print("ERROR: SET_CDR, LIST NOT LONG ENOUGH");}
+}
 func cons(i1, i2){ return [i1, i2]; }
+func null?(x){ return x == nil;}
 
 func front_ptr(queue) { return car(queue); }
 func rear_ptr(queue) { return cdr(queue); }
 func set_front_ptr(queue, item) { set_car(queue, item); }
 func set_rear_ptr(queue, item) { set_cdr(queue, item); }
 func empty_queue?(queue) { return (null?(front_ptr(queue))); }
-func make_queue() { cons(nil, nil); }
+func make_queue() { return cons(nil, nil); }
 
 func front_queue(queue)
 {
     if (empty_queue?(queue))
     {
-        return print("FRONT called with an empty queue", queue);
+        print("FRONT called with an empty queue", queue);
+        return nil;
     }
     else
     {
@@ -44,11 +62,12 @@ func delete_queue(queue)
 {
     if(empty_queue?(queue))
     {
-        return print("DELETE called with an empty queue", queue);
+        print("DELETE called with an empty queue", queue);
+        return nil;
     }
     else
     {
-        set_front_ptr(queue, (cdr(front_ptr(queue))));
+        set_front_ptr(queue, cdr(front_ptr(queue)));
         return queue;
     }
 }
@@ -82,7 +101,7 @@ func make_wire()
         if (m == "'get_signal") { return signal_value; }
         else if (m == "'set_signal") { return set_my_signal; }
         else if (m == "'add_action") { return accept_action_procedure; }
-        else { return print("Unknown operation __ WIRE", m); }
+        else { print("Unknown operation __ WIRE", m); return nil; }
     }
 
     return dispatch;
@@ -97,7 +116,7 @@ func call_each(procedures)
     }
     else
     {
-        c = car(procedures);
+        var c = car(procedures);
         c();
         return call_each(cdr(procedures));
     }
@@ -119,7 +138,14 @@ func add_action(wire, action_procedure)
 
 func after_delay(delay, action)
 {
-    return add_to_agenda((delay + current_time(the_agenda)), action, the_agenda);
+    if (length(the_agenda) == 0)
+    {
+        return add_to_agenda(delay, action, the_agenda);
+    }
+    else
+    {
+        return add_to_agenda((delay + current_time(the_agenda)), action, the_agenda);
+    }
 }
 
 func propagate()
@@ -147,7 +173,8 @@ func first_agenda_item (agenda)
 {
     if (empty_agenda? (agenda))
     {
-        return print ("Agenda is empty __ FIRST_AGENDA_ITEM", nil);
+        print ("Agenda is empty __ FIRST_AGENDA_ITEM", nil);
+        return nil;
 
     }
     else
@@ -215,7 +242,7 @@ func add_to_agenda(time, action, agenda)
         }
         else
         {
-            return set_segments(agends, cons(make_new_time_segment(time, action), cdr(segs)));
+            return set_segments(agenda, cons(make_new_time_segment(time, action), cdr(segs)));
         }
     }
     else
@@ -330,7 +357,7 @@ func full_adder(a, b, cin, sum, cout)
     return "OK";
 }
 
-var the_agenda = nil;
+var the_agenda = [];
 var and_delay = 0;
 var or_delay = 0;
 var inverter_delay = 0;
@@ -346,7 +373,8 @@ func wiretest()
     var y0 = make_wire();
     var o0 = make_wire();
     var carry = make_wire();
-    print(full_adder(x0, y0, 0, o0, carry));
+    var zero = make_wire();
+    print(full_adder(x0, y0, zero, o0, carry));
     set_signal(x0, 1);
     propagate();
     print("X        = 0", get_signal(x0));

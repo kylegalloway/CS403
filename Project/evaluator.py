@@ -129,6 +129,8 @@ def evaluate(tree, env):
         return evalREMOVE(tree, env)
     elif (tree.ltype == "SET"):
         return evalSET(tree, env)
+    elif (tree.ltype == "LENGTH"):
+        return evalLENGTH(tree, env)
     else:
         raise Exception("ERROR: "+str(tree.ltype)+" : "+str(tree.lvalue))
 
@@ -159,6 +161,7 @@ def evalVARDEF(tree, env):
 def evalFUNCDEF(tree, env):
     # print("In evalFUNCDEF")
     variable = str(tree.right.left.lvalue)
+    print(variable)
     params = tree.right.right.right.left.left
     body = tree.right.right.right.right.right.left
     right = Lexeme("JOIN", "JOIN", body, env)
@@ -212,6 +215,11 @@ def evalFUNCCALL(tree, env):
     eparams = makeParamList(params)
 
     eeargs = makeArgList(eargs, env)
+
+    print("eparams", end=" : ")
+    print(eparams)
+    print("eeargs", end=" : ")
+    print(eeargs)
 
     if(len(eeargs) != len(eparams)):
         raise Exception("ERROR: Wrong number of arguments.")
@@ -637,6 +645,12 @@ def evalSET(tree, env):
     elif(isinstance(value, int)):
         new = Lexeme("INTEGER", value)
     arr.lvalue[index] = value
+
+def evalLENGTH(tree, env):
+    # print("In evalREMOVE")
+    arr = evaluate(tree.right.right.left.left.left.left.left, env).lvalue
+    return Lexeme("INTEGER", len(arr))
+
 
 
 

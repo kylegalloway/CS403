@@ -1,4 +1,7 @@
 var arr2 = [true, 1, "String"];
+var a = length(arr2);
+var m = print(a);
+#$
 var y = print(arr2[2]);
 var b = set("ME", arr2, 2);
 var z = print(arr2[2]);

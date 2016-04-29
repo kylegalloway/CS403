@@ -139,6 +139,7 @@ class Lexer():
         if (buff == "append"): return Lexeme("APPEND", "append")
         if (buff == "remove"): return Lexeme("REMOVE", "remove")
         if (buff == "set"): return Lexeme("SET", "set")
+        if (buff == "length"): return Lexeme("LENGTH", "length")
 
         return Lexeme("ID", buff)
 
@@ -162,7 +163,7 @@ class Lexer():
 
     def skipLine(self):
         ch = self.getCharacter()
-        while(ch != '\n'):
+        while((ch != '\n')):
             ch = self.getCharacter()
         self.lineNumber += 1
 

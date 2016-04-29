@@ -172,6 +172,7 @@ class Parser():
     #         | APPEND OPAREN exprList CPAREN
     #         | REMOVE OPAREN exprList CPAREN
     #         | SET OPAREN exprList CPAREN
+    #         | LENGTH OPAREN exprList CPAREN
     def primary(self):
         # print("In primary")
         if (self.idDefPending()):
@@ -233,6 +234,12 @@ class Parser():
             e = self.exprList()
             c = self.match("CPAREN")
             return self.cons("SET", f, self.cons("JOIN", o, self.cons("JOIN", e, self.cons("JOIN", c, None))))
+        elif (self.check("LENGTH")):
+            f = self.match("LENGTH")
+            o = self.match("OPAREN")
+            e = self.exprList()
+            c = self.match("CPAREN")
+            return self.cons("LENGTH", f, self.cons("JOIN", o, self.cons("JOIN", e, self.cons("JOIN", c, None))))
 
     # operator : EQUAL
     #          | NOTEQUAL
@@ -443,7 +450,7 @@ class Parser():
 
     def primaryPending(self):
         # print("In primaryPending")
-        return self.idDefPending() or self.check("STRING") or self.check("INTEGER") or self.check("NOT") or self.check("OPAREN") or self.k_lambdaPending() or self.functionDefinitionPending() or self.check("OBRACKET") or self.check("NIL") or self.check("BOOLEAN") or self.check("PRINT") or self.check("APPEND") or self.check("REMOVE") or self.check("SET")
+        return self.idDefPending() or self.check("STRING") or self.check("INTEGER") or self.check("NOT") or self.check("OPAREN") or self.k_lambdaPending() or self.functionDefinitionPending() or self.check("OBRACKET") or self.check("NIL") or self.check("BOOLEAN") or self.check("PRINT") or self.check("APPEND") or self.check("REMOVE") or self.check("SET") or self.check("LENGTH")
 
     def operatorPending(self):
         # print("In operatorPending")
