@@ -257,6 +257,7 @@ class Parser():
     #          | MINUS
     #          | MULTIPLY
     #          | DIVIDE
+    #          | INTEGERDIVIDE
     #          | POWER
     #          | AND
     #          | OR
@@ -293,6 +294,9 @@ class Parser():
         elif(self.check("DIVIDE")):
             op = self.match("DIVIDE")
             return self.cons("DIVIDE", op, None)
+        elif(self.check("INTEGERDIVIDE")):
+            op = self.match("INTEGERDIVIDE")
+            return self.cons("INTEGERDIVIDE", op, None)
         elif(self.check("POWER")):
             op = self.match("POWER")
             return self.cons("POWER", op, None)
@@ -460,7 +464,7 @@ class Parser():
 
     def operatorPending(self):
         # print("In operatorPending")
-        return self.check("EQUAL") or self.check("NOTEQUAL") or self.check("GREATER") or self.check("LESS") or self.check("GREATEREQUAL") or self.check("LESSEQUAL") or self.check("PLUS") or self.check("MINUS") or self.check("MULTIPLY") or self.check("DIVIDE") or self.check("POWER") or self.check("AND") or self.check("OR") or self.check("ASSIGN") or self.check("DOUBLEEQUAL")
+        return self.check("EQUAL") or self.check("NOTEQUAL") or self.check("GREATER") or self.check("LESS") or self.check("GREATEREQUAL") or self.check("LESSEQUAL") or self.check("PLUS") or self.check("MINUS") or self.check("MULTIPLY") or self.check("DIVIDE") or self.check("INTEGERDIVIDE") or self.check("POWER") or self.check("AND") or self.check("OR") or self.check("ASSIGN") or self.check("DOUBLEEQUAL")
 
     def blockPending(self):
         # print("In blockPending")

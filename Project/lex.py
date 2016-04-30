@@ -22,7 +22,6 @@ class Lexer():
         if (ch == ']'): return Lexeme("CBRACKET", "]")
         if (ch == '+'): return Lexeme("PLUS", "+")
         if (ch == '*'): return Lexeme("MULTIPLY", "*")
-        if (ch == '/'): return Lexeme("DIVIDE", "/")
         if (ch == '%'): return Lexeme("MODULO", "%")
         if (ch == '^'): return Lexeme("POWER", "^")
         if (ch == '&'): return Lexeme("AND", "&")
@@ -30,6 +29,7 @@ class Lexer():
         if (ch == '|'): return Lexeme("OR", "|")
 
         if (ch == '-'): return self.lexMinus(ch)
+        if (ch == '/'): return self.lexDivide(ch)
         if (ch in ['<', '>', '=', '!']): return self.lexOp(ch)
         if (ch == '\"'): return self.lexString()
         if (ch == '\''): return self.lexString()
@@ -79,6 +79,14 @@ class Lexer():
             self.pushbackCharacter()
             return Lexeme("INTEGER", buff)
 
+    def lexDivide(self, ch):
+        buff = "" + ch
+        ch = self.getCharacter()
+        if (ch == "/"):
+            return Lexeme("INTEGERDIVIDE", "//")
+        else:
+            self.pushbackCharacter()
+            return Lexeme("DIVIDE", "/")
 
     def skipComment(self):
         ch = self.getCharacter()

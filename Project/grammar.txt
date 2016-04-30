@@ -54,6 +54,7 @@ operator : EQUAL
          | MINUS
          | MULTIPLY
          | DIVIDE
+         | INTEGERDIVIDE
          | POWER
          | AND
          | OR

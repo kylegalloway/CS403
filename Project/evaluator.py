@@ -111,6 +111,8 @@ def evaluate(tree, env):
         return evalMULTIPLY(tree, env)
     elif (tree.ltype == "DIVIDE"):
         return evalDIVIDE(tree, env)
+    elif (tree.ltype == "INTEGERDIVIDE"):
+        return evalINTEGERDIVIDE(tree, env)
     elif (tree.ltype == "POWER"):
         return evalPOWER(tree, env)
     elif (tree.ltype == "AND"):
@@ -176,7 +178,7 @@ def evalIDDEF(tree, env):
     return evaluate(tree.left, env)
 
 def evalARRAYACCESS(tree, env):
-    print("In evalARRAYACCESS")
+    # print("In evalARRAYACCESS")
     arr = lookup(tree.left.lvalue, env)
     place = evaluate(tree.right.right.left, env)
     if(isinstance(place.lvalue, str)):
@@ -197,8 +199,8 @@ def evalFUNCCALL(tree, env):
 
     # print("args", end=" : ")
     # print(args)
-    # print("funcName", end=" : ")
-    # print(funcName)
+    print("funcName", end=" : ")
+    print(funcName)
     # print("closure", end=" : ")
     # print(closure)
     # print(lookup("f",env))
@@ -223,10 +225,10 @@ def evalFUNCCALL(tree, env):
 
     eeargs = makeArgList(eargs, env)
 
-    # print("eparams", end=" : ")
-    # print(eparams)
-    # print("eeargs", end=" : ")
-    # print(eeargs)
+    print("eparams", end=" : ")
+    print(eparams)
+    print("eeargs", end=" : ")
+    print(eeargs)
 
     if(len(eeargs) != len(eparams)):
         raise Exception("ERROR: Wrong number of arguments.")
@@ -621,6 +623,14 @@ def evalDIVIDE(tree, env):
     else:
         raise Exception("ERROR: Can't divide: "+str(l)+" and "+str(r))
 
+def evalINTEGERDIVIDE(tree, env):
+    l = evaluate(tree.left, env)
+    r = evaluate(tree.right, env)
+    if((l.ltype == "INTEGER") and (r.ltype == "INTEGER")):
+        return Lexeme("INTEGER", (int(l.lvalue) // int(r.lvalue)))
+    else:
+        raise Exception("ERROR: Can't divide: "+str(l)+" and "+str(r))
+
 def evalPOWER(tree, env):
     l = evaluate(tree.left, env)
     r = evaluate(tree.right, env)
@@ -634,6 +644,8 @@ def evalAND(tree, env):
     r = evaluate(tree.right, env)
     if((l.ltype == "INTEGER") and (r.ltype == "INTEGER")):
         return Lexeme("INTEGER", (int(l.lvalue) and int(r.lvalue)))
+    elif((l.ltype == "BOOLEAN") and (r.ltype == "BOOLEAN")):
+        return Lexeme("BOOLEAN", (l.lvalue and r.lvalue))
     else:
         raise Exception("ERROR: Can't and: "+str(l)+" and "+str(r))
 
@@ -642,6 +654,8 @@ def evalOR(tree, env):
     r = evaluate(tree.right, env)
     if((l.ltype == "INTEGER") and (r.ltype == "INTEGER")):
         return Lexeme("INTEGER", (int(l.lvalue)or int(r.lvalue)))
+    elif((l.ltype == "BOOLEAN") and (r.ltype == "BOOLEAN")):
+        return Lexeme("BOOLEAN", (l.lvalue or r.lvalue))
     else:
         raise Exception("ERROR: Can't or: "+str(l)+" or "+str(r))
 
@@ -692,8 +706,8 @@ def evalSET(tree, env):
     index = evaluate(tree.right.right.left.right.right.left.right.right.left.left.left.left, env)
     value = evaluate(tree.right.right.left.left.left.left, env)
     arr = evaluate(tree.right.right.left.right.right.left.left.left.left.left, env)
-    print(arr.ltype)
-    print(arr.lvalue)
+    # print(arr.ltype)
+    # print(arr.lvalue)
     if(isinstance(index.lvalue, str)):
         i = eval(index.lvalue)
     else:
@@ -706,7 +720,7 @@ def evalSET(tree, env):
         new = Lexeme("STRING", v)
     elif(isinstance(v, int)):
         new = Lexeme("INTEGER", v)
-    arr.lvalue[i] = v
+    arr.lvalue[i] = new
 
 def evalLENGTH(tree, env):
     # print("In evalLENGTH")

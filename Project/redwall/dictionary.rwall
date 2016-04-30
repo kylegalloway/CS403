@@ -4,8 +4,9 @@ func Node()
     var right = nil;
     var left = nil;
 
-    func this(msg, p)
+    func this(m, p)
     {
+        print(m);
         if (m == "get_key") { return key; }
         else if (m == "get_right") { return right; }
         else if (m == "get_left") { return left; }
@@ -20,25 +21,26 @@ func Node()
 
 func Tree(arr)
 {
-    var root = formLocalRoot(arr, 0, length(arr) - 1);
     func formLocalRoot(array, fromIndex, toIndex)
     {
         if(fromIndex>toIndex) {
             return nil;
         }
-        var middleIndex = (fromIndex+toIndex) / 2;
-        var localRoot = Node;
+        var middleIndex = (fromIndex+toIndex) // 2;
+        var localRoot = Node();
         localRoot("set_key", array[middleIndex]);
         localRoot("set_right", formLocalRoot(array,(middleIndex + 1),toIndex));
         localRoot("set_left", formLocalRoot(array,fromIndex,(middleIndex - 1)));
         return localRoot;
     }
 
-    func this(msg, p)
+    var root = formLocalRoot(arr, 0, length(arr) - 1);
+
+    func this(m, p)
     {
         if (m == "get_root") { return root; }
         else if (m == "set_root") { root = p; }
-        else if (m == "formLocalRoot") { return formLocalRoot; }
+        else if (m == "formLocalRoot") { return formLocalRoot(); }
         else { print("Unknown operation __ NODE", m); return nil; }
     }
 
@@ -54,17 +56,34 @@ func TreeTest()
         var i = 0;
         while(i < length(arguments))
         {
-            print(i);
+            print(arguments[i]);
             append(arguments[i], intArray);
             var i = i + 1;
         }
 
-        var intArray = bubbleSort(intArray);
+        ## var intArray = insertionSort(intArray);
+        ## var intArray = bubbleSort(intArray);
         var tree = Tree(intArray);
         print(tree("get_root"));
     }
 
     return main;
+}
+
+func insertionSort(a)
+{
+    var i = 0;
+    while(i < length(a))
+    {
+        var tmp = a[i];
+        var k = i;
+        while((k > 0) & (tmp < a[k - 1]))
+        {
+            set(a[k - 1], a, k);
+            var k = k - 1;
+        }
+        set(tmp, a, k);
+    }
 }
 
 func bubbleSort(a)
@@ -79,10 +98,11 @@ func bubbleSort(a)
             {
                 swap(a, (j - 1), j);
             }
-            j = j + 1;
+            var j = j + 1;
         }
-        i = i + 1;
+        var i = i + 1;
     }
+    return a;
 }
 func swap(a, i, j)
 {
@@ -91,6 +111,8 @@ func swap(a, i, j)
     set(temp, a, j);
 }
 
-var a = [13, -3, -77, 49, -11, 235, 0, -54, -43];
+
+## var a = [13, -3, -77, 49, -11, 235, 0, -54, -43];
+var a = [3,2,1];
 var f = TreeTest();
 var m = f(a);
