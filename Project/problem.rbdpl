@@ -1,0 +1,521 @@
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~Author: 		Brad Wilson
+~Email: 		bewilson@crimson.ua.edu
+~Written:		2016-04-28
+~Last Updated:		2016-04-29
+~
+~This is a program written in Ruby DPL to similuate a 
+~physical full adder circuit connected to wires. 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+~~~~~~~~~~
+~ Useful
+~~~~~~~~~~
+func printArray(arr)
+{
+	var l = length(arr)
+	var i = 0
+	while(i < l)
+	{
+		println(arr[i])
+		i =  i + 1
+	}
+}
+
+func cons(a, b)
+{
+	return [a, b]
+}
+
+func car(con)
+{
+	if(con == nil)
+	{
+		println()
+		println()
+		println("Cannot take car of nil. Exiting")
+		println()
+		println()
+		return con[0]
+	}
+	return con[0]
+}
+
+func cdr(con)
+{
+	return con[1]
+}
+
+func setCar(con, val)
+{
+	con[0] = val
+	return con
+}
+func setCdr(con,val)
+{
+	con[1] = val
+	return con
+}
+func isNull(con)
+{
+	if(con == nil)
+	{return 1}
+	else
+	{return 0}
+}
+
+func arrConsTest()
+{
+	println("Storing brr = [1,[2,nil]]")
+	var brr = [1,[2,nil]]
+	println("brr[0] should be: 1")
+	println("brr[0] is:        ",brr[0])
+	println("brr[1] should be: Lexeme")
+	println("brr[1] is:        ", brr[1])
+	println("Storing crr = brr[1]")
+	var crr = brr[1]
+	println("crr[0] should be: 2")
+	println("crr[0] is:        ", crr[0])
+	println("crr[1] should be: nil")
+	println("crr[1] is:        ", crr[1])
+	println()
+	println("storing xrr = cons(1, cons(2, nil)) --> [1,[2,nil]]")
+	var xrr = cons(1, cons(2, nil))
+	println("car(xrr) --> xrr[0] --> 1")
+	println("car(xrr) is: ", car(xrr))
+	println("xrr[0] is:   ", xrr[0])
+	println("cdr(xrr) --> xrr[1] --> Lexeme")
+	println("cdr(xrr) is: ",cdr(xrr))
+	println("xrr[1] is:   ",xrr[1])
+	println("Storing yrr = cdr(xrr)")
+	var yrr = cdr(xrr)
+	println("Storing zrr = xrr[1]")
+	var zrr = xrr[1]
+	println("car(yrr) --> yrr[0] --> car(zrr) --> zrr[0]")
+	println("car(yrr) is: ",car(yrr))
+	println("yrr[0] is:   ",yrr[0])
+	println("car(zrr) is: ",car(zrr))
+	println("zrr[0] is:   ",zrr[0])
+	println("cdr(yrr) --> yrr[1] --> cdr(zrr) --> zrr[1]")
+	println("cdr(yrr) is: ",cdr(yrr))
+	println("yrr[1] is:   ",yrr[1])
+	println("cdr(zrr) is: ",cdr(zrr))
+	println("zrr[1] is:   ",zrr[1])
+	println(isNull(zrr[0]))
+	println(isNull(zrr[1]))
+}
+
+~~~~~~~~~~
+~ Queue
+~~~~~~~~~~
+func frontPtr(queue){return car(queue)}
+func rearPtr(queue){return cdr(queue)}
+func setFrontPtr(queue, item){return setCar(queue, item)}
+func setRearPtr(queue, item){return setCdr(queue, item)}
+func isEmptyQueue(queue){return isNull(frontPtr(queue))}
+func makeQueue(){return cons(nil, nil)} ~~Trace this for accuracy
+func frontQueue(queue)
+{
+	if(isEmptyQueue(queue))
+	{
+		println()println()
+		println("FRONT called with an empty queue. Exiting")
+		return car(frontPtr(queue))
+	}
+	else
+	{
+		return car(frontPtr(queue))
+	}
+}
+func insertQueue(queue, item)
+{
+	var new_pair = cons(item, nil)
+	
+	if(isEmptyQueue(queue))
+	{
+		setFrontPtr(queue, new_pair)
+		setRearPtr(queue, new_pair)
+		return queue
+	}
+	else
+	{
+		setCdr(rearPtr(queue), new_pair)
+		setRearPtr(queue, new_pair)
+		return queue
+	}
+}
+func deleteQueue(queue)
+{
+	if(isEmptyQueue(queue))
+	{
+		println()println()
+		println("DELETE called with an empty queue. Exiting")
+		return car(frontPtr(queue))
+	}
+	else
+	{
+		setFrontPtr(queue, cdr(frontPtr(queue)))
+		return queue
+	}
+}
+
+~~~~~~~~~~
+~ Agenda
+~~~~~~~~~~
+func makeSegment(time, queue)
+{
+	return cons(time, queue)
+}
+
+func segmentTime(seg)
+{
+	return car(seg)
+}
+
+func segmentQueue(seg)
+{
+	return cdr(seg)
+}
+
+func makeAgenda()
+{
+	return cons(0, nil)
+}
+
+func currentTime(agenda)
+{
+	return car(agenda)
+}
+
+func setCurrentTime(agenda, time)
+{
+	return setCar(agenda, time)
+}
+
+func segments(agenda)
+{
+	return cdr(agenda)
+}
+
+func setSegments(agenda, segments)
+{
+	return setCdr(agenda, segments)
+}
+
+func firstSegment(agenda)
+{
+	return car(segments(agenda))
+}
+
+func restSegments(agenda)
+{
+	return cdr(segments(agenda))
+}
+
+func emptyAgenda(agenda)
+{
+	return isNull(segments(agenda))
+}
+
+func addToAgenda(time, action, agenda)
+{
+	func doesBelongBefore(segments)
+	{
+		if(isNull(segments))
+		{
+			return 1
+		}
+		else if (time < segmentTime(car(segments)))
+		{
+			return 1
+		} 
+		else
+		{
+			return 0
+		}
+	}
+	func makeNewTimeSegment(time, action)
+	{
+		var q = makeQueue()
+		insertQueue(q, action)
+		return makeSegment(time, q)
+	}
+	func addToSegments(segments)
+	{
+		if(segmentTime(car(segments)) == time)
+		{
+			return insertQueue(segmentQueue(car(segments)),action)
+		}
+		else
+		{
+			var rest = cdr(segments)
+			if(doesBelongBefore(rest))
+			{
+				return setCdr(segments, cons(makeNewTimeSegment(time, action), cdr(segments)))
+			}
+			else
+			{
+				return addToSegments(rest)
+			}
+		}
+	}
+	var segments = segments(agenda)
+	if(doesBelongBefore(segments))
+	{
+		return setSegments(agenda,
+					cons(makeNewTimeSegment(time,action), segments)
+					)
+	}
+	else
+	{
+		return addToSegments(segments)
+	}
+}
+func removeFirstAgendaItem(agenda)
+{
+	var q = segmentQueue(firstSegment(agenda))
+	deleteQueue(q)
+	if(isEmptyQueue(q))
+	{
+		return setSegments(agenda, restSegments(agenda))
+	}
+}
+func firstAgendaItem(agenda)
+{
+	if(emptyAgenda(agenda))
+	{
+		println()println()
+		println("EMPTY AGENDA")
+		println()println()
+	}
+	else
+	{
+		var first_seg = firstSegment(agenda)
+		setCurrentTime(agenda, segmentTime(first_seg))
+		return frontQueue(segmentQueue(first_seg))
+	}
+}
+
+~~~~~~~~~~~~~~~~~~~~
+~ Circuit Initialize
+~~~~~~~~~~~~~~~~~~~~
+var the_agenda = makeAgenda()
+var and_gate_delay = 3
+var or_gate_delay = 3
+var inverter_delay = 2
+
+~~~~~~~~~~~~~~
+~ After-Delay
+~~~~~~~~~~~~~~
+func afterDelay(mdelay, action)
+{
+	return addToAgenda((mdelay + currentTime(the_agenda)), action, the_agenda)
+}
+
+~~~~~~~~~~~~~~
+~ Propagate
+~~~~~~~~~~~~~~
+func propagate()
+{
+	if(emptyAgenda(the_agenda))
+	{
+		return "done"
+	}
+	else
+	{
+		var first_item = firstAgendaItem(the_agenda)
+		first_item()
+		removeFirstAgendaItem(the_agenda)
+		propagate()
+	}
+}
+
+~~~~~~~~~~~~~
+~ Wire Stuff
+~~~~~~~~~~~~~
+func makeWire()
+{
+	var signal = 0
+	var action_procedures = nil
+
+	func setMySignal(val)
+	{
+		if(signal != val)
+		{
+			signal = val
+			return callEach(action_procedures)
+		}
+		else
+		{
+			return "done"
+		}
+	}
+	func acceptActionProcedure(proc)
+	{
+		action_procedures = cons(proc, action_procedures)
+		return proc()
+	}
+
+	func dispatch(m)
+	{
+		if(m == "get-signal") {return signal}
+		else if(m == "set-signal") {return setMySignal}
+		else if(m == "add-action") {return acceptActionProcedure}
+		else {println("Unknown Operation --WIRE ", m)}
+	}
+	return dispatch
+}
+func callEach(procedures)
+{
+	if(isNull(procedures))
+	{
+		return "done"
+	}
+	else
+	{
+		var temp = car(procedures)
+		temp()
+		return callEach(cdr(procedures))
+	}
+}
+func setSignal(wire, value)
+{
+	var temp = wire("set-signal")
+	temp(value)
+}
+func getSignal(wire)
+{
+	return wire("get-signal")
+}
+func addAction(wire, ap)
+{
+	var temp = wire("add-action")
+	temp(ap)
+}
+
+func inverter(in, out)
+{
+	func invertInput()
+	{
+		var inv = 
+			lambda(s)
+			{
+				if(s == 0){return 1}
+				else if(s == 1){return 0}
+				else{println("ERROR! Incorrect signal value in INVERTER")}
+			}
+
+		var val = inv(getSignal(in))
+		return afterDelay(inverter_delay,
+				   lambda(){setSignal(out, val)})
+
+	}
+	addAction(in, invertInput)
+	return "ok"
+}
+func orGate(in1, in2, out)
+{
+	func orActionProcedure()
+	{
+		var ort = 
+			lambda()
+			{
+				var v1 = getSignal(in1)
+				var v2 = getSignal(in2)
+				if((v1 == 0) && (v2 == 0)) 
+				{
+					return 0
+				}
+				else {return 1}
+			}
+		var v = ort()
+		return afterDelay(or_gate_delay,
+				   lambda(){setSignal(out, v)})
+	}
+	addAction(in1, orActionProcedure)
+	addAction(in2, orActionProcedure)
+	return "ok"
+}
+func andGate(in1, in2, out)
+{
+	func andActionProcedure()
+	{
+		var ant = 
+			lambda()
+			{
+				var v1 = getSignal(in1)
+				var v2 = getSignal(in2)
+				if((v1 == 0) || (v2 == 0)) {return 0}
+				else {return 1}
+			}
+		var v = ant()
+		return afterDelay(and_gate_delay,
+				   lambda(){setSignal(out, v)})
+	}
+	addAction(in1, andActionProcedure)
+	addAction(in2, andActionProcedure)
+	return "ok"
+}
+func halfAdder(in1, in2, out, cout)
+{
+	var x = makeWire()
+	var y = makeWire()
+	orGate(in1, in2, x)
+	andGate(in1, in2, cout)
+	inverter(cout, y)
+	andGate(x, y, out)
+	return "ok"
+}
+func fullAdder(in1, in2, out, cin, cout)
+{
+	var x = makeWire()
+	var y = makeWire()
+	var z = makeWire()
+	halfAdder(in2, cin, x, z)
+	halfAdder(in1, x, out, y)
+	orGate(y, z, cout)
+	return "ok"
+}
+func probe(name, wire)
+{
+	addAction(wire,
+			  lambda()
+			  {
+			  	println(name," ",currentTime(the_agenda), " New-value = ",getSignal(wire))
+			  }
+		)
+}
+
+~~~~~~~~~~~~~~~~~~~~
+~ Program Execution
+~~~~~~~~~~~~~~~~~~~~
+var a = makeWire()
+var b = makeWire()
+var carryin = makeWire()
+var carryout = makeWire()
+var result = makeWire()
+~orGate(a,b,result)
+fullAdder(a, b, result, carryin, carryout)
+func addBiNums(val1, val2, cin)
+{
+	println()
+	println("A: ",val1," B: ",val2," Cin: ",cin)
+	setSignal(a, val1)
+	setSignal(b, val2)
+	setSignal(carryin, cin)
+	propagate()
+}
+probe("Wire A",a)
+probe("Wire B",b)
+probe("CarryIn", carryin)
+probe("CarryOut", carryout)
+probe("Output",result)
+propagate()
+addBiNums(0, 0, 0)
+addBiNums(1, 0, 0)
+addBiNums(0, 1, 0)
+addBiNums(1, 1, 0)
+addBiNums(0, 0, 1)
+addBiNums(1, 0, 1)
+addBiNums(0, 1, 1)
+addBiNums(1, 1, 1)

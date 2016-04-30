@@ -163,7 +163,7 @@ def evalVARDEF(tree, env):
 def evalFUNCDEF(tree, env):
     # print("In evalFUNCDEF")
     variable = str(tree.right.left.lvalue)
-    print(variable)
+    # print(variable)
     params = tree.right.right.right.left.left
     body = tree.right.right.right.right.right.left
     right = Lexeme("JOIN", "JOIN", body, env)
@@ -176,7 +176,7 @@ def evalIDDEF(tree, env):
     return evaluate(tree.left, env)
 
 def evalARRAYACCESS(tree, env):
-    # print("In evalARRAYACCESS")
+    print("In evalARRAYACCESS")
     arr = lookup(tree.left.lvalue, env)
     place = evaluate(tree.right.right.left, env)
     if(isinstance(place.lvalue, str)):
@@ -197,8 +197,8 @@ def evalFUNCCALL(tree, env):
 
     # print("args", end=" : ")
     # print(args)
-    print("funcName", end=" : ")
-    print(funcName)
+    # print("funcName", end=" : ")
+    # print(funcName)
     # print("closure", end=" : ")
     # print(closure)
     # print(lookup("f",env))
@@ -223,10 +223,10 @@ def evalFUNCCALL(tree, env):
 
     eeargs = makeArgList(eargs, env)
 
-    print("eparams", end=" : ")
-    print(eparams)
-    print("eeargs", end=" : ")
-    print(eeargs)
+    # print("eparams", end=" : ")
+    # print(eparams)
+    # print("eeargs", end=" : ")
+    # print(eeargs)
 
     if(len(eeargs) != len(eparams)):
         raise Exception("ERROR: Wrong number of arguments.")
@@ -277,7 +277,12 @@ def makeArgList(args, env):
     argArr = []
     while(args):
         # print("{}".format(args.ltype))
-        if(args.ltype == "CLOSURE"):
+        if(isinstance(args,list)):
+            for x in args:
+                print(x)
+                argArr.append(x)
+            break
+        elif(args.ltype == "CLOSURE"):
             argArr.append(args)
             break
         elif(args.ltype != "JOIN"):
@@ -456,6 +461,7 @@ def evalARRAY(tree,env):
 
 def evalBOOLEAN(tree,env):
     # print("In evalBOOLEAN")
+    # print(tree.lvalue)
     return tree
 
 def evalID(tree,env):
@@ -645,6 +651,9 @@ def evalPRINT(tree, env):
     print(eargs)
 
 def evalNIL(tree, env):
+    # print("In evalNIL")
+    # print(tree.ltype)
+    # print(tree.lvalue)
     return tree
 
 def evalAPPEND(tree, env):
@@ -662,9 +671,9 @@ def evalINSERT(tree, env):
     # print("In evalINSERT")
     index = evaluate(tree.right.right.left.right.right.left.right.right.left.left.left.left, env)
     value = evaluate(tree.right.right.left.left.left.left, env)
+    arr = evaluate(tree.right.right.left.right.right.left.left.left.left.left, env)
     i = eval(index.lvalue)
     v = eval(value.lvalue)
-    arr = evaluate(tree.right.right.left.right.right.left.left.left.left.left, env)
     if(isinstance(v, str)):
         new = Lexeme("STRING", v)
     elif(isinstance(v, int)):
@@ -681,16 +690,18 @@ def evalREMOVE(tree, env):
 def evalSET(tree, env):
     # print("In evalREMOVE")
     index = evaluate(tree.right.right.left.right.right.left.right.right.left.left.left.left, env)
+    value = evaluate(tree.right.right.left.left.left.left, env)
+    arr = evaluate(tree.right.right.left.right.right.left.left.left.left.left, env)
+    print(arr.ltype)
+    print(arr.lvalue)
     if(isinstance(index.lvalue, str)):
         i = eval(index.lvalue)
     else:
         i = index.lvalue
-    value = evaluate(tree.right.right.left.left.left.left, env)
     if(isinstance(value.lvalue, str)):
         v = eval(value.lvalue)
     else:
         v = value.lvalue
-    arr = evaluate(tree.right.right.left.right.right.left.left.left.left.left, env)
     if(isinstance(v, str)):
         new = Lexeme("STRING", v)
     elif(isinstance(v, int)):

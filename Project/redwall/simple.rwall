@@ -1,7 +1,165 @@
-var arr2 = [true, 1, "String"];
-var a = length(arr2);
-var m = print(a);
-#$
-var y = print(arr2[2]);
-var b = set("ME", arr2, 2);
-var z = print(arr2[2]);
+func printArray(arr)
+{
+    var l = length(arr);
+    var i = 0;
+    while(i < l)
+    {
+        print(arr[i]);
+        var i =  i + 1;
+    }
+}
+
+func cons(a, b)
+{
+    return [a, b];
+}
+
+func car(lyst)
+{
+    if(lyst == nil)
+    {
+        print();
+        print();
+        print("Cannot take car of nil. Exiting");
+        print();
+        print();
+        return lyst[0];
+    }
+    return lyst[0];
+}
+
+func cdr(lyst)
+{
+    return lyst[1];
+}
+
+func setCar(lyst, val)
+{
+    set(val, lyst, 0);
+    return lyst;
+}
+func setCdr(lyst,val)
+{
+    set(val, lyst, 1);
+    return lyst;
+}
+func isNull(lyst)
+{
+    if(lyst == nil)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+func arrConsTest()
+{
+    print("Storing arr1 = [1,2]");
+    var arr1 = [1, 2];
+    var a = arr1[0];
+    var b = arr1[1];
+    print("arr1[0] should be: 1");
+    print(a);
+    print("arr1[1] should be: 2");
+    print(b);
+    var arr2 = cons(1, cons(2, nil));
+    print("car(arr2) == arr2[0] == 1");
+    print(car(arr2));
+    print(arr2[0]);
+    print("cdr(arr2) == arr2[1] == Lexeme");
+    print(cdr(arr2));
+    print(arr2[1]);
+    print("Storing arr3 = cdr(arr2)");
+    var arr3 = cdr(arr2);
+    print("Storing arr4 = arr2[1]");
+    var arr4 = arr2[1];
+    print("car(arr3) == arr3[0] == car(arr4) == arr4[0] == 2");
+    print(car(arr3));
+    print(arr3[0]);
+    print(car(arr4));
+    print(arr4[0]);
+    print("cdr(arr3) == arr3[1] == cdr(arr4) == arr4[1] == nil");
+    print(cdr(arr3));
+    print(arr3[1]);
+    print(cdr(arr4));
+    print(arr4[1]);
+    print("Is car arr4 null?");
+    print(isNull(arr4[0]));
+    print("Is cdr arr4 null?");
+    print(isNull(arr4[1]));
+}
+
+func frontPtr(queue){return car(queue);}
+func rearPtr(queue){return cdr(queue);}
+func setFrontPtr(queue, item){return setCar(queue, item);}
+func setRearPtr(queue, item){return setCdr(queue, item);}
+func isEmptyQueue(queue){return isNull(queue);}
+func makeQueue(){return cons(nil, nil);}
+func frontQueue(queue)
+{
+    if(isEmptyQueue(queue))
+    {
+        print();
+        print();
+        print("FRONT called with an empty queue. Exiting");
+        return frontPtr(queue);
+    }
+    else
+    {
+        return frontPtr(queue);
+    }
+}
+func insertQueue(queue, item)
+{
+    var new_pair = cons(item, nil);
+
+    print("DEBUG #######################################################");
+    print(isEmptyQueue(queue));
+    if(isEmptyQueue(queue))
+    {
+        setFrontPtr(queue, new_pair);
+        setRearPtr(queue, new_pair);
+        return queue;
+    }
+    else
+    {
+        setCdr(rearPtr(queue), new_pair);
+        setRearPtr(queue, new_pair);
+        return queue;
+    }
+}
+func deleteQueue(queue)
+{
+    if(isEmptyQueue(queue))
+    {
+        print();
+        print();
+        print("DELETE called with an empty queue. Exiting");
+        return car(frontPtr(queue));
+    }
+    else
+    {
+        setFrontPtr(queue, cdr(frontPtr(queue)));
+        return queue;
+    }
+}
+
+func queueTest()
+{
+    var Q = makeQueue();
+    print(isEmptyQueue(Q));
+    print(frontPtr(Q));
+    insertQueue(Q, 1);
+    print(frontPtr(Q));
+    insertQueue(Q, 2);
+    insertQueue(Q, 3);
+    print(frontPtr(Q));
+    print(rearPtr(Q));
+    deleteQueue(Q);
+    print(frontPtr(Q));
+}
+
+var a = queueTest();
