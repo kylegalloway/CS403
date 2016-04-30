@@ -50,11 +50,11 @@ run-arrays:
 # Everything above works with evaluator. Everything below needs fixes.
 
 run-dictionary:
-	# @echo "DID NOT IMPLEMENT"
-	python3 ./evaluator.py redwall/dictionary.rwall
+	@echo "DID NOT IMPLEMENT DICTIONARY"
+	# python3 ./evaluator.py redwall/dictionary.rwall
 
 run-problem:
-	@echo "DID NOT IMPLEMENT"
+	@echo "DID NOT IMPLEMENT ADDER"
 	#python3 ./evaluator.py redwall/test_problem.rwall
 
 # EXTRAS ======================================================================

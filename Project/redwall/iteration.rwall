@@ -1,18 +1,18 @@
-## This is an iterative function.
-func redo(x, count)
+func fibIteration(n)
 {
-    if (x >= 0)
-    {
-
-        return count;
+    var x = 0;
+    var y = 1;
+    var z = 1;
+    var i = 0;
+    while(i < n) {
+        var x = y;
+        var y = z;
+        var z = x + y;
+        var i = i + 1;
     }
-    else
-    {
-        print (count);
-        return redo(x+1,count+1);
-    }
+    return x;
 }
-
-var a = -10;
-var b = redo(a, 0);
-var c = print(b);
+var a = fibIteration(8);
+var p = print("Fibonacci: n = 8");
+var p = print("Should be 21.");
+var b = print(a);

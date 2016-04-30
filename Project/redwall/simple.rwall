@@ -1,0 +1,35 @@
+func fibIteration(n)
+{
+    var x = 0;
+    var y = 1;
+    var z = 1;
+    var i = 0;
+    while(i < n) {
+        var x = y;
+        var y = z;
+        var z = x + y;
+        var i = i + 1;
+    }
+    return x;
+}
+
+func fibRecursion(n)
+{
+    if (n == 1)
+    {
+        return n;
+    }
+    else if (n == 0)
+    {
+        return n;
+    }
+    else
+    {
+        return fibRecursion(n - 1) + fibRecursion(n - 2);
+    }
+}
+
+var a = fibIteration(8);
+var b = fibRecursion(8);
+var c = print(a);
+var d = print(b);

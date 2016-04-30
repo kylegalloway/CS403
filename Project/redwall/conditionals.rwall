@@ -40,6 +40,9 @@ func largest(x,y,z)
     }
 }
 
+var p = print("largest(1, 2, 3):");
 var a = print(largest(1, 2, 3));
+var p = print("largest(3, 2, 1):");
 var b = print(largest(3, 2, 1));
+var p = print("largest(2, 3, 1):");
 var c = print(largest(2, 3, 1));

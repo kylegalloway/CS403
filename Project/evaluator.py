@@ -199,8 +199,8 @@ def evalFUNCCALL(tree, env):
 
     # print("args", end=" : ")
     # print(args)
-    print("funcName", end=" : ")
-    print(funcName)
+    # print("funcName", end=" : ")
+    # print(funcName)
     # print("closure", end=" : ")
     # print(closure)
     # print(lookup("f",env))
@@ -225,10 +225,10 @@ def evalFUNCCALL(tree, env):
 
     eeargs = makeArgList(eargs, env)
 
-    print("eparams", end=" : ")
-    print(eparams)
-    print("eeargs", end=" : ")
-    print(eeargs)
+    # print("eparams", end=" : ")
+    # print(eparams)
+    # print("eeargs", end=" : ")
+    # print(eeargs)
 
     if(len(eeargs) != len(eparams)):
         raise Exception("ERROR: Wrong number of arguments.")

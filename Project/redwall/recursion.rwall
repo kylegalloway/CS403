@@ -1,15 +1,19 @@
-## This is a recursive function.
-func recur(limit, count)
+func fibRecursion(n)
 {
-    if(count <= limit)
+    if (n == 1)
     {
-        print(count);
-        return recur(limit, count + 1);
+        return n;
+    }
+    else if (n == 0)
+    {
+        return n;
     }
     else
     {
-        print("DONE!");
+        return fibRecursion(n - 1) + fibRecursion(n - 2);
     }
 }
-
-var a = recur(10, 0);
+var a = fibRecursion(8);
+var p = print("Fibonacci: n = 8");
+var p = print("Should be 21.");
+var b = print(a);

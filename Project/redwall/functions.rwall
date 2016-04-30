@@ -15,6 +15,10 @@ func square(x)
 }
 
 var a = run(double, 3);
+var p = print("Doubling 3.");
+var p = print("Should be 6.");
 var b = print(a);
 var c = run(square, 3);
+var p = print("Squaring 3.");
+var p = print("Should be 9.");
 var d = print(c);
