@@ -1,35 +1,16 @@
-func fibIteration(n)
+func map(f, arr, size)
 {
-    var x = 0;
-    var y = 1;
-    var z = 1;
+    var newArr = [];
     var i = 0;
-    while(i < n) {
-        var x = y;
-        var y = z;
-        var z = x + y;
-        var i = i + 1;
+    while(i < size)
+    {
+        var tmp = f(arr[i]);
+        append(tmp, newArr);
     }
-    return x;
+    return newArr;
 }
 
-func fibRecursion(n)
-{
-    if (n == 1)
-    {
-        return n;
-    }
-    else if (n == 0)
-    {
-        return n;
-    }
-    else
-    {
-        return fibRecursion(n - 1) + fibRecursion(n - 2);
-    }
-}
+func double(x) { return x * 2; }
 
-var a = fibIteration(8);
-var b = fibRecursion(8);
-var c = print(a);
-var d = print(b);
+var arr = [1, 2, 3, 4, 5];
+var arr2 = map(double, arr, length(arr));

@@ -143,6 +143,8 @@ def prettyPrint(tree):
             printAPPEND(tree)
         elif(tree.ltype == "REMOVE"):
             printREMOVE(tree)
+        elif(tree.ltype == "BOOLEAN"):
+            printBOOLEAN(tree)
         elif(tree.ltype == "END_OF_INPUT"):
             print("\n" + " ", end="")
         else:
@@ -412,11 +414,8 @@ def printNOT(tree):
 def printNIL(tree):
     print(tree.lvalue + " ", end="")
 
-def printTRUE(tree):
-    print(tree.lvalue + " ", end="")
-
-def printFALSE(tree):
-    print(tree.lvalue + " ", end="")
+def printBOOLEAN(tree):
+    print(str(tree.lvalue) + " ", end="")
 
 def printPRINT(tree):
     print(tree.left.lvalue + " ", end="")
